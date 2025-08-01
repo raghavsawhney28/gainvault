@@ -41,6 +41,7 @@
 .logoIcon {
   width: 32px;
   height: 32px;
+  /* background: linear-gradient(135deg, var(--accent-green), #22C55E); */
   border-radius: 6px;
   position: relative;
 }
@@ -53,6 +54,7 @@
   transform: translate(-50%, -50%);
   width: 16px;
   height: 16px;
+  background: var(--text-primary);
   border-radius: 2px;
 }
 
@@ -154,7 +156,6 @@
     display: block;
   }
 }
-
 .logoImage {
   width: 32px;
   height: 32px;

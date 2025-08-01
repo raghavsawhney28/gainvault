@@ -1,0 +1,97 @@
+/* Wallet Button Styles */
+.connectButton {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #9945FF, #14F195);
+  color: var(--text-primary);
+}
+
+.connectButton:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.connectButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.installButton {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid #9945FF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #9945FF;
+}
+
+.installButton:hover {
+  background: #9945FF;
+  color: var(--text-primary);
+}
+
+.connectedWallet {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 1);
+}
+
+.walletInfo {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.disconnectButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: calc(var(--spacing-unit) * 1);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.disconnectButton:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .connectedWallet {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+  
+  .walletInfo span {
+    font-size: 0.75rem;
+  }
+}

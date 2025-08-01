@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
-import styles from "./Header.module.css";
+import React, { useEffect, useState } from 'react';
+import { Menu, X } from 'lucide-react';
+import WalletButton from '../WalletButton/WalletButton'
+import styles from './Header.module.css';
 import logo from "../../assets/logo.png";
 
 const Header = () => {
@@ -11,12 +12,12 @@ const Header = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}>
+    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
         <div className={styles.headerContent}>
           <div className={styles.logo}>
@@ -27,15 +28,10 @@ const Header = () => {
                 className={styles.logoImage}
               />
             </div>
-
             <span>GainVault</span>
           </div>
-
-          <nav
-            className={`${styles.nav} ${
-              isMobileMenuOpen ? styles.navOpen : ""
-            }`}
-          >
+          
+          <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.navOpen : ''}`}>
             <a href="#platform">Platform</a>
             <a href="#features">Features</a>
             <a href="#pricing">Pricing</a>
@@ -43,13 +39,12 @@ const Header = () => {
           </nav>
 
           <div className={styles.headerActions}>
-            <a href="#signin" className={styles.signIn}>
-              Sign In
-            </a>
+            {/* <a href="#signin" className={styles.signIn}>Sign In</a> */}
+            <WalletButton />
             <button className={styles.btnPrimary}>Start Trading</button>
           </div>
 
-          <button
+          <button 
             className={styles.mobileMenuToggle}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
