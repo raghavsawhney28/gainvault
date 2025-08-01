@@ -1,0 +1,107 @@
+/* Hero Section Styles */
+.hero {
+  padding: calc(var(--spacing-unit) * 20) 0 calc(var(--spacing-unit) * 12) 0;
+  text-align: center;
+  background: radial-gradient(ellipse at center, rgba(45, 218, 125, 0.1) 0%, transparent 50%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 calc(var(--spacing-unit) * 3);
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, var(--accent-green), #22C55E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroSubtitle {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto calc(var(--spacing-unit) * 5) auto;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.heroActions {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btnPrimary, .btnSecondary {
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+.btnLarge {
+  padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 4);
+  font-size: 1.1rem;
+}
+
+.btnPrimary {
+  background-color: var(--accent-green);
+  color: var(--text-primary);
+}
+
+.btnPrimary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btnSecondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+}
+
+.btnSecondary:hover {
+  background-color: var(--text-primary);
+  color: var(--primary-bg);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 2);
+  }
+
+  .hero {
+    padding: calc(var(--spacing-unit) * 15) 0 calc(var(--spacing-unit) * 8) 0;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .heroActions .btnLarge {
+    width: 100%;
+    max-width: 300px;
+  }
+}

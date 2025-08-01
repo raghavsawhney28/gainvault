@@ -1,0 +1,215 @@
+/* Pricing Section Styles */
+.pricingSection {
+  padding: calc(var(--spacing-unit) * 12) 0;
+  background-color: var(--card-bg);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 calc(var(--spacing-unit) * 3);
+}
+
+.pricingHeader {
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 8);
+}
+
+.pricingHeader h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.pricingHeader p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: calc(var(--spacing-unit) * 4);
+  margin-bottom: calc(var(--spacing-unit) * 8);
+}
+
+.pricingCard {
+  background-color: var(--primary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 4);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricingCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.pricingCard.popular {
+  border-color: var(--accent-green);
+  transform: scale(1.05);
+}
+
+.popularBadge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--accent-green);
+  color: var(--text-primary);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  border-radius: calc(var(--spacing-unit) * 3);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+.planHeader {
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.planHeader h3 {
+  font-size: 1.5rem;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.planPrice {
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.price {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.period {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.planDescription {
+  color: var(--text-secondary);
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.featuresList {
+  list-style: none;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.featuresList li {
+  padding: calc(var(--spacing-unit) * 1) 0;
+  color: var(--text-secondary);
+  position: relative;
+  padding-left: calc(var(--spacing-unit) * 3);
+}
+
+.featuresList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent-green);
+  font-weight: bold;
+}
+
+.btnFull {
+  width: 100%;
+  justify-content: center;
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+.btnPrimary {
+  background-color: var(--accent-green);
+  color: var(--text-primary);
+}
+
+.btnPrimary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btnSecondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+}
+
+.btnSecondary:hover {
+  background-color: var(--text-primary);
+  color: var(--primary-bg);
+}
+
+.btnOutline {
+  background-color: transparent;
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+.btnOutline:hover {
+  background-color: var(--accent-green);
+  color: var(--text-primary);
+}
+
+.pricingGuarantee {
+  text-align: center;
+}
+
+.pricingGuarantee p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.guaranteeBadge {
+  display: inline-block;
+  background-color: var(--accent-green);
+  color: var(--text-primary);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-top: calc(var(--spacing-unit) * 2);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 2);
+  }
+
+  .pricingGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricingCard.popular {
+    transform: none;
+  }
+
+  .price {
+    font-size: 2.5rem;
+  }
+}

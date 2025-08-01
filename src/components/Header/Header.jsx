@@ -1,0 +1,64 @@
+import React, { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
+import styles from "./Header.module.css";
+import logo from "../../assets/logo.png";
+
+const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}>
+      <div className={styles.container}>
+        <div className={styles.headerContent}>
+          <div className={styles.logo}>
+            <div className={styles.logoIcon}>
+              <img
+                src={logo}
+                alt="GainVault Logo"
+                className={styles.logoImage}
+              />
+            </div>
+
+            <span>GainVault</span>
+          </div>
+
+          <nav
+            className={`${styles.nav} ${
+              isMobileMenuOpen ? styles.navOpen : ""
+            }`}
+          >
+            <a href="#platform">Platform</a>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#about">About</a>
+          </nav>
+
+          <div className={styles.headerActions}>
+            <a href="#signin" className={styles.signIn}>
+              Sign In
+            </a>
+            <button className={styles.btnPrimary}>Start Trading</button>
+          </div>
+
+          <button
+            className={styles.mobileMenuToggle}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
