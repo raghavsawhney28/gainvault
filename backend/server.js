@@ -13,11 +13,20 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(express.json());
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://raghavsawhney28.github.io'
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // Allow tools like Postman
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
+
 
 // Store nonces temporarily (in production, use Redis or database)
 const nonces = new Map();

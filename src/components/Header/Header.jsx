@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import WalletButton from '../WalletButton/WalletButton'
 import styles from './Header.module.css';
 import logo from "../../assets/logo.png";
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -16,6 +18,9 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleStartTrading = () => {
+    navigate('/trading-challenge');
+  };
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
@@ -41,7 +46,9 @@ const Header = () => {
           <div className={styles.headerActions}>
             {/* <a href="#signin" className={styles.signIn}>Sign In</a> */}
             <WalletButton />
-            <button className={styles.btnPrimary}>Start Trading</button>
+            <button className={styles.btnPrimary} onClick={handleStartTrading}>
+              Start Trading
+            </button>
           </div>
 
           <button 

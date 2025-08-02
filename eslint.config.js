@@ -6,6 +6,16 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
   { ignores: ['dist'] },
+  [{server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001', // Change to your actual backend server
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  }
+}],
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {

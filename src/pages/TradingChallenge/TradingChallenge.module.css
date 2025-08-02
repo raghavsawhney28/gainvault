@@ -1,0 +1,454 @@
+/* Trading Challenge Page Styles */
+.tradingChallenge {
+  min-height: 100vh;
+  background-color: #1C1E26;
+  color: #A0A4AE;
+  padding: calc(var(--spacing-unit) * 12) 0 calc(var(--spacing-unit) * 8) 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 calc(var(--spacing-unit) * 3);
+}
+
+/* Progress Bar */
+.progressBar {
+  position: relative;
+  margin-bottom: calc(var(--spacing-unit) * 6);
+  background-color: #2A2D3A;
+  border-radius: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 3);
+}
+
+.progressSteps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+.progressStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+.stepNumber {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #3A3D4A;
+  color: #A0A4AE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.progressStep.active .stepNumber {
+  background-color: #007BFF;
+  color: white;
+}
+
+.stepLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.progressStep.active .stepLabel {
+  color: #007BFF;
+}
+
+.progressLine {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 2px;
+  background-color: #007BFF;
+  transition: width 0.3s ease;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+/* Step Container */
+.stepContainer {
+  background-color: #2A2D3A;
+  border-radius: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.stepContent h2 {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  text-align: center;
+}
+
+/* Form Styles */
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: calc(var(--spacing-unit) * 3);
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+.formGroup label {
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.formGroup input,
+.formGroup select {
+  padding: calc(var(--spacing-unit) * 2);
+  border: 1px solid #3A3D4A;
+  border-radius: calc(var(--spacing-unit) * 1);
+  background-color: #1C1E26;
+  color: white;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #007BFF;
+}
+
+.formGroup input::placeholder {
+  color: #6B7280;
+}
+
+/* Account Size Section */
+.accountSizeSection {
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.accountSizeSection label {
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.accountSizeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.accountSizeCard {
+  background-color: #1C1E26;
+  border: 2px solid #3A3D4A;
+  border-radius: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 3);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.accountSizeCard:hover {
+  border-color: #007BFF;
+  transform: translateY(-2px);
+}
+
+.accountSizeCard.selected {
+  border-color: #007BFF;
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.accountSizeLabel {
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: calc(var(--spacing-unit) * 1);
+}
+
+.accountSizePrice {
+  color: #28A745;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* Coupon Section */
+.couponSection {
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.couponInput {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+.couponInput input {
+  flex: 1;
+}
+
+/* Summary Card */
+.summaryCard {
+  background-color: #1C1E26;
+  border: 1px solid #3A3D4A;
+  border-radius: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  overflow: hidden;
+}
+
+.summaryHeader {
+  background-color: #007BFF;
+  padding: calc(var(--spacing-unit) * 3);
+}
+
+.summaryHeader h3 {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.summaryDetails {
+  padding: calc(var(--spacing-unit) * 3);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 1) 0;
+  border-bottom: 1px solid #3A3D4A;
+}
+
+.summaryRow:last-child {
+  border-bottom: none;
+}
+
+.summaryRow span:first-child {
+  color: #A0A4AE;
+}
+
+.summaryRow span:last-child {
+  color: white;
+  font-weight: 600;
+}
+
+.summaryTotal {
+  background-color: #2A2D3A;
+  padding: calc(var(--spacing-unit) * 3);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalRow span:first-child {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.totalPrice {
+  color: #28A745;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Terms Section */
+.termsSection {
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  cursor: pointer;
+  color: white;
+  font-size: 1rem;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3A3D4A;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkmark {
+  background-color: #007BFF;
+  border-color: #007BFF;
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkmark::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Navigation Buttons */
+.stepNavigation {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(var(--spacing-unit) * 2);
+  margin-top: calc(var(--spacing-unit) * 4);
+}
+
+.btnPrimary,
+.btnSecondary,
+.btnSuccess {
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  min-width: 140px;
+  justify-content: center;
+}
+
+.btnPrimary {
+  background-color: #007BFF;
+  color: white;
+  margin-left: auto;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.btnPrimary:disabled {
+  background-color: #3A3D4A;
+  color: #6B7280;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  background-color: transparent;
+  color: #A0A4AE;
+  border: 1px solid #3A3D4A;
+}
+
+.btnSecondary:hover {
+  background-color: #3A3D4A;
+  color: white;
+}
+
+.btnSuccess {
+  background-color: #28A745;
+  color: white;
+  margin-left: auto;
+}
+
+.btnSuccess:hover:not(:disabled) {
+  background-color: #1e7e34;
+  transform: translateY(-1px);
+}
+
+.btnSuccess:disabled {
+  background-color: #3A3D4A;
+  color: #6B7280;
+  cursor: not-allowed;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 2);
+  }
+
+  .tradingChallenge {
+    padding: calc(var(--spacing-unit) * 8) 0 calc(var(--spacing-unit) * 4) 0;
+  }
+
+  .stepContainer {
+    padding: calc(var(--spacing-unit) * 3);
+  }
+
+  .stepContent h2 {
+    font-size: 1.5rem;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 2);
+  }
+
+  .accountSizeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stepNavigation {
+    flex-direction: column;
+  }
+
+  .btnPrimary {
+    margin-left: 0;
+  }
+
+  .btnSuccess {
+    margin-left: 0;
+  }
+
+  .progressSteps {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 2);
+  }
+
+  .progressLine {
+    display: none;
+  }
+
+  .couponInput {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .accountSizeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+
+  .totalRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+}

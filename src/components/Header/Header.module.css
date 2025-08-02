@@ -54,7 +54,7 @@
   transform: translate(-50%, -50%);
   width: 16px;
   height: 16px;
-  background: var(--text-primary);
+  /* background: var(--text-primary); */
   border-radius: 2px;
 }
 
