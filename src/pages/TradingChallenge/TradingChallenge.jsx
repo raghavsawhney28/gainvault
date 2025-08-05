@@ -1,9 +1,25 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, ExternalLink, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import usePhantomWallet from '../../hooks/usePhantomWallet';
+import usePhantomPayment from '../../hooks/usePhantomPayment';
 import styles from './TradingChallenge.module.css';
 
 const TradingChallenge = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const { connected, publicKey, connectWallet } = usePhantomWallet();
+  const {
+    sendSOLPayment,
+    calculateSOLAmount,
+    getAccountLabel,
+    getSolScanUrl,
+    resetPaymentState,
+    isProcessing,
+    paymentStatus,
+    transactionSignature,
+    error: paymentError,
+    SOL_RATE
+  } = usePhantomPayment();
+
   const [formData, setFormData] = useState({
     // Account Setup
     country: '',
@@ -85,7 +101,94 @@ const TradingChallenge = () => {
       alert('Please agree to the Terms and Conditions');
       return;
     }
-    alert('Order confirmed! This would integrate with payment processing.');
+    
+    if (!connected || !publicKey) {
+      alert('Please connect your Phantom wallet first');
+      return;
+    }
+
+    handlePayment();
+  };
+
+  const handlePayment = async () => {
+    try {
+      await sendSOLPayment(formData.accountSize, publicKey);
+    } catch (error) {
+      console.error('Payment failed:', error);
+    }
+  };
+
+  const renderPaymentStatus = () => {
+    if (!paymentStatus) return null;
+
+    const statusConfig = {
+      processing: {
+        icon: Loader2,
+        title: 'Processing Payment...',
+        message: 'Please confirm the transaction in your Phantom wallet',
+        color: '#007BFF'
+      },
+      confirming: {
+        icon: Loader2,
+        title: 'Confirming Transaction...',
+        message: 'Waiting for blockchain confirmation',
+        color: '#007BFF'
+      },
+      confirmed: {
+        icon: CheckCircle,
+        title: 'Payment Confirmed!',
+        message: 'Your payment has been successfully processed',
+        color: '#28A745'
+      },
+      activated: {
+        icon: CheckCircle,
+        title: 'Challenge Activated!',
+        message: 'Your trading challenge has been successfully activated',
+        color: '#28A745'
+      },
+      payment_success_activation_pending: {
+        icon: AlertCircle,
+        title: 'Payment Successful',
+        message: 'Payment confirmed, challenge activation pending',
+        color: '#FFA502'
+      },
+      failed: {
+        icon: AlertCircle,
+        title: 'Payment Failed',
+        message: paymentError || 'Something went wrong with your payment',
+        color: '#FF4757'
+      }
+    };
+
+    const config = statusConfig[paymentStatus];
+    if (!config) return null;
+
+    return (
+      <div className={styles.paymentStatus} style={{ '--status-color': config.color }}>
+        <div className={styles.statusIcon}>
+          <config.icon size={24} className={config.icon === Loader2 ? styles.spinning : ''} />
+        </div>
+        <div className={styles.statusContent}>
+          <h4>{config.title}</h4>
+          <p>{config.message}</p>
+          {transactionSignature && (
+            <div className={styles.transactionInfo}>
+              <p className={styles.transactionId}>
+                Transaction: {transactionSignature.slice(0, 8)}...{transactionSignature.slice(-8)}
+              </p>
+              <a 
+                href={getSolScanUrl(transactionSignature)} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={styles.solscanLink}
+              >
+                View on SolScan <ExternalLink size={14} />
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   const renderAccountSetup = () => (
@@ -311,8 +414,29 @@ const TradingChallenge = () => {
             <span>Total Cost:</span>
             <span className={styles.totalPrice}>${getSelectedAccountPrice()}</span>
           </div>
+          {connected && formData.accountSize && (
+            <div className={styles.solConversion}>
+              <span>SOL Amount:</span>
+              <span className={styles.solAmount}>
+                ◎{calculateSOLAmount(formData.accountSize).toFixed(4)} SOL
+              </span>
+              <span className={styles.solRate}>@ ${SOL_RATE}/SOL</span>
+            </div>
+          )}
         </div>
       </div>
+
+      {!connected && (
+        <div className={styles.walletPrompt}>
+          <AlertCircle size={20} />
+          <span>Connect your Phantom wallet to proceed with payment</span>
+          <button className={styles.btnSecondary} onClick={connectWallet}>
+            Connect Wallet
+          </button>
+        </div>
+      )}
+
+      {renderPaymentStatus()}
 
       <div className={styles.termsSection}>
         <label className={styles.checkboxLabel}>
@@ -333,9 +457,17 @@ const TradingChallenge = () => {
         <button 
           className={styles.btnSuccess}
           onClick={handleConfirmOrder}
-          disabled={!formData.agreeToTerms}
+          disabled={!formData.agreeToTerms || !connected || isProcessing}
         >
-          <Check size={17} /> Confirm Order
+          {isProcessing ? (
+            <>
+              <Loader2 size={17} className={styles.spinning} /> Processing...
+            </>
+          ) : (
+            <>
+              <Check size={17} /> {connected ? 'Pay with SOL' : 'Connect Wallet First'}
+            </>
+          )}
         </button>
       </div>
     </div>

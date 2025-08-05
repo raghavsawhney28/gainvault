@@ -382,6 +382,126 @@
   cursor: not-allowed;
 }
 
+/* SOL Conversion Display */
+.solConversion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 2) 0;
+  border-top: 1px solid #3A3D4A;
+  margin-top: calc(var(--spacing-unit) * 2);
+}
+
+.solAmount {
+  color: #9945FF;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.solRate {
+  color: #6B7280;
+  font-size: 0.875rem;
+}
+
+/* Wallet Prompt */
+.walletPrompt {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  background-color: rgba(255, 165, 2, 0.1);
+  border: 1px solid rgba(255, 165, 2, 0.3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 3);
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  color: #FFA502;
+}
+
+.walletPrompt svg {
+  flex-shrink: 0;
+}
+
+.walletPrompt button {
+  margin-left: auto;
+}
+
+/* Payment Status */
+.paymentStatus {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--status-color);
+  border-radius: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 4);
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--spacing-unit) * 3);
+}
+
+.statusIcon {
+  color: var(--status-color);
+  flex-shrink: 0;
+  padding: calc(var(--spacing-unit) * 1);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.statusContent {
+  flex: 1;
+}
+
+.statusContent h4 {
+  color: var(--status-color);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: calc(var(--spacing-unit) * 1);
+}
+
+.statusContent p {
+  color: #A0A4AE;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.transactionInfo {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 2);
+}
+
+.transactionId {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  color: #22C55E;
+  margin-bottom: calc(var(--spacing-unit) * 1);
+}
+
+.solscanLink {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  color: #007BFF;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.solscanLink:hover {
+  color: #0056b3;
+}
+
+/* Spinning Animation */
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .container {
