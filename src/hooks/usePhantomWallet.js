@@ -21,47 +21,32 @@ const usePhantomWallet = () => {
 
   useEffect(() => {
     const provider = getProvider();
-    if (!provider) return;
+    if (provider) {
+      setWallet(provider);
 
-    setWallet(provider);
+      provider
+        .connect({ onlyIfTrusted: true })
+        .then(({ publicKey }) => {
+          setPublicKey(publicKey);
+          setConnected(true);
 
-    // Attempt trusted reconnection
-    provider
-      .connect({ onlyIfTrusted: true })
-      .then(({ publicKey }) => {
-        setPublicKey(publicKey);
-        setConnected(true);
-
-        const token = localStorage.getItem("phantom_jwt");
-        if (token) {
-          setJwtToken(token);
-        }
-      })
-      .catch(() => {
-        // User rejected or not previously connected
-      });
-
-    // Handle manual or triggered disconnect
-    const handleDisconnect = () => {
-      console.log("Phantom wallet disconnected");
-      setConnected(false);
-      setPublicKey(null);
-      setJwtToken(null);
-      localStorage.removeItem("phantom_jwt");
-    };
-
-    provider.on("disconnect", handleDisconnect);
-
-    return () => {
-      provider.off("disconnect", handleDisconnect);
-    };
+          const token = localStorage.getItem("phantom_jwt");
+          if (token) {
+            setJwtToken(token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          }
+        })
+        .catch(() => {
+          // Silent fail — user not connected
+        });
+    }
   }, [getProvider]);
 
   const connectWallet = useCallback(async () => {
     const provider = getProvider();
 
     if (!provider) {
-      alert("Phantom wallet not found! Please install Phantom wallet.");
+      alert("Phantom wallet not found! Please install it.");
       window.open("https://phantom.app/", "_blank");
       return;
     }
@@ -74,30 +59,32 @@ const usePhantomWallet = () => {
       setConnected(true);
 
       const nonceRes = await axios.get("https://gainvault.onrender.com/api/auth/nonce");
-
       const { nonce } = nonceRes.data;
 
       const message = `Sign this message to authenticate with our app.\n\nNonce: ${nonce}`;
-      const encoded = new TextEncoder().encode(message);
+      const encodedMessage = new TextEncoder().encode(message);
+      const signedMessage = await provider.signMessage(encodedMessage, "utf8");
 
-      const signed = await provider.signMessage(encoded, "utf8");
+      const base64Signature = btoa(String.fromCharCode(...signedMessage.signature));
 
-      // ✅ Convert Uint8Array to base64 using browser-safe btoa
-      const base64Signature = btoa(String.fromCharCode(...signed.signature));
-
-      const authRes = await axios.post("/api/auth/phantom-signin", {
+      const authRes = await axios.post("https://gainvault.onrender.com/api/auth/phantom-signin", {
         publicKey: response.publicKey.toString(),
         signature: base64Signature,
-        message
+        message,
       });
+      console.log("PublicKey:", publicKey);
+console.log("Signature:", signature);
+console.log("Message:", message);
+
 
       const { token } = authRes.data;
       setJwtToken(token);
       localStorage.setItem("phantom_jwt", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     } catch (error) {
       console.error("Error connecting to Phantom wallet:", error);
-      alert("Failed to connect to Phantom wallet. Please try again.");
+      alert("Failed to connect. Please try again.");
     } finally {
       setConnecting(false);
     }
@@ -108,6 +95,15 @@ const usePhantomWallet = () => {
       const provider = getProvider();
       if (provider?.disconnect) {
         await provider.disconnect();
+
+        // 🧼 Clean Phantom's internal session
+        if (provider._handleDisconnect) {
+          provider._handleDisconnect();
+        }
+
+        if (provider.autoConnect) {
+          provider.autoConnect = false;
+        }
       }
     } catch (error) {
       console.error("Error disconnecting from Phantom:", error);
@@ -117,9 +113,6 @@ const usePhantomWallet = () => {
     setPublicKey(null);
     setJwtToken(null);
     localStorage.removeItem("phantom_jwt");
-
-    // Optional: refresh app on logout
-    window.location.reload();
   }, [getProvider]);
 
   const formatAddress = useCallback((address) => {
