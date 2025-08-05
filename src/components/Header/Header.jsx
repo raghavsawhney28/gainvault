@@ -41,6 +41,7 @@ const Header = () => {
             <a href="#features">Features</a>
             <a href="#pricing">Pricing</a>
             <a href="#about">About</a>
+            <a href="/rules" onClick={(e) => { e.preventDefault(); navigate('/rules'); }}>Rules</a>
           </nav>
 
           <div className={styles.headerActions}>

@@ -7,6 +7,7 @@ import FeaturesSection from './components/FeaturesSection/FeaturesSection';
 import PricingSection from './components/PricingSection/PricingSection';
 import Footer from './components/Footer/Footer';
 import TradingChallenge from './pages/TradingChallenge/TradingChallenge';
+import Rules from './pages/Rules/Rules';
 import './App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           </main>
         } />
         <Route path="/trading-challenge" element={<TradingChallenge />} />
+        <Route path="/rules" element={<Rules />} />
       </Routes>
       <Footer />
     </div>
