@@ -41,7 +41,7 @@ const usePhantomWallet = () => {
         // User rejected or not previously connected
       });
 
-    // ✅ Handle manual or triggered disconnect
+    // Handle manual or triggered disconnect
     const handleDisconnect = () => {
       console.log("Phantom wallet disconnected");
       setConnected(false);
@@ -52,7 +52,6 @@ const usePhantomWallet = () => {
 
     provider.on("disconnect", handleDisconnect);
 
-    // Cleanup on unmount
     return () => {
       provider.off("disconnect", handleDisconnect);
     };
@@ -74,7 +73,8 @@ const usePhantomWallet = () => {
       setPublicKey(response.publicKey);
       setConnected(true);
 
-      const nonceRes = await axios.get("/api/auth/nonce");
+      const nonceRes = await axios.get("https://gainvault.onrender.com/api/auth/nonce");
+
       const { nonce } = nonceRes.data;
 
       const message = `Sign this message to authenticate with our app.\n\nNonce: ${nonce}`;
@@ -82,9 +82,12 @@ const usePhantomWallet = () => {
 
       const signed = await provider.signMessage(encoded, "utf8");
 
+      // ✅ Convert Uint8Array to base64 using browser-safe btoa
+      const base64Signature = btoa(String.fromCharCode(...signed.signature));
+
       const authRes = await axios.post("/api/auth/phantom-signin", {
         publicKey: response.publicKey.toString(),
-        signature: Buffer.from(signed.signature).toString("base64"),
+        signature: base64Signature,
         message
       });
 
@@ -115,8 +118,8 @@ const usePhantomWallet = () => {
     setJwtToken(null);
     localStorage.removeItem("phantom_jwt");
 
-    // Optional: refresh the app
-    // window.location.reload();
+    // Optional: refresh app on logout
+    window.location.reload();
   }, [getProvider]);
 
   const formatAddress = useCallback((address) => {
