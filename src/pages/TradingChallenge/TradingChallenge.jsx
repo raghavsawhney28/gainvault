@@ -47,7 +47,7 @@ const TradingChallenge = () => {
   ];
 
   const platforms = [
-    'MetaTrader 4', 'MetaTrader 5', 'cTrader', 'TradingView'
+      'GainVault'
   ];
 
   const handleInputChange = (field, value) => {
