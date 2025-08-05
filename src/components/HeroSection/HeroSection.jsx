@@ -18,27 +18,43 @@ const HeroSection = () => {
   const handleStartTrading = () => {
     navigate('/trading-challenge');
   };
+
+  const taglines = [
+    "GainVault: Altcoins. It's Our Money Now.",
+    "We Provide The Funds. You Provide The Vibes.",
+    "Zero Risk. Just Gains. Mostly."
+  ];
+
   return (
     <section className={styles.hero}>
       <div className={styles.container}>
         <animated.div style={heroAnimation} className={styles.heroContent}>
+          <div className={styles.taglineContainer}>
+            {taglines.map((tagline, index) => (
+              <div key={index} className={styles.tagline} style={{ animationDelay: `${index * 0.5}s` }}>
+                {tagline}
+              </div>
+            ))}
+          </div>
           <h1 className={styles.heroTitle}>
-            Trade with<br />
-            <span className={styles.gradientText}>Precision & Power</span>
+            Unlock Your<br />
+            <span className={styles.gradientText}>True Potential</span>
           </h1>
           <p className={styles.heroSubtitle}>
-            Access institutional-grade trading tools, real-time market data, and advanced analytics 
-            to maximize your trading potential in global markets.
+            What if your trading potential wasn't limited by your wallet? With GainVault, it's not. 
+            We provide the capital so you can execute the trades you've always dreamed of. 
+            Risk-free trading. Massive growth. This is your chance to take control. 
+            <strong> GainVault. Unlock your true potential.</strong>
           </p>
           <div className={styles.heroActions}>
             <button 
               className={`${styles.btnPrimary} ${styles.btnLarge}`}
               onClick={handleStartTrading}
             >
-              Start Trading Now →
+              Get Funded Now →
             </button>
             <button className={`${styles.btnSecondary} ${styles.btnLarge}`}>
-              <Play size={16} /> Watch Demo
+              <Play size={16} /> See How It Works
             </button>
           </div>
         </animated.div>

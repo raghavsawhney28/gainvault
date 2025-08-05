@@ -5,9 +5,9 @@ import styles from './StatsSection.module.css';
 
 const StatsSection = () => {
   const stats = [
-    { icon: BarChart3, value: '$2.4B+', label: 'Daily Volume' },
-    { icon: Users, value: '500K+', label: 'Active Traders' },
-    { icon: Zap, value: '0.1ms', label: 'Execution Speed' }
+    { icon: BarChart3, value: '$50M+', label: 'Funds Provided' },
+    { icon: Users, value: '10K+', label: 'Funded Traders' },
+    { icon: Zap, value: '24/7', label: 'Market Access' }
   ];
 
   return (

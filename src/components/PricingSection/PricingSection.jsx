@@ -6,53 +6,54 @@ import styles from './PricingSection.module.css';
 const PricingSection = () => {
   const plans = [
     {
-      name: 'Starter',
+      name: 'Explorer',
       price: '$0',
-      period: '/Forever Free',
-      description: 'Perfect for beginners exploring trading',
+      period: '/Demo Account',
+      description: 'Perfect for testing your altcoin strategies',
       features: [
-        'Basic trading tools',
-        'Real-time market data',
-        'Educational resources',
+        'Demo trading environment',
+        'Real-time altcoin data',
+        'Strategy testing tools',
         'Community support',
-        'Mobile app access'
+        'Educational resources'
       ],
-      buttonText: 'Get Started',
+      buttonText: 'Start Demo',
       buttonClass: 'btnSecondary'
     },
     {
-      name: 'Professional',
-      price: '$49',
-      period: '/per month',
-      description: 'Advanced tools for serious traders',
+      name: 'Funded Trader',
+      price: '$99',
+      period: '/evaluation fee',
+      description: 'Get funded and start earning real profits',
       popular: true,
       features: [
-        'Advanced charting tools',
-        'AI-powered analytics',
-        'Priority customer support',
-        'Advanced order types',
-        'Risk management tools',
-        'API access',
-        'Custom indicators'
+        'Up to $100K funding',
+        'Keep 80% of profits',
+        'Risk-free trading',
+        'Advanced altcoin tools',
+        'Priority support',
+        'Monthly payouts',
+        'Scaling opportunities'
       ],
-      buttonText: 'Start Free Trial',
+      buttonText: 'Get Funded',
       buttonClass: 'btnPrimary'
     },
     {
-      name: 'Enterprise',
-      price: '$199',
-      period: '/per month',
-      description: 'Institutional-grade trading platform',
+      name: 'Pro Trader',
+      price: '$299',
+      period: '/evaluation fee',
+      description: 'Maximum funding for experienced traders',
       features: [
-        'Everything in Professional',
+        'Up to $500K funding',
+        'Keep 90% of profits',
+        'Multiple account scaling',
         'Dedicated account manager',
-        'Custom integrations',
-        'White-label solutions',
-        'Advanced security features',
-        'SLA guarantee',
-        'Custom reporting'
+        'Exclusive altcoin access',
+        'Custom risk parameters',
+        'Weekly payouts',
+        'VIP community access'
       ],
-      buttonText: 'Contact Sales',
+      buttonText: 'Go Pro',
       buttonClass: 'btnOutline'
     }
   ];
@@ -61,8 +62,8 @@ const PricingSection = () => {
     <section className={styles.pricingSection} id="pricing">
       <div className={styles.container}>
         <AnimatedSection className={styles.pricingHeader}>
-          <h2>Choose Your Trading Plan</h2>
-          <p>Start with our free plan and upgrade as you grow. All plans include our core trading features with varying levels of advanced tools.</p>
+          <h2>Choose Your Funding Level</h2>
+          <p>Start with our demo account and work your way up to substantial funding. We provide the capital, you provide the skills.</p>
         </AnimatedSection>
 
         <div className={styles.pricingGrid}>
@@ -94,8 +95,8 @@ const PricingSection = () => {
         </div>
 
         <AnimatedSection className={styles.pricingGuarantee}>
-          <p>All plans include SSL encryption, 99.9% uptime guarantee, and 24/7 customer support.</p>
-          <div className={styles.guaranteeBadge}>30-day money-back guarantee</div>
+          <p>All funded accounts include risk management, profit sharing, and scaling opportunities.</p>
+          <div className={styles.guaranteeBadge}>Risk-free evaluation process</div>
         </AnimatedSection>
       </div>
     </section>

@@ -7,33 +7,33 @@ const FeaturesSection = () => {
   const features = [
     {
       icon: TrendingUp,
-      title: 'Advanced Analytics',
-      description: 'Real-time market analysis with AI-powered insights and predictive modeling.'
+      title: 'Risk-Free Trading',
+      description: 'Trade with our capital, not yours. Keep the profits while we handle the risk.'
     },
     {
       icon: Zap,
-      title: 'Lightning Execution',
-      description: 'Ultra-low latency trading with sub-millisecond order execution.'
+      title: 'Instant Funding',
+      description: 'Get funded quickly and start trading altcoins with substantial capital backing.'
     },
     {
       icon: Shield,
-      title: 'Bank-Grade Security',
-      description: 'Multi-layer security protocols and encrypted data transmission.'
+      title: 'Secure Platform',
+      description: 'Trade with confidence on our secure, regulated platform with full transparency.'
     },
     {
       icon: Globe,
-      title: 'Global Markets',
-      description: 'Access to 150+ markets worldwide including forex, stocks, and crypto.'
+      title: 'Altcoin Focus',
+      description: 'Specialized in altcoin trading with access to emerging and established cryptocurrencies.'
     },
     {
       icon: Cpu,
-      title: 'AI Trading Bots',
-      description: 'Automated trading strategies powered by machine learning algorithms.'
+      title: 'Smart Tools',
+      description: 'Advanced trading tools and analytics designed specifically for crypto markets.'
     },
     {
       icon: Headphones,
-      title: '24/7 Support',
-      description: 'Round-the-clock market access with real-time support.'
+      title: 'Community Support',
+      description: 'Join a community of funded traders with 24/7 support and shared strategies.'
     }
   ];
 
@@ -41,8 +41,8 @@ const FeaturesSection = () => {
     <section className={styles.featuresSection} id="features">
       <div className={styles.container}>
         <AnimatedSection className={styles.featuresHeader}>
-          <h2>Professional Trading Made Simple</h2>
-          <p>Experience the power of institutional-grade trading tools designed for both beginners and professional traders.</p>
+          <h2>Why Choose GainVault?</h2>
+          <p>We provide the capital, tools, and support you need to succeed in altcoin trading. Focus on what you do best - trading.</p>
         </AnimatedSection>
         
         <div className={styles.featuresGrid}>
@@ -56,7 +56,7 @@ const FeaturesSection = () => {
         </div>
 
         <AnimatedSection className={styles.featuresCta}>
-          <button className={styles.btnOutline}>Explore All Features</button>
+          <button className={styles.btnOutline}>Start Your Journey</button>
         </AnimatedSection>
       </div>
     </section>
