@@ -9,7 +9,11 @@ const usePhantomPayment = () => {
   const [error, setError] = useState(null);
 
   // Solana connection
-  const connection = new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+  const connection = new Connection(
+  'https://mainnet.helius-rpc.com/?api-key=1264c6e5-a1c4-4020-a38a-6762628b45bf',
+  'confirmed'
+);
+
   
   // Recipient address
   const RECIPIENT_ADDRESS = 'iWB2mdro9ct7rCyyz68jYE7EGNCTqiDLaqVTNpuJ68j';
