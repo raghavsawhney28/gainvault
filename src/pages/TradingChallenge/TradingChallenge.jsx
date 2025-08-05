@@ -34,16 +34,16 @@ const TradingChallenge = () => {
   ];
 
   const countries = [
-    'United States', 'Canada', 'United Kingdom', 'Germany', 'France', 
+    'United States', 'Canada','India', 'United Kingdom', 'Germany', 'France', 
     'Australia', 'Japan', 'Singapore', 'Switzerland', 'Netherlands'
   ];
 
   const accountTypes = [
-    'Standard Challenge', 'Express Challenge', 'Instant Funding'
+    ' Phase one only','Two Phases ', 'Express Challenge', 'Instant Funding'
   ];
 
   const profitTargets = [
-    '8% Phase 1, 5% Phase 2', '10% Phase 1, 5% Phase 2', '12% Phase 1, 6% Phase 2'
+     '10% Phase 1, 5% Phase 1', '12% Phase 2'
   ];
 
   const platforms = [
