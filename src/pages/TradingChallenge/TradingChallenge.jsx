@@ -26,11 +26,12 @@ const TradingChallenge = () => {
   });
 
   const accountSizes = [
-    { value: '10k', label: '$10,000', price: 99 },
-    { value: '25k', label: '$25,000', price: 199 },
-    { value: '50k', label: '$50,000', price: 399 },
-    { value: '100k', label: '$100,000', price: 699 },
-    { value: '200k', label: '$200,000', price: 1299 }
+    { value: '5k', label: '$5,000', price: 29 },
+    { value: '10k', label: '$10,000', price: 55 },
+    { value: '25k', label: '$25,000', price: 129 },
+    { value: '50k', label: '$50,000', price: 249 },
+    { value: '100k', label: '$100,000', price: 449 },
+    { value: '200k', label: '$200,000', price: 849 }
   ];
 
   const countries = [
@@ -39,11 +40,11 @@ const TradingChallenge = () => {
   ];
 
   const accountTypes = [
-    ' Phase one only','Two Phases ', 'Express Challenge', 'Instant Funding'
+    ' 1 Step  -------  12% Phase 1','2 Step  --------10% Phase 1, 5% Phase 2'
   ];
 
   const profitTargets = [
-     '10% Phase 1, 5% Phase 1', '12% Phase 2'
+     '10% Phase 1, 5% Phase 2', '12% Phase 1'
   ];
 
   const platforms = [
@@ -92,7 +93,7 @@ const TradingChallenge = () => {
       <h2>Account Setup</h2>
       
       <div className={styles.formGrid}>
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label>Country</label>
           <select 
             value={formData.country} 
@@ -103,7 +104,7 @@ const TradingChallenge = () => {
               <option key={country} value={country}>{country}</option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         <div className={styles.formGroup}>
           <label>Account Type</label>
@@ -118,7 +119,7 @@ const TradingChallenge = () => {
           </select>
         </div>
 
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label>Profit Target</label>
           <select 
             value={formData.profitTarget} 
@@ -129,7 +130,7 @@ const TradingChallenge = () => {
               <option key={target} value={target}>{target}</option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         <div className={styles.formGroup}>
           <label>Platform</label>
@@ -167,7 +168,7 @@ const TradingChallenge = () => {
         <button 
           className={styles.btnPrimary}
           onClick={handleNext}
-          disabled={!formData.country || !formData.accountType || !formData.accountSize}
+          disabled={ !formData.accountType || !formData.accountSize || !formData.platform }
         >
           Next <ChevronRight size={16} />
         </button>
@@ -181,16 +182,16 @@ const TradingChallenge = () => {
       
       <div className={styles.formGrid}>
         <div className={styles.formGroup}>
-          <label>First Name</label>
+          <label>Name</label>
           <input
             type="text"
             value={formData.firstName}
             onChange={(e) => handleInputChange('firstName', e.target.value)}
-            placeholder="Enter your first name"
+            placeholder="Enter your name"
           />
         </div>
 
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label>Last Name</label>
           <input
             type="text"
@@ -198,7 +199,7 @@ const TradingChallenge = () => {
             onChange={(e) => handleInputChange('lastName', e.target.value)}
             placeholder="Enter your last name"
           />
-        </div>
+        </div> */}
 
         <div className={styles.formGroup}>
           <label>Country</label>
@@ -265,7 +266,7 @@ const TradingChallenge = () => {
         <button 
           className={styles.btnPrimary}
           onClick={handleNext}
-          disabled={!formData.firstName || !formData.lastName || !formData.billingAddress}
+          disabled={!formData.firstName  || !formData.billingAddress}
         >
           Proceed to Summary <ChevronRight size={16} />
         </button>
@@ -295,14 +296,14 @@ const TradingChallenge = () => {
             <span>Account Size:</span>
             <span>{accountSizes.find(size => size.value === formData.accountSize)?.label}</span>
           </div>
-          <div className={styles.summaryRow}>
+          {/* <div className={styles.summaryRow}>
             <span>Profit Target:</span>
             <span>{formData.profitTarget}</span>
           </div>
           <div className={styles.summaryRow}>
             <span>Country:</span>
             <span>{formData.country}</span>
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.summaryTotal}>
@@ -321,7 +322,7 @@ const TradingChallenge = () => {
             onChange={(e) => handleInputChange('agreeToTerms', e.target.checked)}
           />
           <span className={styles.checkmark}></span>
-          I have read and agree to the Terms and Conditions
+          I have read and agree to the Rules and Conditions
         </label>
       </div>
 
@@ -334,7 +335,7 @@ const TradingChallenge = () => {
           onClick={handleConfirmOrder}
           disabled={!formData.agreeToTerms}
         >
-          <Check size={16} /> Confirm Order
+          <Check size={17} /> Confirm Order
         </button>
       </div>
     </div>

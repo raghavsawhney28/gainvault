@@ -263,7 +263,7 @@
 }
 
 .totalPrice {
-  color: #28A745;
+  color: #ffffff;
   font-size: 2rem;
   font-weight: 700;
 }
@@ -366,13 +366,13 @@
 }
 
 .btnSuccess {
-  background-color: #28A745;
+  background-color: #1766ce;
   color: white;
   margin-left: auto;
 }
 
 .btnSuccess:hover:not(:disabled) {
-  background-color: #1e7e34;
+  background-color: #477cf0;
   transform: translateY(-1px);
 }
 
