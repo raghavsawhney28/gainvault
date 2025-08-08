@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 import WalletButton from '../WalletButton/WalletButton'
 import styles from './Header.module.css';
 import logo from "../../assets/logo.png";
 
-const Header = () => {
+const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,6 +21,7 @@ const Header = () => {
   const handleStartTrading = () => {
     navigate('/trading-challenge');
   };
+
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
@@ -45,7 +46,21 @@ const Header = () => {
           </nav>
 
           <div className={styles.headerActions}>
-            {/* <a href="#signin" className={styles.signIn}>Sign In</a> */}
+            {isLoggedIn ? (
+              <div className={styles.userSection}>
+                <span className={styles.welcomeMessage}>
+                  Welcome, {username}!
+                </span>
+                <button className={styles.logoutButton} onClick={onLogout}>
+                  <LogOut size={16} />
+                  Log Out
+                </button>
+              </div>
+            ) : (
+              <button className={styles.authButton} onClick={onAuthClick}>
+                Sign Up / Log In
+              </button>
+            )}
             <WalletButton />
             <button className={styles.btnPrimary} onClick={handleStartTrading}>
               Start Trading

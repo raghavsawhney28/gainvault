@@ -80,6 +80,55 @@
   gap: calc(var(--spacing-unit) * 3);
 }
 
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.welcomeMessage {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.authButton {
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid var(--accent-green);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: var(--accent-green);
+}
+
+.authButton:hover {
+  background-color: var(--accent-green);
+  color: var(--text-primary);
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.logoutButton:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
 .signIn {
   color: var(--text-primary);
   text-decoration: none;
@@ -124,6 +173,26 @@
 @media (max-width: 768px) {
   .container {
     padding: 0 calc(var(--spacing-unit) * 2);
+  }
+
+  .headerActions {
+    gap: calc(var(--spacing-unit) * 2);
+  }
+
+  .userSection {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    align-items: flex-end;
+  }
+
+  .welcomeMessage {
+    font-size: 0.75rem;
+  }
+
+  .authButton,
+  .logoutButton {
+    font-size: 0.75rem;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
   }
 
   .headerContent {

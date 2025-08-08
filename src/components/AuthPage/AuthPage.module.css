@@ -1,0 +1,377 @@
+/* Auth Page Styles */
+.authOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(5px);
+}
+
+.authModal {
+  background-color: var(--card-bg);
+  border-radius: calc(var(--spacing-unit) * 2);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.authHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.authHeader h2 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: calc(var(--spacing-unit) * 1);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.closeButton:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.authContent {
+  padding: calc(var(--spacing-unit) * 3);
+}
+
+/* Wallet Section */
+.walletSection {
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: var(--primary-bg);
+  border-radius: calc(var(--spacing-unit) * 1);
+  border: 1px solid var(--border-color);
+}
+
+.walletSection h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.walletPrompt {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  color: #FFA502;
+}
+
+.walletConnected {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  color: var(--accent-green);
+}
+
+.connectButton {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #9945FF, #14F195);
+  color: var(--text-primary);
+  width: 100%;
+  justify-content: center;
+}
+
+.connectButton:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.connectButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.installButton {
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid #9945FF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: #9945FF;
+}
+
+.installButton:hover {
+  background: #9945FF;
+  color: var(--text-primary);
+}
+
+/* Form Styles */
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 3);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+.formGroup label {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrapper svg {
+  position: absolute;
+  left: calc(var(--spacing-unit) * 2);
+  color: var(--text-secondary);
+  z-index: 1;
+}
+
+.inputWrapper input {
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 6);
+  border: 1px solid var(--border-color);
+  border-radius: calc(var(--spacing-unit) * 1);
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.inputWrapper input:focus {
+  outline: none;
+  border-color: var(--accent-green);
+}
+
+.inputWrapper input::placeholder {
+  color: var(--text-secondary);
+}
+
+.inputWrapper input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.eyeButton {
+  position: absolute;
+  right: calc(var(--spacing-unit) * 2);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: calc(var(--spacing-unit) * 1);
+  border-radius: 4px;
+  transition: color 0.3s ease;
+}
+
+.eyeButton:hover {
+  color: var(--text-primary);
+}
+
+/* Messages */
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  color: #FF4757;
+  background-color: rgba(255, 71, 87, 0.1);
+  padding: calc(var(--spacing-unit) * 2);
+  border-radius: calc(var(--spacing-unit) * 1);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  font-size: 0.875rem;
+}
+
+.successMessage {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  color: var(--accent-green);
+  background-color: rgba(45, 218, 125, 0.1);
+  padding: calc(var(--spacing-unit) * 2);
+  border-radius: calc(var(--spacing-unit) * 1);
+  border: 1px solid rgba(45, 218, 125, 0.3);
+  font-size: 0.875rem;
+}
+
+/* Submit Button */
+.submitButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--accent-green);
+  color: var(--text-primary);
+  min-height: 48px;
+}
+
+.submitButton:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Auth Toggle */
+.authToggle {
+  text-align: center;
+  margin-top: calc(var(--spacing-unit) * 3);
+  padding-top: calc(var(--spacing-unit) * 3);
+  border-top: 1px solid var(--border-color);
+}
+
+.authToggle span {
+  color: var(--text-secondary);
+  margin-right: calc(var(--spacing-unit) * 1);
+}
+
+.authToggle button {
+  background: none;
+  border: none;
+  color: var(--accent-green);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.authToggle button:hover:not(:disabled) {
+  color: #22C55E;
+}
+
+.authToggle button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Demo Credentials */
+.demoCredentials {
+  margin-top: calc(var(--spacing-unit) * 3);
+  padding: calc(var(--spacing-unit) * 2);
+  background-color: rgba(45, 218, 125, 0.1);
+  border-radius: calc(var(--spacing-unit) * 1);
+  border: 1px solid rgba(45, 218, 125, 0.3);
+}
+
+.demoCredentials h4 {
+  color: var(--accent-green);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: calc(var(--spacing-unit) * 1);
+}
+
+.demoCredentials p {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin: calc(var(--spacing-unit) * 0.5) 0;
+}
+
+.demoCredentials code {
+  background-color: var(--primary-bg);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: var(--accent-green);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .authModal {
+    width: 95%;
+    margin: calc(var(--spacing-unit) * 2);
+  }
+
+  .authContent {
+    padding: calc(var(--spacing-unit) * 2);
+  }
+
+  .walletSection {
+    padding: calc(var(--spacing-unit) * 2);
+  }
+
+  .inputWrapper input {
+    padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 5);
+  }
+}
+
+@media (max-width: 480px) {
+  .authHeader {
+    padding: calc(var(--spacing-unit) * 2);
+  }
+
+  .authHeader h2 {
+    font-size: 1.25rem;
+  }
+
+  .demoCredentials p {
+    font-size: 0.7rem;
+  }
+}
