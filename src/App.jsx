@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import HeroSection from './components/HeroSection/HeroSection';
@@ -10,22 +9,19 @@ import Footer from './components/Footer/Footer';
 import TradingChallenge from './pages/TradingChallenge/TradingChallenge';
 import Rules from './pages/Rules/Rules';
 import AuthPage from './components/AuthPage/AuthPage';
+import useAuth from './hooks/useAuth';
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { isLoggedIn, user, logout } = useAuth();
+  const [showAuthModal, setShowAuthModal] = React.useState(false);
 
   const handleAuthSuccess = (user) => {
-    setIsLoggedIn(true);
-    setUsername(user.username);
     setShowAuthModal(false);
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUsername('');
+    logout();
   };
 
   const openAuthModal = () => {
@@ -40,7 +36,7 @@ function App() {
     <div className="App">
       <Header 
         isLoggedIn={isLoggedIn}
-        username={username}
+        username={user?.username}
         onAuthClick={openAuthModal}
         onLogout={handleLogout}
       />

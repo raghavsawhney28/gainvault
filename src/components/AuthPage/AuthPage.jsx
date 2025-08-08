@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Lock, Wallet, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
 import usePhantomWallet from '../../hooks/usePhantomWallet';
+import useAuth from '../../hooks/useAuth';
 import styles from './AuthPage.module.css';
 
 const AuthPage = ({ onAuthSuccess, onClose }) => {
@@ -24,6 +25,8 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
     formatAddress,
     isPhantomInstalled
   } = usePhantomWallet();
+  
+  const { signup, signin } = useAuth();
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -63,32 +66,6 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
     return true;
   };
 
-  const simulateApiCall = (endpoint, data) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (endpoint === 'signup') {
-          // Simulate existing username check
-          if (data.username.toLowerCase() === 'admin') {
-            reject(new Error('Username already exists'));
-            return;
-          }
-          resolve({ success: true, message: 'Account created successfully' });
-        } else if (endpoint === 'signin') {
-          // Simulate authentication
-          const validUsers = ['testuser', 'demo', 'trader'];
-          if (validUsers.includes(data.username.toLowerCase()) && data.password === 'password123') {
-            resolve({ 
-              success: true, 
-              user: { username: data.username, walletAddress: publicKey?.toString() }
-            });
-          } else {
-            reject(new Error('Invalid username or password'));
-          }
-        }
-      }, 1500);
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -100,7 +77,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
 
     try {
       if (isSignUp) {
-        const response = await simulateApiCall('signup', {
+        const response = await signup({
           username: formData.username,
           password: formData.password,
           walletAddress: publicKey.toString()
@@ -113,7 +90,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
           setSuccess('');
         }, 2000);
       } else {
-        const response = await simulateApiCall('signin', {
+        const response = await signin({
           username: formData.username,
           password: formData.password
         });
@@ -273,13 +250,6 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
             </button>
           </div>
 
-          {!isSignUp && (
-            <div className={styles.demoCredentials}>
-              <h4>Demo Credentials:</h4>
-              <p>Username: <code>testuser</code> | Password: <code>password123</code></p>
-              <p>Username: <code>demo</code> | Password: <code>password123</code></p>
-            </div>
-          )}
         </div>
       </div>
     </div>
