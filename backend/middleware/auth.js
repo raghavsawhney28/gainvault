@@ -1,59 +1,32 @@
+// backend/middleware/auth.js
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
 
-export const authenticateToken = async (req, res, next) => {
+const auth = (req, res, next) => {
   try {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    // Check if the token is in the Authorization header
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
-      return res.status(401).json({ 
-        success: false, 
-        error: 'Access token required' 
-      });
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'No token provided, authorization denied' });
     }
+
+    const token = authHeader.split(' ')[1];
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    // Get user from database
-    const user = await User.findById(decoded.userId).select('-password');
-    
-    if (!user || !user.isActive) {
-      return res.status(401).json({ 
-        success: false, 
-        error: 'User not found or inactive' 
-      });
-    }
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+      }
 
-    // Add user to request object
-    req.user = user;
-    next();
-  } catch (error) {
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(403).json({ 
-        success: false, 
-        error: 'Invalid token' 
-      });
-    } else if (error.name === 'TokenExpiredError') {
-      return res.status(403).json({ 
-        success: false, 
-        error: 'Token expired' 
-      });
-    }
-    
-    console.error('Auth middleware error:', error);
-    return res.status(500).json({ 
-      success: false, 
-      error: 'Authentication failed' 
+      // Attach user info to request
+      req.user = decoded;
+      next();
     });
+
+  } catch (error) {
+    console.error('Auth middleware error:', error);
+    res.status(500).json({ error: 'Server error in authentication middleware' });
   }
 };
 
-export const generateToken = (userId) => {
-  return jwt.sign(
-    { userId },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-  );
-};
+export default auth;

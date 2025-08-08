@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, X, LogOut } from 'lucide-react';
-import WalletButton from '../WalletButton/WalletButton'
+import WalletButton from '../WalletButton/WalletButton';
 import styles from './Header.module.css';
 import logo from "../../assets/logo.png";
+import { AuthContext } from '../../context/authcontext';
 
-const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
+const Header = ({ onAuthClick }) => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // ✅ Get auth state from context
+  const { isLoggedIn, username, logout } = useContext(AuthContext);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -28,11 +30,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
         <div className={styles.headerContent}>
           <div className={styles.logo}>
             <div className={styles.logoIcon}>
-              <img
-                src={logo}
-                alt="GainVault Logo"
-                className={styles.logoImage}
-              />
+              <img src={logo} alt="GainVault Logo" className={styles.logoImage} />
             </div>
             <span>GainVault</span>
           </div>
@@ -51,7 +49,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
                 <span className={styles.welcomeMessage}>
                   Welcome, {username}!
                 </span>
-                <button className={styles.logoutButton} onClick={onLogout}>
+                <button className={styles.logoutButton} onClick={logout}>
                   <LogOut size={16} />
                   Log Out
                 </button>
