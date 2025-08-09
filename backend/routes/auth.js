@@ -4,8 +4,22 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import auth from '../middleware/auth.js';
+import crypto from 'crypto'; // Node.js built-in module, no install needed
 
 const router = express.Router();
+// Add this route somewhere in your router before export
+router.get('/nonce', (req, res) => {
+  try {
+    // Generate a random nonce (e.g., 16 bytes hex string)
+    const nonce = crypto.randomBytes(16).toString('hex');
+    res.json({ nonce });
+  } catch (error) {
+    console.error('Error generating nonce:', error);
+    res.status(500).json({ error: 'Failed to generate nonce' });
+  }
+});
+
+
 
 /**
  * @route   POST /api/auth/register
