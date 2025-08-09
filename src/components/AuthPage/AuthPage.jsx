@@ -61,9 +61,11 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
       if (formData.password !== formData.confirmPassword) {
         setError('Passwords do not match');
         return false;
-        setError('Passwords do not match');
-        return false;
       }
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
