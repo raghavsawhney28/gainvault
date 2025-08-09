@@ -21,6 +21,25 @@ router.get('/nonce', (req, res) => {
 
 
 
+const verifySignature = (message, signature, publicKey) => {
+  try {
+    const messageBytes = new TextEncoder().encode(message);
+    const signatureBytes = Uint8Array.from(Buffer.from(signature, 'base64')); // 🔥 Fix is here
+    const publicKeyBytes = new PublicKey(publicKey).toBytes();
+
+    const verified = nacl.sign.detached.verify(
+      messageBytes,
+      signatureBytes,
+      publicKeyBytes
+    );
+
+    console.log('🔐 Signature verified:', verified);
+    return verified;
+  } catch (error) {
+    console.error('Signature verification error:', error);
+    return false;
+  }
+};
 /**
  * @route   POST /api/auth/register
  * @desc    Register a new user
