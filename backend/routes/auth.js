@@ -2,16 +2,24 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto'; // built-in
+import nacl from 'tweetnacl';
+import { PublicKey } from '@solana/web3.js';
+
 import User from '../models/User.js';
 import auth from '../middleware/auth.js';
-import crypto from 'crypto'; // Node.js built-in module, no install needed
 
 const router = express.Router();
-// Add this route somewhere in your router before export
+
+// In-memory store for nonces (for demo purposes only! Use DB or Redis in prod)
+const nonces = {};
+
+// Generate and send nonce for signing
 router.get('/nonce', (req, res) => {
   try {
-    // Generate a random nonce (e.g., 16 bytes hex string)
     const nonce = crypto.randomBytes(16).toString('hex');
+    // For simplicity, associate nonce with some client id or wallet address via query or header
+    // Here, just send nonce to client. You should have a better mapping in prod.
     res.json({ nonce });
   } catch (error) {
     console.error('Error generating nonce:', error);
@@ -19,27 +27,63 @@ router.get('/nonce', (req, res) => {
   }
 });
 
-
-
+// Signature verification helper
 const verifySignature = (message, signature, publicKey) => {
   try {
     const messageBytes = new TextEncoder().encode(message);
-    const signatureBytes = Uint8Array.from(Buffer.from(signature, 'base64')); // 🔥 Fix is here
+    const signatureBytes = Uint8Array.from(Buffer.from(signature, 'base64'));
     const publicKeyBytes = new PublicKey(publicKey).toBytes();
 
-    const verified = nacl.sign.detached.verify(
-      messageBytes,
-      signatureBytes,
-      publicKeyBytes
-    );
-
-    console.log('🔐 Signature verified:', verified);
-    return verified;
+    return nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes);
   } catch (error) {
     console.error('Signature verification error:', error);
     return false;
   }
 };
+
+// Phantom wallet sign-in route
+router.post('/phantom-signin', async (req, res) => {
+  try {
+    const { publicKey, signature, message } = req.body;
+
+    if (!publicKey || !signature || !message) {
+      return res.status(400).json({ error: 'Missing publicKey, signature, or message' });
+    }
+
+    // Verify signature
+    const isValid = verifySignature(message, signature, publicKey);
+
+    if (!isValid) {
+      return res.status(401).json({ error: 'Invalid signature' });
+    }
+
+    // TODO: Verify nonce inside message against stored nonce here for security
+
+    // Find or create user by wallet address
+    let user = await User.findOne({ walletAddress: publicKey });
+    if (!user) {
+      user = new User({
+        username: publicKey, // default username as wallet address
+        walletAddress: publicKey,
+        password: crypto.randomBytes(32).toString('hex'), // random password since wallet sign-in
+      });
+      await user.save();
+    }
+
+    // Issue JWT token
+    const token = jwt.sign(
+      { id: user._id, walletAddress: user.walletAddress },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token });
+  } catch (error) {
+    console.error('Phantom signin error:', error);
+    res.status(500).json({ error: 'Server error during Phantom signin' });
+  }
+});
+
 /**
  * @route   POST /api/auth/register
  * @desc    Register a new user
@@ -49,15 +93,14 @@ router.post('/register', async (req, res) => {
   try {
     const { username, walletAddress, password } = req.body;
 
-    // Validate input
     if (!username || !walletAddress || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ 
+    const existingUser = await User.findOne({
       $or: [{ username }, { walletAddress }]
     });
+
     if (existingUser) {
       if (existingUser.username === username) {
         return res.status(400).json({ error: 'Username already exists' });
@@ -67,20 +110,18 @@ router.post('/register', async (req, res) => {
       }
     }
 
-    // Create user
     const newUser = new User({
       username,
       walletAddress,
-      password, // Will be hashed by the pre-save middleware
+      password, // hashed by model middleware
     });
 
     await newUser.save();
 
-    res.status(201).json({ 
+    res.status(201).json({
       success: true,
-      message: 'User registered successfully' 
+      message: 'User registered successfully'
     });
-
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ error: 'Server error during registration' });
@@ -96,28 +137,23 @@ router.post('/signin', async (req, res) => {
   try {
     const { walletAddress, password } = req.body;
 
-    // Validate input
     if (!walletAddress || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // Check for user
     const user = await User.findOne({ walletAddress });
     if (!user) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
-    // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
-    // Update last login
     user.lastLogin = new Date();
     await user.save();
 
-    // Create JWT
     const token = jwt.sign(
       { id: user._id, walletAddress: user.walletAddress },
       process.env.JWT_SECRET,
@@ -133,7 +169,6 @@ router.post('/signin', async (req, res) => {
         walletAddress: user.walletAddress,
       }
     });
-
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error during login' });
