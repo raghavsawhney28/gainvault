@@ -14,32 +14,39 @@ const router = express.Router();
  */
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { username, walletAddress, password } = req.body;
 
     // Validate input
-    if (!name || !email || !password) {
+    if (!username || !walletAddress || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ 
+      $or: [{ username }, { walletAddress }]
+    });
     if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
+      if (existingUser.username === username) {
+        return res.status(400).json({ error: 'Username already exists' });
+      }
+      if (existingUser.walletAddress === walletAddress) {
+        return res.status(400).json({ error: 'Wallet address already registered' });
+      }
     }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
+      username,
+      walletAddress,
+      password, // Will be hashed by the pre-save middleware
     });
 
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ 
+      success: true,
+      message: 'User registered successfully' 
+    });
 
   } catch (error) {
     console.error('Register error:', error);
@@ -54,15 +61,15 @@ router.post('/register', async (req, res) => {
  */
 router.post('/signin', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { walletAddress, password } = req.body;
 
     // Validate input
-    if (!email || !password) {
+    if (!walletAddress || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
     // Check for user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ walletAddress });
     if (!user) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
@@ -73,19 +80,24 @@ router.post('/signin', async (req, res) => {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
+    // Update last login
+    user.lastLogin = new Date();
+    await user.save();
+
     // Create JWT
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, walletAddress: user.walletAddress },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
     res.json({
+      success: true,
       token,
       user: {
         id: user._id,
-        name: user.name,
-        email: user.email,
+        username: user.username,
+        walletAddress: user.walletAddress,
       }
     });
 
@@ -103,7 +115,15 @@ router.post('/signin', async (req, res) => {
 router.get('/me', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        walletAddress: user.walletAddress,
+        lastLogin: user.lastLogin
+      }
+    });
   } catch (error) {
     console.error('Fetch user error:', error);
     res.status(500).json({ error: 'Server error while fetching user' });

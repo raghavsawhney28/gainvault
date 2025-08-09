@@ -37,6 +37,10 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
   };
 
   const validateForm = () => {
+    if (!connected || !publicKey) {
+      setError('Please connect your Phantom wallet first');
+      return false;
+    }
     if (!formData.username.trim()) {
       setError('Username is required');
       return false;
@@ -54,18 +58,12 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
       return false;
     }
     if (isSignUp) {
-      if (!connected || !publicKey) {
-        setError('Please connect your Phantom wallet first');
-        return false;
-      }
       if (formData.password !== formData.confirmPassword) {
         setError('Passwords do not match');
         return false;
+        setError('Passwords do not match');
+        return false;
       }
-    }
-    return true;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -91,7 +89,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
         }, 2000);
       } else {
         const response = await signin({
-          username: formData.username,
+          walletAddress: publicKey.toString(),
           password: formData.password
         });
         
@@ -120,52 +118,52 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
         </div>
 
         <div className={styles.authContent}>
-          {isSignUp && (
-            <div className={styles.walletSection}>
-              <h3>Connect Wallet</h3>
-              {!isPhantomInstalled ? (
-                <div className={styles.walletPrompt}>
-                  <AlertCircle size={20} />
-                  <span>Phantom wallet not detected</span>
-                  <button 
-                    className={styles.installButton}
-                    onClick={() => window.open('https://phantom.app/', '_blank')}
-                  >
-                    Install Phantom
-                  </button>
-                </div>
-              ) : connected ? (
-                <div className={styles.walletConnected}>
-                  <CheckCircle size={20} />
-                  <span>Connected: {formatAddress(publicKey)}</span>
-                </div>
-              ) : (
+          <div className={styles.walletSection}>
+            <h3>Connect Wallet</h3>
+            {!isPhantomInstalled ? (
+              <div className={styles.walletPrompt}>
+                <AlertCircle size={20} />
+                <span>Phantom wallet not detected</span>
                 <button 
-                  className={styles.connectButton}
-                  onClick={connectWallet}
-                  disabled={connecting}
+                  className={styles.installButton}
+                  onClick={() => window.open('https://phantom.app/', '_blank')}
                 >
-                  <Wallet size={16} />
-                  {connecting ? 'Connecting...' : 'Connect Phantom Wallet'}
+                  Install Phantom
                 </button>
-              )}
-            </div>
-          )}
+              </div>
+            ) : connected ? (
+              <div className={styles.walletConnected}>
+                <CheckCircle size={20} />
+                <span>Connected: {formatAddress(publicKey)}</span>
+              </div>
+            ) : (
+              <button 
+                className={styles.connectButton}
+                onClick={connectWallet}
+                disabled={connecting}
+              >
+                <Wallet size={16} />
+                {connecting ? 'Connecting...' : 'Connect Phantom Wallet'}
+              </button>
+            )}
+          </div>
 
           <form onSubmit={handleSubmit} className={styles.authForm}>
-            <div className={styles.formGroup}>
-              <label>Username</label>
-              <div className={styles.inputWrapper}>
-                <User size={18} />
-                <input
-                  type="text"
-                  value={formData.username}
-                  onChange={(e) => handleInputChange('username', e.target.value)}
-                  placeholder="Enter your username"
-                  disabled={isLoading}
-                />
+            {isSignUp && (
+              <div className={styles.formGroup}>
+                <label>Username</label>
+                <div className={styles.inputWrapper}>
+                  <User size={18} />
+                  <input
+                    type="text"
+                    value={formData.username}
+                    onChange={(e) => handleInputChange('username', e.target.value)}
+                    placeholder="Enter your username"
+                    disabled={isLoading}
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             <div className={styles.formGroup}>
               <label>Password</label>
@@ -228,7 +226,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
             <button 
               type="submit" 
               className={styles.submitButton}
-              disabled={isLoading || (isSignUp && !connected)}
+              disabled={isLoading || !connected}
             >
               {isLoading ? (
                 <>
