@@ -4,7 +4,7 @@ import { Menu, X, LogOut } from 'lucide-react';
 import WalletButton from '../WalletButton/WalletButton';
 import styles from './Header.module.css';
 import logo from "../../assets/logo.png";
-import { AuthContext } from '../../context/authcontext';
+import { AuthContext } from '../../context/AuthContext';
 
 const Header = ({ onAuthClick }) => {
   const navigate = useNavigate();
