@@ -89,7 +89,7 @@ router.post('/phantom-signin', async (req, res) => {
  * @desc    Register a new user
  * @access  Public
  */
-router.post('/register', async (req, res) => {
+router.post('/signup', async (req, res) => {
   try {
     const { username, walletAddress, password } = req.body;
 
