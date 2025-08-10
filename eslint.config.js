@@ -9,7 +9,7 @@ export default [
   [{server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3001', // Change to your actual backend server
+        target: 'https://gainvault-capital.onrender.com', // Change to your actual backend server
         changeOrigin: true,
         secure: false,
       },
