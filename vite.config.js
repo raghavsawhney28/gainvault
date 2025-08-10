@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.RENDER ? '/' : '/gainvault/', // 👈 Required for GitHub Pages
+  base: '/', // 👈 Required for GitHub Pages
   server: {
     proxy: {
       '/api': {
