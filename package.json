@@ -1,13 +1,11 @@
 {
-  "homepage": "https://raghavsawhney28.github.io/gainvault/",
+  
   "name": "gain-vault",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "predeploy": "npm run build && copy dist\\index.html dist\\404.html",
-    "deploy": "gh-pages -d dist",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
