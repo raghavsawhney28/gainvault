@@ -159,7 +159,7 @@ router.post('/signin', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
-
+    console.log(`User ${user.username} logged in successfully`);
     res.json({
       success: true,
       token,
