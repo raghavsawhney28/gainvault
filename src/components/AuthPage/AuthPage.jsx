@@ -34,7 +34,14 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
     isPhantomInstalled
   } = usePhantomWallet();
 
-  const { signup, signin, checkAuthStatus, error, clearError } = useAuth();
+  const { signup, checkAuthStatus, error, clearError, isLoggedIn } = useAuth();
+
+  // Auto-close modal when user gets logged in via wallet connection
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      onAuthSuccess?.();
+    }
+  }, [isLoggedIn, onAuthSuccess]);
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -59,20 +66,20 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
         alert("Username must be at least 3 characters long");
         return false;
       }
-    }
+      
+      if (!formData.password) {
+        alert("Password is required");
+        return false;
+      }
+      if (formData.password.length < 6) {
+        alert("Password must be at least 6 characters long");
+        return false;
+      }
 
-    if (!formData.password) {
-      alert("Password is required");
-      return false;
-    }
-    if (formData.password.length < 6) {
-      alert("Password must be at least 6 characters long");
-      return false;
-    }
-
-    if (isSignUp && formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return false;
+      if (formData.password !== formData.confirmPassword) {
+        alert("Passwords do not match");
+        return false;
+      }
     }
 
     return true;
@@ -80,6 +87,13 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Only allow signup through the form, signin happens automatically via wallet
+    if (!isSignUp) {
+      alert("Sign in happens automatically when you connect your wallet!");
+      return;
+    }
+    
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -87,36 +101,18 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
     clearError();
 
     try {
-      if (isSignUp) {
-        console.log("🔹 Sending sign-up request...");
-        const response = await signup({
-          username: formData.username.trim(),
-          password: formData.password,
-          walletAddress: publicKey.toString()
-        });
-        console.log("✅ Sign-up response:", response);
+      console.log("🔹 Sending sign-up request...");
+      const response = await signup({
+        username: formData.username.trim(),
+        password: formData.password,
+        walletAddress: publicKey.toString()
+      });
+      console.log("✅ Sign-up response:", response);
 
-        setSuccess(response.message || "Account created successfully!");
-        setTimeout(() => {
-          setIsSignUp(false);
-          setFormData({ username: "", password: "", confirmPassword: "" });
-          setSuccess("");
-        }, 2000);
-      } else {
-        console.log("🔹 Sending sign-in request...");
-        const response = await signin({
-          walletAddress: publicKey.toString(),
-          password: formData.password
-        });
-        console.log("✅ Sign-in response:", response);
-
-        if (response?.user) {
-          await checkAuthStatus();
-          onAuthSuccess?.(response.user);
-        } else {
-          throw new Error(response?.message || "Invalid login response");
-        }
-      }
+      setSuccess(response.message || "Account created successfully! You are now logged in.");
+      setTimeout(() => {
+        onAuthSuccess?.();
+      }, 2000);
     } catch (err) {
       console.error("❌ Auth error:", err);
     } finally {
@@ -135,7 +131,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
     <div className={styles.authOverlay}>
       <div className={styles.authModal}>
         <div className={styles.authHeader}>
-          <h2>{isSignUp ? "Create Account" : "Sign In"}</h2>
+          <h2>{isSignUp ? "Create Account" : "Connect Wallet to Sign In"}</h2>
           <button className={styles.closeButton} onClick={onClose}>
             ×
           </button>
@@ -144,7 +140,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
         <div className={styles.authContent}>
           {/* Wallet Connection */}
           <div className={styles.walletSection}>
-            <h3>Connect Wallet</h3>
+            <h3>{isSignUp ? "Connect Wallet" : "Connect Wallet to Sign In"}</h3>
             {!isPhantomInstalled ? (
               <div className={styles.walletPrompt}>
                 <AlertCircle size={20} />
@@ -159,7 +155,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
             ) : connected ? (
               <div className={styles.walletConnected}>
                 <CheckCircle size={20} />
-                <span>Connected: {formatAddress(publicKey)}</span>
+                <span>Connected: {formatAddress(publicKey)} {!isSignUp && "- You're signed in!"}</span>
               </div>
             ) : (
               <button
@@ -168,14 +164,14 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                 disabled={connecting}
               >
                 <Wallet size={16} />
-                {connecting ? "Connecting..." : "Connect Phantom Wallet"}
+                {connecting ? "Connecting..." : isSignUp ? "Connect Phantom Wallet" : "Connect to Sign In"}
               </button>
             )}
           </div>
 
-          {/* Auth Form */}
-          <form onSubmit={handleSubmit} className={styles.authForm}>
-            {isSignUp && (
+          {/* Auth Form - Only show for signup */}
+          {isSignUp && (
+            <form onSubmit={handleSubmit} className={styles.authForm}>
               <div className={styles.formGroup}>
                 <label>Username</label>
                 <div className={styles.inputWrapper}>
@@ -191,30 +187,28 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                   />
                 </div>
               </div>
-            )}
 
-            <div className={styles.formGroup}>
-              <label>Password</label>
-              <div className={styles.inputWrapper}>
-                <Lock size={18} />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
-                  onChange={(e) => handleInputChange("password", e.target.value)}
-                  placeholder="Enter your password"
-                  disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  className={styles.eyeButton}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
+              <div className={styles.formGroup}>
+                <label>Password</label>
+                <div className={styles.inputWrapper}>
+                  <Lock size={18} />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={(e) => handleInputChange("password", e.target.value)}
+                    placeholder="Enter your password"
+                    disabled={isLoading}
+                  />
+                  <button
+                    type="button"
+                    className={styles.eyeButton}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {isSignUp && (
               <div className={styles.formGroup}>
                 <label>Confirm Password</label>
                 <div className={styles.inputWrapper}>
@@ -243,39 +237,53 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                   </button>
                 </div>
               </div>
-            )}
 
-            {error && (
-              <div className={styles.errorMessage}>
-                <AlertCircle size={16} />
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className={styles.successMessage}>
-                <CheckCircle size={16} />
-                {success}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className={styles.submitButton}
-              disabled={isLoading || !connected}
-            >
-              {isLoading ? (
-                <>
-                  <div className={styles.spinner}></div>
-                  {isSignUp ? "Creating Account..." : "Signing In..."}
-                </>
-              ) : isSignUp ? (
-                "Create Account"
-              ) : (
-                "Sign In"
+              {error && (
+                <div className={styles.errorMessage}>
+                  <AlertCircle size={16} />
+                  {error}
+                </div>
               )}
-            </button>
-          </form>
+
+              {success && (
+                <div className={styles.successMessage}>
+                  <CheckCircle size={16} />
+                  {success}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={isLoading || !connected}
+              >
+                {isLoading ? (
+                  <>
+                    <div className={styles.spinner}></div>
+                    Creating Account...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
+              </button>
+            </form>
+          )}
+
+          {/* Sign In Message */}
+          {!isSignUp && (
+            <div className={styles.signInMessage}>
+              <div className={styles.signInInfo}>
+                <CheckCircle size={24} />
+                <div>
+                  <h3>Wallet-Based Authentication</h3>
+                  <p>Simply connect your Phantom wallet to sign in. No password required!</p>
+                  {connected && (
+                    <p className={styles.connectedText}>✅ You're now signed in with {formatAddress(publicKey)}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className={styles.authToggle}>
             <span>

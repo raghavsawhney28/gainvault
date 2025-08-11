@@ -63,13 +63,16 @@ router.post('/phantom-signin', async (req, res) => {
     let user = await User.findOne({ walletAddress: publicKey });
     if (!user) {
       user = new User({
-        username: publicKey, // default username as wallet address
+        username: `user_${publicKey.slice(0, 8)}`, // default username as shortened wallet address
         walletAddress: publicKey,
         password: crypto.randomBytes(32).toString('hex'), // random password since wallet sign-in
       });
       await user.save();
     }
 
+    // Update last login
+    user.lastLogin = new Date();
+    await user.save();
     // Issue JWT token
     const token = jwt.sign(
       { id: user._id, walletAddress: user.walletAddress },

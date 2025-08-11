@@ -59,13 +59,24 @@ const useAuth = () => {
 
     // If phantom login, credentials will have { token, user, phantom: true }
     if (credentials.phantom) {
-      const { token, user } = credentials;
+      const { token } = credentials;
       if (token) {
         localStorage.setItem('auth_token', token);
       }
       setIsLoggedIn(true);
-      setUser(user);
-      return { success: true, user };
+      
+      // Fetch user data from the token
+      try {
+        const response = await api.get('/auth/me');
+        if (response.data.success) {
+          setUser(response.data.user);
+          return { success: true, user: response.data.user };
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+      
+      return { success: true };
     }
 
     // Normal email/password signin

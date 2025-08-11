@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Buffer } from "buffer";
 import axios from "axios";
-import useAuth from "../hooks/useAuth";  // Import the unified auth hook
+import useAuth from "./useAuth";  // Import the unified auth hook
 
 const usePhantomWallet = () => {
   const [wallet, setWallet] = useState(null);
@@ -31,12 +31,45 @@ const usePhantomWallet = () => {
           .then(({ publicKey }) => {
             setPublicKey(publicKey);
             setConnected(true);
+            // Auto-login when wallet connects
+            handleAutoLogin(publicKey);
           })
           .catch(() => {});
       }
     }
   }, [getProvider]);
 
+  const handleAutoLogin = async (walletPublicKey) => {
+    try {
+      // Get nonce from backend
+      const nonceRes = await axios.get("http://localhost:3001/api/auth/nonce");
+      const { nonce } = nonceRes.data;
+
+      const message = `Sign this message to authenticate with GainVault.\n\nNonce: ${nonce}`;
+      const encodedMessage = new TextEncoder().encode(message);
+
+      // User signs the message
+      const provider = getProvider();
+      const signedMessage = await provider.signMessage(encodedMessage, "utf8");
+      const base64Signature = Buffer.from(signedMessage.signature).toString("base64");
+
+      // Send signature to backend for verification & JWT issuance
+      const authRes = await axios.post("http://localhost:3001/api/auth/phantom-signin", {
+        publicKey: walletPublicKey.toString(),
+        signature: base64Signature,
+        message,
+      });
+
+      const { token } = authRes.data;
+
+      // Use signin from useAuth to update app state & store token
+      await signin({ token, phantom: true });
+
+    } catch (error) {
+      console.error("Auto-login failed:", error);
+      // Don't show error to user for auto-login failures
+    }
+  };
   const connectWallet = useCallback(async () => {
     const provider = getProvider();
 
@@ -55,28 +88,8 @@ const usePhantomWallet = () => {
 
       localStorage.setItem("phantom_auto_connect", "true");
 
-      // Get nonce from your backend
-      const nonceRes = await axios.get("https://gainvault.onrender.com/api/auth/nonce");
-      const { nonce } = nonceRes.data;
-
-      const message = `Sign this message to authenticate with our app.\n\nNonce: ${nonce}`;
-      const encodedMessage = new TextEncoder().encode(message);
-
-      // User signs the message
-      const signedMessage = await provider.signMessage(encodedMessage, "utf8");
-      const base64Signature = Buffer.from(signedMessage.signature).toString("base64");
-
-      // Send signature to backend for verification & JWT issuance
-      const authRes = await axios.post("https://gainvault.onrender.com/api/auth/phantom-signin", {
-        publicKey: response.publicKey.toString(),
-        signature: base64Signature,
-        message,
-      });
-
-      const { token, user } = authRes.data;
-
-      // Use signin from useAuth to update app state & store token
-      await signin({ token, user, phantom: true });
+      // Auto-login when wallet connects manually
+      await handleAutoLogin(response.publicKey);
 
     } catch (error) {
       console.error("Error connecting to Phantom wallet:", error);
