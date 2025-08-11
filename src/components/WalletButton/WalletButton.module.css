@@ -55,6 +55,16 @@
   padding: calc(var(--spacing-unit) * 1);
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
 .walletInfo {
   display: flex;
   align-items: center;
@@ -95,3 +105,6 @@
     font-size: 0.75rem;
   }
 }
+
+
+

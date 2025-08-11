@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wallet, LogOut } from 'lucide-react';
+import { Wallet, LogOut, Loader2 } from 'lucide-react'; // Assuming you have a loader icon
 import usePhantomWallet from '../../hooks/usePhantomWallet';
 import styles from './WalletButton.module.css';
 
@@ -11,12 +11,12 @@ const WalletButton = () => {
     connectWallet,
     disconnectWallet,
     formatAddress,
-    isPhantomInstalled
+    isPhantomInstalled,
   } = usePhantomWallet();
 
   if (!isPhantomInstalled) {
     return (
-      <button 
+      <button
         className={styles.installButton}
         onClick={() => window.open('https://phantom.app/', '_blank')}
       >
@@ -32,10 +32,11 @@ const WalletButton = () => {
           <Wallet size={16} />
           <span>{formatAddress(publicKey)}</span>
         </div>
-        <button 
+        <button
           className={styles.disconnectButton}
           onClick={disconnectWallet}
           title="Disconnect Wallet"
+          aria-label="Disconnect Wallet"
         >
           <LogOut size={16} />
         </button>
@@ -44,12 +45,14 @@ const WalletButton = () => {
   }
 
   return (
-    <button 
+    <button
       className={styles.connectButton}
       onClick={connectWallet}
       disabled={connecting}
+      aria-busy={connecting}
+      aria-label="Connect Phantom Wallet"
     >
-      <Wallet size={16} />
+      {connecting ? <Loader2 size={16} className={styles.spinner} /> : <Wallet size={16} />}
       {connecting ? 'Connecting...' : 'Connect Wallet'}
     </button>
   );

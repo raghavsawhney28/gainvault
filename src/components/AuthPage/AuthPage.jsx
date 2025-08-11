@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
-import { User, Lock, Wallet, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
-import usePhantomWallet from '../../hooks/usePhantomWallet';
-import useAuth from '../../hooks/useAuth';
-import styles from './AuthPage.module.css';
+// AuthPage.jsx
+import React, { useState } from "react";
+import {
+  User,
+  Lock,
+  Wallet,
+  Eye,
+  EyeOff,
+  CheckCircle,
+  AlertCircle
+} from "lucide-react";
+import usePhantomWallet from "../../hooks/usePhantomWallet";
+import useAuth from "../../hooks/useAuth";
+import styles from "./AuthPage.module.css";
 
 const AuthPage = ({ onAuthSuccess, onClose }) => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-    confirmPassword: ''
+    username: "",
+    password: "",
+    confirmPassword: ""
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [success, setSuccess] = useState("");
 
   const {
     connected,
@@ -25,80 +33,92 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
     formatAddress,
     isPhantomInstalled
   } = usePhantomWallet();
-  
-  const { signup, signin } = useAuth();
+
+  const { signup, signin, checkAuthStatus, error, clearError } = useAuth();
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: value
     }));
-    setError('');
+    clearError();
   };
 
   const validateForm = () => {
     if (!connected || !publicKey) {
-      setError('Please connect your Phantom wallet first');
+      alert("Please connect your Phantom wallet first");
       return false;
     }
-    if (!formData.username.trim()) {
-      setError('Username is required');
-      return false;
-    }
-    if (formData.username.length < 3) {
-      setError('Username must be at least 3 characters long');
-      return false;
-    }
-    if (!formData.password) {
-      setError('Password is required');
-      return false;
-    }
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
-      return false;
-    }
+
     if (isSignUp) {
-      if (formData.password !== formData.confirmPassword) {
-        setError('Passwords do not match');
+      if (!formData.username.trim()) {
+        alert("Username is required");
+        return false;
+      }
+      if (formData.username.length < 3) {
+        alert("Username must be at least 3 characters long");
         return false;
       }
     }
+
+    if (!formData.password) {
+      alert("Password is required");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      alert("Password must be at least 6 characters long");
+      return false;
+    }
+
+    if (isSignUp && formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return false;
+    }
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
 
     setIsLoading(true);
-    setError('');
-    setSuccess('');
+    setSuccess("");
+    clearError();
 
     try {
       if (isSignUp) {
+        console.log("🔹 Sending sign-up request...");
         const response = await signup({
-          username: formData.username,
+          username: formData.username.trim(),
           password: formData.password,
           walletAddress: publicKey.toString()
         });
-        
-        setSuccess(response.message);
+        console.log("✅ Sign-up response:", response);
+
+        setSuccess(response.message || "Account created successfully!");
         setTimeout(() => {
           setIsSignUp(false);
-          setFormData({ username: '', password: '', confirmPassword: '' });
-          setSuccess('');
+          setFormData({ username: "", password: "", confirmPassword: "" });
+          setSuccess("");
         }, 2000);
       } else {
+        console.log("🔹 Sending sign-in request...");
         const response = await signin({
           walletAddress: publicKey.toString(),
           password: formData.password
         });
-        
-        onAuthSuccess(response.user);
+        console.log("✅ Sign-in response:", response);
+
+        if (response?.user) {
+          await checkAuthStatus();
+          onAuthSuccess?.(response.user);
+        } else {
+          throw new Error(response?.message || "Invalid login response");
+        }
       }
     } catch (err) {
-      setError(err.message);
+      console.error("❌ Auth error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -106,29 +126,32 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
 
   const toggleAuthMode = () => {
     setIsSignUp(!isSignUp);
-    setFormData({ username: '', password: '', confirmPassword: '' });
-    setError('');
-    setSuccess('');
+    setFormData({ username: "", password: "", confirmPassword: "" });
+    clearError();
+    setSuccess("");
   };
 
   return (
     <div className={styles.authOverlay}>
       <div className={styles.authModal}>
         <div className={styles.authHeader}>
-          <h2>{isSignUp ? 'Create Account' : 'Sign In'}</h2>
-          <button className={styles.closeButton} onClick={onClose}>×</button>
+          <h2>{isSignUp ? "Create Account" : "Sign In"}</h2>
+          <button className={styles.closeButton} onClick={onClose}>
+            ×
+          </button>
         </div>
 
         <div className={styles.authContent}>
+          {/* Wallet Connection */}
           <div className={styles.walletSection}>
             <h3>Connect Wallet</h3>
             {!isPhantomInstalled ? (
               <div className={styles.walletPrompt}>
                 <AlertCircle size={20} />
                 <span>Phantom wallet not detected</span>
-                <button 
+                <button
                   className={styles.installButton}
-                  onClick={() => window.open('https://phantom.app/', '_blank')}
+                  onClick={() => window.open("https://phantom.app/", "_blank")}
                 >
                   Install Phantom
                 </button>
@@ -139,17 +162,18 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                 <span>Connected: {formatAddress(publicKey)}</span>
               </div>
             ) : (
-              <button 
+              <button
                 className={styles.connectButton}
                 onClick={connectWallet}
                 disabled={connecting}
               >
                 <Wallet size={16} />
-                {connecting ? 'Connecting...' : 'Connect Phantom Wallet'}
+                {connecting ? "Connecting..." : "Connect Phantom Wallet"}
               </button>
             )}
           </div>
 
+          {/* Auth Form */}
           <form onSubmit={handleSubmit} className={styles.authForm}>
             {isSignUp && (
               <div className={styles.formGroup}>
@@ -159,7 +183,9 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                   <input
                     type="text"
                     value={formData.username}
-                    onChange={(e) => handleInputChange('username', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("username", e.target.value)
+                    }
                     placeholder="Enter your username"
                     disabled={isLoading}
                   />
@@ -172,9 +198,9 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
               <div className={styles.inputWrapper}>
                 <Lock size={18} />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={formData.password}
-                  onChange={(e) => handleInputChange('password', e.target.value)}
+                  onChange={(e) => handleInputChange("password", e.target.value)}
                   placeholder="Enter your password"
                   disabled={isLoading}
                 />
@@ -194,18 +220,26 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                 <div className={styles.inputWrapper}>
                   <Lock size={18} />
                   <input
-                    type={showConfirmPassword ? 'text' : 'password'}
+                    type={showConfirmPassword ? "text" : "password"}
                     value={formData.confirmPassword}
-                    onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("confirmPassword", e.target.value)
+                    }
                     placeholder="Confirm your password"
                     disabled={isLoading}
                   />
                   <button
                     type="button"
                     className={styles.eyeButton}
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    onClick={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
                   >
-                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    {showConfirmPassword ? (
+                      <EyeOff size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
                   </button>
                 </div>
               </div>
@@ -225,31 +259,34 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
               </div>
             )}
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={styles.submitButton}
               disabled={isLoading || !connected}
             >
               {isLoading ? (
                 <>
                   <div className={styles.spinner}></div>
-                  {isSignUp ? 'Creating Account...' : 'Signing In...'}
+                  {isSignUp ? "Creating Account..." : "Signing In..."}
                 </>
+              ) : isSignUp ? (
+                "Create Account"
               ) : (
-                isSignUp ? 'Create Account' : 'Sign In'
+                "Sign In"
               )}
             </button>
           </form>
 
           <div className={styles.authToggle}>
             <span>
-              {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+              {isSignUp
+                ? "Already have an account?"
+                : "Don't have an account?"}
             </span>
             <button onClick={toggleAuthMode} disabled={isLoading}>
-              {isSignUp ? 'Sign In' : 'Sign Up'}
+              {isSignUp ? "Sign In" : "Sign Up"}
             </button>
           </div>
-
         </div>
       </div>
     </div>

@@ -1,14 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
-import { PublicKey } from "@solana/web3.js";
+import { Buffer } from "buffer";
 import axios from "axios";
-import { Buffer } from "buffer"; // Needed for base64 signature
+import useAuth from "../hooks/useAuth";  // Import the unified auth hook
 
 const usePhantomWallet = () => {
   const [wallet, setWallet] = useState(null);
   const [connected, setConnected] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [publicKey, setPublicKey] = useState(null);
-  const [jwtToken, setJwtToken] = useState(null);
+
+  const { signin } = useAuth();  // Use signin from useAuth
 
   const getProvider = useCallback(() => {
     if ("phantom" in window) {
@@ -18,29 +19,20 @@ const usePhantomWallet = () => {
     return null;
   }, []);
 
-  // Auto-connect only if allowed
   useEffect(() => {
     const provider = getProvider();
     const autoConnect = localStorage.getItem("phantom_auto_connect") !== "false";
 
     if (provider) {
       setWallet(provider);
-
       if (autoConnect) {
         provider
           .connect({ onlyIfTrusted: true })
           .then(({ publicKey }) => {
             setPublicKey(publicKey);
             setConnected(true);
-            const token = localStorage.getItem("phantom_jwt");
-            if (token) {
-              setJwtToken(token);
-              axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-            }
           })
-          .catch(() => {
-            // silently fail
-          });
+          .catch(() => {});
       }
     }
   }, [getProvider]);
@@ -61,36 +53,38 @@ const usePhantomWallet = () => {
       setPublicKey(response.publicKey);
       setConnected(true);
 
-      // ✅ allow auto-connect next time
       localStorage.setItem("phantom_auto_connect", "true");
 
-      // Get nonce
+      // Get nonce from your backend
       const nonceRes = await axios.get("https://gainvault.onrender.com/api/auth/nonce");
       const { nonce } = nonceRes.data;
 
       const message = `Sign this message to authenticate with our app.\n\nNonce: ${nonce}`;
       const encodedMessage = new TextEncoder().encode(message);
 
+      // User signs the message
       const signedMessage = await provider.signMessage(encodedMessage, "utf8");
       const base64Signature = Buffer.from(signedMessage.signature).toString("base64");
 
+      // Send signature to backend for verification & JWT issuance
       const authRes = await axios.post("https://gainvault.onrender.com/api/auth/phantom-signin", {
         publicKey: response.publicKey.toString(),
         signature: base64Signature,
         message,
       });
 
-      const { token } = authRes.data;
-      setJwtToken(token);
-      localStorage.setItem("phantom_jwt", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      const { token, user } = authRes.data;
+
+      // Use signin from useAuth to update app state & store token
+      await signin({ token, user, phantom: true });
+
     } catch (error) {
       console.error("Error connecting to Phantom wallet:", error);
       alert("Failed to connect to Phantom wallet. Please try again.");
     } finally {
       setConnecting(false);
     }
-  }, [getProvider]);
+  }, [getProvider, signin]);
 
   const disconnectWallet = useCallback(async () => {
     if (wallet) {
@@ -103,13 +97,7 @@ const usePhantomWallet = () => {
 
     setConnected(false);
     setPublicKey(null);
-    setJwtToken(null);
-    localStorage.removeItem("phantom_jwt");
-
-    // ✅ block auto-connect on refresh
     localStorage.setItem("phantom_auto_connect", "false");
-
-    delete axios.defaults.headers.common["Authorization"];
   }, [wallet]);
 
   const formatAddress = useCallback((address) => {
@@ -123,7 +111,6 @@ const usePhantomWallet = () => {
     connected,
     connecting,
     publicKey,
-    jwtToken,
     connectWallet,
     disconnectWallet,
     formatAddress,
