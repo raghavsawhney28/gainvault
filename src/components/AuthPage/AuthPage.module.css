@@ -342,6 +342,45 @@
   color: var(--accent-green);
 }
 
+/* Sign In Message */
+.signInMessage {
+  padding: calc(var(--spacing-unit) * 4) 0;
+}
+
+.signInInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--spacing-unit) * 3);
+  background-color: rgba(45, 218, 125, 0.1);
+  border: 1px solid rgba(45, 218, 125, 0.3);
+  border-radius: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 4);
+}
+
+.signInInfo svg {
+  color: var(--accent-green);
+  flex-shrink: 0;
+  margin-top: calc(var(--spacing-unit) * 0.5);
+}
+
+.signInInfo h3 {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: calc(var(--spacing-unit) * 1);
+}
+
+.signInInfo p {
+  color: var(--text-secondary);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  line-height: 1.5;
+}
+
+.connectedText {
+  color: var(--accent-green) !important;
+  font-weight: 600;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .authModal {
@@ -359,6 +398,11 @@
 
   .inputWrapper input {
     padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 5);
+  }
+
+  .signInInfo {
+    flex-direction: column;
+    text-align: center;
   }
 }
 
