@@ -10,7 +10,7 @@
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: linear-gradient(135deg, #9945FF, #14F195);
+  background: linear-gradient(135deg, #9645fa, #14F195);
   color: var(--text-primary);
 }
 
