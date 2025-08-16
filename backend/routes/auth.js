@@ -115,7 +115,7 @@ router.post('/phantom-signin', async (req, res) => {
 // ✅ Phantom wallet sign-up
 router.post('/phantom-signup', async (req, res) => {
   try {
-    const { publicKey, signature, message, username, email } = req.body;
+    const { publicKey, signature, message, username, email, referralCode } = req.body;
 
     if (!publicKey || !signature || !message || !username || !email) {
       return res.status(400).json({ error: 'Missing fields: publicKey, signature, message, username, email' });
@@ -159,6 +159,28 @@ router.post('/phantom-signup', async (req, res) => {
 
     await newUser.save();
 
+    // Handle referral if code is provided
+    if (referralCode) {
+      try {
+        // Find referrer by referral code
+        const referrer = await User.findOne({ referralCode });
+        if (referrer && referrer._id.toString() !== newUser._id.toString()) {
+          // Create referral record
+          const Referral = (await import('../models/Referral.js')).default;
+          const referral = new Referral({
+            referrerUserId: referrer._id,
+            referredUserId: newUser._id,
+            referralCode,
+            status: 'pending'
+          });
+          await referral.save();
+        }
+      } catch (referralError) {
+        console.error('Referral processing error:', referralError);
+        // Don't fail signup if referral fails
+      }
+    }
+
     const token = jwt.sign(
       { id: newUser._id, walletAddress: newUser.walletAddress },
       process.env.JWT_SECRET,
@@ -174,6 +196,8 @@ router.post('/phantom-signup', async (req, res) => {
         username: newUser.username,
         email: newUser.email,
         walletAddress: newUser.walletAddress,
+        referralCode: newUser.referralCode,
+        walletBalance: newUser.walletBalance,
         lastLogin: newUser.lastLogin,
       },
     });

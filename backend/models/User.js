@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -29,6 +30,20 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  referralCode: {
+    type: String,
+    unique: true,
+    sparse: true, // Allow null values while maintaining uniqueness
+    default: function() {
+      // Generate unique referral code on user creation
+      return this.generateReferralCode();
+    }
+  },
+  walletBalance: {
+    type: Number,
+    default: 0,
+    min: [0, 'Wallet balance cannot be negative']
+  },
   isActive: {
     type: Boolean,
     default: true
@@ -41,9 +56,38 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Hash password before saving (only if password exists)
+// Generate unique referral code
+userSchema.methods.generateReferralCode = function() {
+  return crypto.randomBytes(4).toString('hex').toUpperCase();
+};
+
+// Ensure referral code is unique
 userSchema.pre('save', async function(next) {
-  // Only hash the password if it has been modified (or is new) and exists
+  if (this.isModified('referralCode') || this.isNew) {
+    let isUnique = false;
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    while (!isUnique && attempts < maxAttempts) {
+      const existingUser = await mongoose.model('User').findOne({ 
+        referralCode: this.referralCode,
+        _id: { $ne: this._id }
+      });
+      
+      if (!existingUser) {
+        isUnique = true;
+      } else {
+        this.referralCode = this.generateReferralCode();
+        attempts++;
+      }
+    }
+    
+    if (!isUnique) {
+      return next(new Error('Could not generate unique referral code'));
+    }
+  }
+  
+  // Hash password before saving (only if password exists)
   if (!this.isModified('password') || !this.password) return next();
   
   try {

@@ -14,7 +14,7 @@ import styles from "./AuthPage.module.css";
 
 const AuthPage = ({ onAuthSuccess, onClose }) => {
   const [authMode, setAuthMode] = useState(null); // "signup" or "signin"
-  const [formData, setFormData] = useState({ username: "", email: "" });
+  const [formData, setFormData] = useState({ username: "", email: "", referralCode: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [localError, setLocalError] = useState("");
@@ -122,6 +122,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
         message,
         username: formData.username.trim(),
         email: formData.email.trim(),
+        referralCode: formData.referralCode.trim(),
       };
 
       const signupRes = await fetch("https://gainvault.onrender.com/api/auth/phantom-signup", {
@@ -226,7 +227,7 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
 
   const resetAuth = () => {
     setAuthMode(null);
-    setFormData({ username: "", email: "" });
+    setFormData({ username: "", email: "", referralCode: "" });
     clearError();
     setSuccess("");
     setIsLoading(false);
@@ -372,6 +373,23 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                     required
                   />
                 </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Referral Code (Optional)</label>
+                <div className={styles.inputWrapper}>
+                  <User size={18} />
+                  <input
+                    type="text"
+                    value={formData.referralCode}
+                    onChange={(e) => handleInputChange("referralCode", e.target.value)}
+                    placeholder="Enter referral code if you have one"
+                    disabled={isLoading}
+                  />
+                </div>
+                <small className={styles.helpText}>
+                  Enter a friend's referral code to earn rewards when they sign up
+                </small>
               </div>
 
               {errorToShow && (

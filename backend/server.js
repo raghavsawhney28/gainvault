@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/database.js';
 import authRoutes from './routes/auth.js';
+import referralRoutes from './routes/referral.js';
+import walletRoutes from './routes/wallet.js';
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +37,8 @@ app.use(cors({
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/referral', referralRoutes);
+app.use('/api/wallet', walletRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -42,10 +46,33 @@ app.get('/api/health', (req, res) => {
 });
 
 // Challenge activation endpoint (for payment integration)
-app.post('/api/activate-challenge', (req, res) => {
-  // This would typically save challenge data to database
-  console.log('Challenge activation request:', req.body);
-  res.json({ success: true, message: 'Challenge activated successfully' });
+app.post('/api/activate-challenge', async (req, res) => {
+  try {
+    const { userId, challengePrice, challengeType } = req.body;
+    
+    // This would typically save challenge data to database
+    console.log('Challenge activation request:', { userId, challengePrice, challengeType });
+    
+    // Process referral reward if applicable
+    if (userId && challengePrice) {
+      try {
+        const { processReferralReward } = await import('./services/referralService.js');
+        const referralResult = await processReferralReward(userId, challengePrice);
+        
+        if (referralResult.success) {
+          console.log('Referral reward processed:', referralResult);
+        }
+      } catch (referralError) {
+        console.error('Referral processing failed:', referralError);
+        // Don't fail challenge activation if referral fails
+      }
+    }
+    
+    res.json({ success: true, message: 'Challenge activated successfully' });
+  } catch (error) {
+    console.error('Challenge activation error:', error);
+    res.status(500).json({ error: 'Failed to activate challenge' });
+  }
 });
 
 // Generic error handler

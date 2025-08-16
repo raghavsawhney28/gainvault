@@ -47,6 +47,9 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
             <a href="#pricing">Pricing</a>
             <a href="#about">About</a>
             <a href="/rules" onClick={(e) => { e.preventDefault(); navigate('/rules'); }}>Rules</a>
+            {isLoggedIn && (
+              <a href="/referral" onClick={(e) => { e.preventDefault(); navigate('/referral'); }}>Referrals</a>
+            )}
           </nav>
 
           <div className={styles.headerActions}>

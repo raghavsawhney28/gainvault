@@ -8,6 +8,7 @@ import PricingSection from './components/PricingSection/PricingSection';
 import Footer from './components/Footer/Footer';
 import TradingChallenge from './pages/TradingChallenge/TradingChallenge';
 import Rules from './pages/Rules/Rules';
+import Referral from './pages/Referral/Referral';
 import AuthPage from './components/AuthPage/AuthPage';
 import useAuth from './hooks/useAuth';
 import './App.css';
@@ -53,6 +54,7 @@ function App() {
         } />
         <Route path="/trading-challenge" element={<TradingChallenge />} />
         <Route path="/rules" element={<Rules />} />
+        <Route path="/referral" element={<Referral />} />
       </Routes>
       <Footer />
       {showAuthModal && (
