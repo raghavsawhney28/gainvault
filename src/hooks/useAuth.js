@@ -13,7 +13,7 @@ const useAuth = () => {
   }, []);
 
   // ✅ Check if user is authenticated
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = useCallback(async () => {
     try {
       console.log('🔍 Checking auth status...');
       const token = localStorage.getItem('auth_token');
@@ -52,7 +52,7 @@ const useAuth = () => {
       setLoading(false);
       console.log('🔍 Auth check completed, loading set to false');
     }
-  };
+  }, []);
 
   // Deprecated signup
   const signup = async () => {

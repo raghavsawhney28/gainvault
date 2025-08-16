@@ -27,11 +27,8 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
 
-    // ✅ Ensure we have the latest login state when header mounts
-    checkAuthStatus();
-
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [checkAuthStatus]);
+  }, []); // Remove checkAuthStatus dependency
 
   const handleStartTrading = () => {
     navigate('/trading-challenge');
