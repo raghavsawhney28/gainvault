@@ -136,6 +136,9 @@ router.post('/debug-signin', async (req, res) => {
 
     console.log('🔍 DEBUG: User found:', user.username);
     
+    // IMPORTANT: Don't delete the nonce in debug mode - it will be used by the real signin
+    console.log('🔍 DEBUG: Nonce preserved for actual signin');
+    
     res.json({
       success: true,
       debug: {
@@ -144,7 +147,8 @@ router.post('/debug-signin', async (req, res) => {
         nonceMatch: nonce === nonces[publicKey],
         signatureValid: isValid,
         userFound: !!user,
-        userId: user._id
+        userId: user._id,
+        message: 'Nonce preserved - you can now try the actual signin'
       }
     });
 
@@ -273,7 +277,7 @@ router.post('/phantom-signup', async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign(
-      { id: newUser._id, walletAddress: newUser.walletAddress },
+      { id: newUser._id, walletAddress: newUserwalletAddress },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
