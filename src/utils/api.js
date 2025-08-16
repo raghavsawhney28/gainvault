@@ -1,12 +1,11 @@
 import axios from 'axios';
 
-// Create axios instance with base configuration
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://gainvault.onrender.com/api',
-  timeout: 10000,
+  baseURL: 'https://gainvault.onrender.com/api',
+  withCredentials: true,
 });
 
-// Request interceptor to add JWT token
+// ✅ Add token to every request
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('auth_token');
@@ -15,19 +14,18 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle token expiration
+// ✅ Handle expired/invalid tokens gracefully
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 || error.response?.status === 403) {
-      // Token expired or invalid
+      console.warn('⚠️ Token invalid/expired, logging out');
       localStorage.removeItem('auth_token');
-      window.location.reload();
+      // ❌ Removed window.location.reload()
+      // Let `useAuth.checkAuthStatus` handle it naturally
     }
     return Promise.reject(error);
   }

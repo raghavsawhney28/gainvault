@@ -29,11 +29,17 @@ router.get('/nonce/:publicKey', (req, res) => {
   }
 });
 
+// ✅ Helper: Extract nonce from message
+const extractNonce = (message) => {
+  const match = message.match(/Nonce: ([a-f0-9]+)/);
+  return match ? match[1] : null;
+};
+
 // ✅ Helper: Verify signature
 const verifySignature = (message, signature, publicKey) => {
   try {
     const messageBytes = new TextEncoder().encode(message);
-    const signatureBytes = Uint8Array.from(Buffer.from(signature, 'base64'));
+    const signatureBytes = Uint8Array.from(Buffer.from(signature, "base64"));
     const publicKeyBytes = new PublicKey(publicKey).toBytes();
 
     return nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes);
@@ -52,8 +58,9 @@ router.post('/phantom-signin', async (req, res) => {
       return res.status(400).json({ error: 'Missing fields: publicKey, signature, message' });
     }
 
-    // Check nonce validity
-    if (message !== nonces[publicKey]) {
+    // Extract nonce from message and check validity
+    const nonce = extractNonce(message);
+    if (!nonce || nonce !== nonces[publicKey]) {
       return res.status(401).json({ error: 'Invalid or expired nonce' });
     }
 
@@ -102,8 +109,9 @@ router.post('/phantom-signup', async (req, res) => {
       return res.status(400).json({ error: 'Missing fields: publicKey, signature, message, username, email' });
     }
 
-    // Check nonce validity
-    if (message !== nonces[publicKey]) {
+    // Extract nonce from message and check validity
+    const nonce = extractNonce(message);
+    if (!nonce || nonce !== nonces[publicKey]) {
       return res.status(401).json({ error: 'Invalid or expired nonce' });
     }
 

@@ -55,8 +55,66 @@
   color: var(--text-primary);
 }
 
+.backButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  border-radius: calc(var(--spacing-unit) * 1);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.5);
+}
+
+.backButton:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
 .authContent {
   padding: calc(var(--spacing-unit) * 3);
+}
+
+/* Choice Section */
+.choiceSection {
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 2) 0;
+}
+
+.choiceSection h3 {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.choiceButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 1);
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 3);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  border: none;
+  border-radius: calc(var(--spacing-unit) * 1);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.choiceButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.choiceButton:last-child {
+  margin-bottom: 0;
 }
 
 /* Wallet Section */
@@ -132,6 +190,25 @@
 .installButton:hover {
   background: #9945FF;
   color: var(--text-primary);
+}
+
+/* Signin Section */
+.signinSection {
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 2) 0;
+}
+
+.signinSection h3 {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: calc(var(--spacing-unit) * 1);
+}
+
+.signinSection p {
+  color: var(--text-secondary);
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  line-height: 1.5;
 }
 
 /* Form Styles */
