@@ -1,15 +1,18 @@
+// usePhantomWallet.js
 import { useState, useEffect, useCallback } from "react";
 import { Buffer } from "buffer";
 import axios from "axios";
-import useAuth from "./useAuth";  // Import the unified auth hook
+import useAuth from "./useAuth";
 
 const usePhantomWallet = () => {
   const [wallet, setWallet] = useState(null);
   const [connected, setConnected] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [publicKey, setPublicKey] = useState(null);
+  const [needsSignup, setNeedsSignup] = useState(false);
+  const [signupContext, setSignupContext] = useState(null);
 
-  const { signin } = useAuth();  // Use signin from useAuth
+  const { signin, logout } = useAuth();
 
   const getProvider = useCallback(() => {
     if ("phantom" in window) {
@@ -21,7 +24,7 @@ const usePhantomWallet = () => {
 
   useEffect(() => {
     const provider = getProvider();
-    const autoConnect = localStorage.getItem("phantom_auto_connect") !== "false";
+    const autoConnect = localStorage.getItem("phantom_auto_connect") === "true";
 
     if (provider) {
       setWallet(provider);
@@ -31,7 +34,7 @@ const usePhantomWallet = () => {
           .then(({ publicKey }) => {
             setPublicKey(publicKey);
             setConnected(true);
-            // Auto-login when wallet connects
+            // 🔗 attempt auto-login when trusted connect succeeds
             handleAutoLogin(publicKey);
           })
           .catch(() => {});
@@ -39,56 +42,53 @@ const usePhantomWallet = () => {
     }
   }, [getProvider]);
 
+  const signNonceMessage = async (nonce) => {
+    const message = `Sign this message to authenticate with GainVault.\n\nNonce: ${nonce}`;
+    const encodedMessage = new TextEncoder().encode(message);
+    const provider = getProvider();
+    const signedMessage = await provider.signMessage(encodedMessage, "utf8");
+    const base64Signature = Buffer.from(signedMessage.signature).toString("base64");
+    return { message, signature: base64Signature };
+  };
+
   const handleAutoLogin = async (walletPublicKey) => {
     try {
-      console.log('🔗 Starting auto-login for wallet:', walletPublicKey.toString());
-      
-      // Get nonce from backend
       const nonceRes = await axios.get("https://gainvault.onrender.com/api/auth/nonce");
       const { nonce } = nonceRes.data;
-      console.log('🔗 Nonce received:', nonce);
 
-      const message = `Sign this message to authenticate with GainVault.\n\nNonce: ${nonce}`;
-      const encodedMessage = new TextEncoder().encode(message);
+      const { message, signature } = await signNonceMessage(nonce);
 
-      // User signs the message
-      const provider = getProvider();
-      const signedMessage = await provider.signMessage(encodedMessage, "utf8");
-      const base64Signature = Buffer.from(signedMessage.signature).toString("base64");
-      console.log('🔗 Message signed successfully');
-
-      // Try to sign in first (for existing users)
       try {
+        // Try sign in first
         const authRes = await axios.post("https://gainvault.onrender.com/api/auth/phantom-signin", {
           publicKey: walletPublicKey.toString(),
-          signature: base64Signature,
+          signature,
           message,
         });
 
         const { token, user } = authRes.data;
-        console.log('🔗 Sign in successful, token received');
-
-        // Use signin from useAuth to update app state & store token
-        console.log('🔗 Calling useAuth signin...');
-        const result = await signin({ token, phantom: true, user });
-        console.log('🔗 useAuth signin result:', result);
-
+        await signin({ token, phantom: true, user });
+        setNeedsSignup(false);
+        setSignupContext(null);
       } catch (signinError) {
-        // If sign in fails (user not found), this means they need to sign up
-        console.log('🔗 Sign in failed, user needs to sign up:', signinError.response?.data?.error);
-        // We'll handle signup in the AuthPage component
-        return { needsSignup: true, walletPublicKey, nonce, message, base64Signature };
+        // ❌ No existing user → must sign up
+        setNeedsSignup(true);
+        setSignupContext({
+          walletPublicKey,
+          nonce,
+          message,
+          signature,
+        });
       }
-
     } catch (error) {
       console.error("❌ Auto-login failed:", error);
-      // Don't show error to user for auto-login failures
-      return { error: error.message };
+      setNeedsSignup(false);
+      setSignupContext(null);
     }
   };
+
   const connectWallet = useCallback(async () => {
     const provider = getProvider();
-
     if (!provider) {
       alert("Phantom wallet not found! Please install Phantom wallet.");
       window.open("https://phantom.app/", "_blank");
@@ -97,20 +97,11 @@ const usePhantomWallet = () => {
 
     try {
       setConnecting(true);
-      console.log('🔗 Connecting to Phantom wallet...');
-
       const response = await provider.connect();
-      console.log('🔗 Wallet connected, public key:', response.publicKey.toString());
-      
       setPublicKey(response.publicKey);
       setConnected(true);
-
       localStorage.setItem("phantom_auto_connect", "true");
-
-      // Auto-login when wallet connects manually
-      console.log('🔗 Starting auto-login process...');
       await handleAutoLogin(response.publicKey);
-
     } catch (error) {
       console.error("❌ Error connecting to Phantom wallet:", error);
       alert("Failed to connect to Phantom wallet. Please try again.");
@@ -127,32 +118,33 @@ const usePhantomWallet = () => {
         console.error("Error disconnecting:", error);
       }
     }
-
     setConnected(false);
     setPublicKey(null);
+    setNeedsSignup(false);
+    setSignupContext(null);
     localStorage.setItem("phantom_auto_connect", "false");
-  }, [wallet]);
+    logout?.();
+  }, [wallet, logout]);
 
-  const handleSignup = async (walletPublicKey, username, email, nonce, message, signature) => {
+  const handleSignup = async (username, email) => {
+    if (!signupContext) throw new Error("Missing signup context");
+
     try {
-      console.log('🔗 Starting signup for wallet:', walletPublicKey.toString());
-      
-      // Send signup request to backend
+      const { walletPublicKey, message, signature } = signupContext;
+
       const signupRes = await axios.post("https://gainvault.onrender.com/api/auth/phantom-signup", {
         publicKey: walletPublicKey.toString(),
         signature,
         message,
         username,
-        email
+        email,
       });
 
       const { token, user } = signupRes.data;
-      console.log('🔗 Signup successful, token received');
+      await signin({ token, phantom: true, user });
 
-      // Use signin from useAuth to update app state & store token
-      console.log('🔗 Calling useAuth signin after signup...');
-      const result = await signin({ token, phantom: true, user });
-      console.log('🔗 useAuth signin result after signup:', result);
+      setNeedsSignup(false);
+      setSignupContext(null);
 
       return { success: true, user };
     } catch (error) {
@@ -177,6 +169,8 @@ const usePhantomWallet = () => {
     handleSignup,
     formatAddress,
     isPhantomInstalled: !!getProvider(),
+    needsSignup,
+    signupContext,
   };
 };
 
