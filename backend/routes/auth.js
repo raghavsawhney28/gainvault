@@ -192,17 +192,20 @@ router.post('/phantom-signin', async (req, res) => {
     // Delete nonce after use
     delete nonces[publicKey];
 
-    // Find user
+    // Find user and update lastLogin
     console.log('🔐 Looking up user with wallet address:', publicKey);
-    const user = await User.findOne({ walletAddress: publicKey });
+    const user = await User.findOneAndUpdate(
+      { walletAddress: publicKey },
+      { lastLogin: new Date() },
+      { new: true, runValidators: false }
+    );
+    
     if (!user) {
       console.log('❌ User not found for wallet:', publicKey);
       return res.status(404).json({ error: 'User not found. Please sign up first.' });
     }
 
-    console.log('✅ User found:', user.username);
-    user.lastLogin = new Date();
-    await user.save();
+    console.log('✅ User found and updated:', user.username);
 
     const token = jwt.sign(
       { id: user._id, walletAddress: user.walletAddress },
@@ -277,7 +280,7 @@ router.post('/phantom-signup', async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign(
-      { id: newUser._id, walletAddress: newUserwalletAddress },
+      { id: newUser._id, walletAddress: newUser.walletAddress },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
