@@ -12,16 +12,12 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Use props if provided, otherwise fall back to hook
-  const { isLoggedIn: hookIsLoggedIn, user: hookUser, logout: hookLogout, checkAuthStatus } = useAuth();
+  const { isLoggedIn: hookIsLoggedIn, user: hookUser, logout: hookLogout } = useAuth();
   
   // Prefer props over hook values for better control
   const isLoggedIn = propIsLoggedIn !== undefined ? propIsLoggedIn : hookIsLoggedIn;
   const user = username ? { username } : hookUser;
   const logout = onLogout || hookLogout;
-
-  // Debug logging
-  console.log('Header - isLoggedIn:', isLoggedIn, 'user:', user);
-  console.log('Header - props received:', { onAuthClick, onLogout, propIsLoggedIn, username });
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -62,7 +58,6 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
                 <button 
                   className={styles.logoutButton} 
                   onClick={() => {
-                    console.log("🔓 Logout button clicked");
                     logout();
                   }}
                 >
@@ -74,7 +69,6 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
               <button 
                 className={styles.authButton} 
                 onClick={() => {
-                  console.log("🔐 Auth button clicked, onAuthClick:", onAuthClick);
                   if (onAuthClick) {
                     onAuthClick();
                   } else {

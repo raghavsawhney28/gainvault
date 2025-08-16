@@ -13,13 +13,8 @@ import useAuth from './hooks/useAuth';
 import './App.css';
 
 function App() {
-  const { isLoggedIn, user, logout, checkAuthStatus } = useAuth();
+  const { isLoggedIn, user, logout } = useAuth();
   const [showAuthModal, setShowAuthModal] = React.useState(false);
-
-  // Check auth status when component mounts and when auth state changes
-  React.useEffect(() => {
-    checkAuthStatus();
-  }, [checkAuthStatus]);
 
   const handleAuthSuccess = (user) => {
     setShowAuthModal(false);

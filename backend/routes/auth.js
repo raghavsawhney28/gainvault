@@ -17,18 +17,13 @@ const nonces = {};
 router.get('/nonce/:publicKey', (req, res) => {
   try {
     const { publicKey } = req.params;
-    console.log('🔐 Nonce request for wallet:', publicKey);
     
     if (!publicKey) {
-      console.log('❌ Missing publicKey in nonce request');
       return res.status(400).json({ error: 'Missing publicKey' });
     }
 
     const nonce = crypto.randomBytes(16).toString('hex');
     nonces[publicKey] = nonce; // save nonce for this wallet
-    
-    console.log('🔐 Generated nonce:', nonce, 'for wallet:', publicKey);
-    console.log('🔐 Current nonces stored:', Object.keys(nonces).length);
 
     res.json({ nonce });
   } catch (error) {
@@ -46,146 +41,37 @@ const extractNonce = (message) => {
 // ✅ Helper: Verify signature
 const verifySignature = (message, signature, publicKey) => {
   try {
-    console.log('🔐 Verifying signature with:', { 
-      messageLength: message?.length, 
-      signatureLength: signature?.length, 
-      publicKeyLength: publicKey?.length 
-    });
-    
     const messageBytes = new TextEncoder().encode(message);
-    console.log('🔐 Message encoded to bytes, length:', messageBytes.length);
-    
     // Use proper base64 decoding for Node.js
     const signatureBytes = Uint8Array.from(Buffer.from(signature, "base64"));
-    console.log('🔐 Signature decoded from base64, length:', signatureBytes.length);
-    
     const publicKeyBytes = new PublicKey(publicKey).toBytes();
-    console.log('🔐 Public key converted to bytes, length:', publicKeyBytes.length);
 
     const result = nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes);
-    console.log('🔐 Signature verification completed, result:', result);
     
     return result;
   } catch (error) {
     console.error('❌ Signature verification error:', error);
-    console.error('❌ Error details:', {
-      message: message?.substring(0, 100),
-      signature: signature?.substring(0, 100),
-      publicKey: publicKey?.substring(0, 100),
-      errorMessage: error.message,
-      errorStack: error.stack
-    });
     return false;
   }
 };
-
-// ✅ Debug endpoint to test signature verification
-router.post('/debug-signin', async (req, res) => {
-  try {
-    const { publicKey, signature, message } = req.body;
-    console.log('🔍 DEBUG: Signin request received:', { 
-      publicKey, 
-      message: message?.substring(0, 50) + '...', 
-      signatureLength: signature?.length 
-    });
-
-    if (!publicKey || !signature || !message) {
-      return res.status(400).json({ 
-        error: 'Missing fields', 
-        received: { publicKey: !!publicKey, signature: !!signature, message: !!message } 
-      });
-    }
-
-    // Test nonce extraction
-    const nonce = extractNonce(message);
-    console.log('🔍 DEBUG: Extracted nonce:', nonce);
-    console.log('🔍 DEBUG: Stored nonce:', nonces[publicKey]);
-    console.log('🔍 DEBUG: Nonce match:', nonce === nonces[publicKey]);
-    
-    if (!nonce) {
-      return res.status(400).json({ error: 'Could not extract nonce from message' });
-    }
-
-    if (!nonces[publicKey]) {
-      return res.status(400).json({ error: 'No nonce found for this public key' });
-    }
-
-    if (nonce !== nonces[publicKey]) {
-      return res.status(400).json({ 
-        error: 'Nonce mismatch', 
-        extracted: nonce, 
-        stored: nonces[publicKey] 
-      });
-    }
-
-    // Test signature verification
-    console.log('🔍 DEBUG: Testing signature verification...');
-    const isValid = verifySignature(message, signature, publicKey);
-    console.log('🔍 DEBUG: Signature verification result:', isValid);
-    
-    if (!isValid) {
-      return res.status(400).json({ error: 'Signature verification failed' });
-    }
-
-    // Test database lookup
-    console.log('🔍 DEBUG: Looking up user in database...');
-    const user = await User.findOne({ walletAddress: publicKey });
-    if (!user) {
-      return res.status(404).json({ error: 'User not found in database' });
-    }
-
-    console.log('🔍 DEBUG: User found:', user.username);
-    
-    // IMPORTANT: Don't delete the nonce in debug mode - it will be used by the real signin
-    console.log('🔍 DEBUG: Nonce preserved for actual signin');
-    
-    res.json({
-      success: true,
-      debug: {
-        nonceExtracted: nonce,
-        nonceStored: nonces[publicKey],
-        nonceMatch: nonce === nonces[publicKey],
-        signatureValid: isValid,
-        userFound: !!user,
-        userId: user._id,
-        message: 'Nonce preserved - you can now try the actual signin'
-      }
-    });
-
-  } catch (error) {
-    console.error('🔍 DEBUG: Error occurred:', error);
-    res.status(500).json({ 
-      error: 'Debug endpoint error', 
-      message: error.message,
-      stack: error.stack 
-    });
-  }
-});
 
 // ✅ Phantom wallet sign-in
 router.post('/phantom-signin', async (req, res) => {
   try {
     const { publicKey, signature, message } = req.body;
-    console.log('🔐 Signin request received:', { publicKey, message: message?.substring(0, 50) + '...', signatureLength: signature?.length });
 
     if (!publicKey || !signature || !message) {
-      console.log('❌ Missing fields:', { publicKey: !!publicKey, signature: !!signature, message: !!message });
       return res.status(400).json({ error: 'Missing fields: publicKey, signature, message' });
     }
 
     // Extract nonce from message and check validity
     const nonce = extractNonce(message);
-    console.log('🔐 Extracted nonce:', nonce);
-    console.log('🔐 Stored nonce:', nonces[publicKey]);
     
     if (!nonce || nonce !== nonces[publicKey]) {
-      console.log('❌ Nonce validation failed:', { extracted: nonce, stored: nonces[publicKey] });
       return res.status(401).json({ error: 'Invalid or expired nonce' });
     }
 
-    console.log('🔐 Nonce validated, verifying signature...');
     const isValid = verifySignature(message, signature, publicKey);
-    console.log('🔐 Signature verification result:', isValid);
     
     if (!isValid) return res.status(401).json({ error: 'Invalid signature' });
 
@@ -193,7 +79,6 @@ router.post('/phantom-signin', async (req, res) => {
     delete nonces[publicKey];
 
     // Find user and update lastLogin
-    console.log('🔐 Looking up user with wallet address:', publicKey);
     const user = await User.findOneAndUpdate(
       { walletAddress: publicKey },
       { lastLogin: new Date() },
@@ -201,11 +86,8 @@ router.post('/phantom-signin', async (req, res) => {
     );
     
     if (!user) {
-      console.log('❌ User not found for wallet:', publicKey);
       return res.status(404).json({ error: 'User not found. Please sign up first.' });
     }
-
-    console.log('✅ User found and updated:', user.username);
 
     const token = jwt.sign(
       { id: user._id, walletAddress: user.walletAddress },
@@ -213,7 +95,6 @@ router.post('/phantom-signin', async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    console.log('✅ Signin successful for user:', user.username);
     res.json({
       success: true,
       token,
@@ -227,7 +108,6 @@ router.post('/phantom-signin', async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Phantom signin error:', error);
-    console.error('❌ Error stack:', error.stack);
     res.status(500).json({ error: 'Server error during signin' });
   }
 });

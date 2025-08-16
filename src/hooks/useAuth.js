@@ -15,13 +15,10 @@ const useAuth = () => {
   // ✅ Check if user is authenticated
   const checkAuthStatus = useCallback(async () => {
     try {
-      console.log('🔍 Checking auth status...');
       const token = localStorage.getItem('auth_token');
       const storedUser = localStorage.getItem('auth_user');
-      console.log('🔍 Token found:', !!token);
 
       if (!token) {
-        console.log('🔍 No token found, setting loading to false');
         setLoading(false);
         return;
       }
@@ -50,7 +47,6 @@ const useAuth = () => {
       setError('Session expired. Please log in again.');
     } finally {
       setLoading(false);
-      console.log('🔍 Auth check completed, loading set to false');
     }
   }, []);
 
@@ -64,23 +60,19 @@ const useAuth = () => {
   const signin = async (credentials) => {
     try {
       setError(null);
-      console.log('🔐 useAuth signin called with:', credentials);
 
       // Phantom login
       if (credentials.phantom) {
-        console.log('🔐 Phantom authentication detected');
         const { token, user: userData } = credentials;
 
         if (token) {
           localStorage.setItem('auth_token', token);
-          console.log('🔐 Token stored in localStorage');
         }
 
         if (userData) {
           localStorage.setItem('auth_user', JSON.stringify(userData));
           setIsLoggedIn(true);
           setUser(userData);
-          console.log('🔐 User persisted in localStorage:', userData);
           return { success: true, user: userData };
         }
 
