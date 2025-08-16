@@ -1,103 +1,218 @@
-import React from 'react';
-import { Star } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star, TrendingUp, Clock, Target, AlertTriangle, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import AnimatedSection from '../AnimatedSection/AnimatedSection';
 import styles from './PricingSection.module.css';
 
 const PricingSection = () => {
-  const plans = [
+  const [selectedPlan, setSelectedPlan] = useState('SKILLED');
+  const navigate = useNavigate();
+
+  const challengePlans = [
     {
-      name: 'Explorer',
-      price: '$0',
-      period: '/Demo Account',
-      description: 'Perfect for testing your altcoin strategies',
-      features: [
-        'Demo trading environment',
-        'Real-time altcoin data',
-        'Strategy testing tools',
-        'Community support',
-        'Educational resources'
-      ],
-      buttonText: 'Start Demo',
-      buttonClass: 'btnSecondary'
+      name: "BASE",
+      value: "$5,000",
+      cost: 49,
+      details: {
+        profitTarget: ["10%", "5%"],
+        maxDailyLoss: ["5%", "5%"],
+        maxLoss: ["10%", "8%"],
+        minTradingDays: ["5", "5"],
+        tradingPeriod: ["Unlimited", "Unlimited"],
+        maxLeverage: ["1:5", "1:5"],
+      }
     },
     {
-      name: 'Funded Trader',
-      price: '$99',
-      period: '/evaluation fee',
-      description: 'Get funded and start earning real profits',
-      popular: true,
-      features: [
-        'Up to $100K funding',
-        'Keep 80% of profits',
-        'Risk-free trading',
-        'Advanced altcoin tools',
-        'Priority support',
-        'Monthly payouts',
-        'Scaling opportunities'
-      ],
-      buttonText: 'Get Funded',
-      buttonClass: 'btnPrimary'
+      name: "STARTER",
+      value: "$10,000",
+      tag: "BEST SELLER",
+      cost: 99,
+      details: {
+        profitTarget: ["10%", "5%"],
+        maxDailyLoss: ["5%", "5%"],
+        maxLoss: ["10%", "8%"],
+        minTradingDays: ["5", "5"],
+        tradingPeriod: ["Unlimited", "Unlimited"],
+        maxLeverage: ["1:5", "1:5"],
+      }
     },
     {
-      name: 'Pro Trader',
-      price: '$299',
-      period: '/evaluation fee',
-      description: 'Maximum funding for experienced traders',
-      features: [
-        'Up to $500K funding',
-        'Keep 90% of profits',
-        'Multiple account scaling',
-        'Dedicated account manager',
-        'Exclusive altcoin access',
-        'Custom risk parameters',
-        'Weekly payouts',
-        'VIP community access'
-      ],
-      buttonText: 'Go Pro',
-      buttonClass: 'btnOutline'
+      name: "SKILLED",
+      value: "$15,000",
+      tag: "NEW",
+      cost: 149,
+      isDefault: true,
+      details: {
+        profitTarget: ["10%", "5%"],
+        maxDailyLoss: ["5%", "5%"],
+        maxLoss: ["10%", "8%"],
+        minTradingDays: ["5", "5"],
+        tradingPeriod: ["Unlimited", "Unlimited"],
+        maxLeverage: ["1:5", "1:5"],
+      }
+    },
+    {
+      name: "INTERMEDIATE",
+      value: "$25,000",
+      cost: 249,
+      details: {
+        profitTarget: ["10%", "5%"],
+        maxDailyLoss: ["5%", "5%"],
+        maxLoss: ["10%", "8%"],
+        minTradingDays: ["5", "5"],
+        tradingPeriod: ["Unlimited", "Unlimited"],
+        maxLeverage: ["1:5", "1:5"],
+      }
+    },
+    {
+      name: "ADVANCED",
+      value: "$50,000",
+      cost: 399,
+      details: {
+        profitTarget: ["10%", "5%"],
+        maxDailyLoss: ["5%", "5%"],
+        maxLoss: ["10%", "8%"],
+        minTradingDays: ["5", "5"],
+        tradingPeriod: ["Unlimited", "Unlimited"],
+        maxLeverage: ["1:5", "1:5"],
+      }
+    },
+    {
+      name: "EXPERT",
+      value: "$100,000",
+      tag: "POPULAR",
+      cost: 599,
+      details: {
+        profitTarget: ["10%", "5%"],
+        maxDailyLoss: ["5%", "5%"],
+        maxLoss: ["10%", "8%"],
+        minTradingDays: ["5", "5"],
+        tradingPeriod: ["Unlimited", "Unlimited"],
+        maxLeverage: ["1:5", "1:5"],
+      }
     }
   ];
+
+  const selectedPlanData = challengePlans.find(plan => plan.name === selectedPlan);
+
+  const handlePlanSelect = (planName) => {
+    setSelectedPlan(planName);
+  };
+
+  const handleStartChallenge = () => {
+    navigate('/trading-challenge');
+  };
 
   return (
     <section className={styles.pricingSection} id="pricing">
       <div className={styles.container}>
         <AnimatedSection className={styles.pricingHeader}>
-          <h2>Choose Your Funding Level</h2>
-          <p>Start with our demo account and work your way up to substantial funding. We provide the capital, you provide the skills.</p>
+          <h2>CHALLENGE PLANS</h2>
         </AnimatedSection>
 
-        <div className={styles.pricingGrid}>
-          {plans.map((plan, index) => (
-            <AnimatedSection key={index} delay={index * 100} className={`${styles.pricingCard} ${plan.popular ? styles.popular : ''}`}>
-              {plan.popular && (
-                <div className={styles.popularBadge}>
-                  <Star size={14} /> Most Popular
+        {/* Challenge Plan Selection */}
+        <div className={styles.planSelection}>
+          {challengePlans.map((plan) => (
+            <button
+              key={plan.name}
+              className={`${styles.planButton} ${selectedPlan === plan.name ? styles.selected : ''}`}
+              onClick={() => handlePlanSelect(plan.name)}
+            >
+              <div className={styles.planName}>{plan.name}</div>
+              <div className={styles.planValue}>{plan.value}</div>
+              {plan.tag && (
+                <div className={styles.planTag}>
+                  {plan.tag === "BEST SELLER" && <Star size={12} />}
+                  {plan.tag === "NEW" && <TrendingUp size={12} />}
+                  {plan.tag === "POPULAR" && <Zap size={12} />}
+                  {plan.tag}
                 </div>
               )}
-              <div className={styles.planHeader}>
-                <h3>{plan.name}</h3>
-                <div className={styles.planPrice}>
-                  <span className={styles.price}>{plan.price}</span>
-                  <span className={styles.period}>{plan.period}</span>
-                </div>
-                <p className={styles.planDescription}>{plan.description}</p>
-              </div>
-              <ul className={styles.featuresList}>
-                {plan.features.map((feature, idx) => (
-                  <li key={idx}>{feature}</li>
-                ))}
-              </ul>
-              <button className={`${styles.btnFull} ${styles[plan.buttonClass]}`}>
-                {plan.buttonText}
-              </button>
-            </AnimatedSection>
+            </button>
           ))}
         </div>
 
-        <AnimatedSection className={styles.pricingGuarantee}>
-          <p>All funded accounts include risk management, profit sharing, and scaling opportunities.</p>
-          <div className={styles.guaranteeBadge}>Risk-free evaluation process</div>
-        </AnimatedSection>
+        {/* Objective Table */}
+        <div className={styles.objectiveSection}>
+          <h3>Objective</h3>
+          <div className={styles.objectiveTable}>
+            <div className={styles.tableHeader}>
+              <div className={styles.headerCell}>Gainvault</div>
+              <div className={styles.headerCell}>Stage 1</div>
+              <div className={styles.headerCell}>Stage 2</div>
+            </div>
+            
+            <div className={styles.tableRow}>
+              <div className={styles.labelCell}>
+                <Target size={16} />
+                Profit Target
+              </div>
+              <div className={styles.valueCell}>{selectedPlanData.details.profitTarget[0]}</div>
+              <div className={styles.valueCell}>{selectedPlanData.details.profitTarget[1]}</div>
+            </div>
+
+            <div className={styles.tableRow}>
+              <div className={styles.labelCell}>
+                <AlertTriangle size={16} />
+                Max Daily Loss
+              </div>
+              <div className={styles.valueCell}>{selectedPlanData.details.maxDailyLoss[0]}</div>
+              <div className={styles.valueCell}>{selectedPlanData.details.maxDailyLoss[1]}</div>
+            </div>
+
+            <div className={styles.tableRow}>
+              <div className={styles.labelCell}>
+                <AlertTriangle size={16} />
+                Max Loss
+              </div>
+              <div className={styles.valueCell}>{selectedPlanData.details.maxLoss[0]}</div>
+              <div className={styles.valueCell}>{selectedPlanData.details.maxLoss[1]}</div>
+            </div>
+
+            <div className={styles.tableRow}>
+              <div className={styles.labelCell}>
+                <Clock size={16} />
+                Min Trading Days
+              </div>
+              <div className={styles.valueCell}>{selectedPlanData.details.minTradingDays[0]}</div>
+              <div className={styles.valueCell}>{selectedPlanData.details.minTradingDays[1]}</div>
+            </div>
+
+            <div className={styles.tableRow}>
+              <div className={styles.labelCell}>
+                <Clock size={16} />
+                Trading Period
+              </div>
+              <div className={styles.valueCell}>{selectedPlanData.details.tradingPeriod[0]}</div>
+              <div className={styles.valueCell}>{selectedPlanData.details.tradingPeriod[1]}</div>
+            </div>
+
+            <div className={styles.tableRow}>
+              <div className={styles.labelCell}>
+                <Zap size={16} />
+                Max Leverage
+              </div>
+              <div className={styles.valueCell}>{selectedPlanData.details.maxLeverage[0]}</div>
+              <div className={styles.valueCell}>{selectedPlanData.details.maxLeverage[1]}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Section */}
+        <div className={styles.actionSection}>
+          <div className={styles.footnote}>
+            *To proceed to the next stage, all positions must be closed
+          </div>
+          <div className={styles.challengeAction}>
+            <div className={styles.challengePrice}>${selectedPlanData.cost}</div>
+            <button 
+              className={styles.startChallengeButton}
+              onClick={handleStartChallenge}
+            >
+              Start Challenge
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
