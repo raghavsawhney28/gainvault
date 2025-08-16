@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import HeroSection from './components/HeroSection/HeroSection';
-import StatsSection from './components/StatsSection/StatsSection';
 import FeaturesSection from './components/FeaturesSection/FeaturesSection';
 import PricingSection from './components/PricingSection/PricingSection';
 import Footer from './components/Footer/Footer';
@@ -14,13 +13,22 @@ import useAuth from './hooks/useAuth';
 import './App.css';
 
 function App() {
-  const { isLoggedIn, user, logout } = useAuth();
-  const [showAuthModal, setShowAuthModal] = React.useState(false);
+  const { isLoggedIn, user, logout, checkAuthStatus, forceRefreshAuth } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
-  const handleAuthSuccess = (user) => {
+  // Check auth status when component mounts
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
+
+  const handleAuthSuccess = () => {
+    console.log('🎉 Auth success callback triggered');
     setShowAuthModal(false);
-    // The auth state should already be updated by the useAuth hook
-    // No need to call checkAuthStatus again
+    // Force a re-check of auth status
+    setTimeout(() => {
+      console.log('🔄 Force refreshing auth after success');
+      forceRefreshAuth();
+    }, 100);
   };
 
   const handleLogout = () => {
@@ -35,6 +43,8 @@ function App() {
     setShowAuthModal(false);
   };
 
+  console.log('🔍 App Component Debug:', { isLoggedIn, user, username: user?.username });
+
   return (
     <div className="App">
       <Header 
@@ -47,7 +57,6 @@ function App() {
         <Route path="/" element={
           <main>
             <HeroSection />
-            <StatsSection />
             <FeaturesSection />
             <PricingSection />
           </main>

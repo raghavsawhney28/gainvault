@@ -1,5 +1,5 @@
 import React from "react";
-import { Linkedin, Twitter } from "lucide-react";
+import { Linkedin, Twitter, Mail, MessageCircle } from "lucide-react";
 import styles from "./Footer.module.css";
 import logo from "../../assets/logo.png";
 
@@ -48,6 +48,20 @@ const Footer = () => {
               Empowering traders worldwide with cutting-edge technology,
               real-time data, and professional-grade trading tools.
             </p>
+            
+            {/* Contact Details */}
+            <div className={styles.contactDetails}>
+              <h4>Contact Us</h4>
+              <div className={styles.contactItem}>
+                <Mail size={16} />
+                <a href="mailto:gainvaultcapital@gmail.com">gainvaultcapital@gmail.com</a>
+              </div>
+              <div className={styles.contactItem}>
+                <MessageCircle size={16} />
+                <a href="https://t.me/gainvaultcapital" target="_blank" rel="noopener noreferrer">t.me/gainvaultcapital</a>
+              </div>
+            </div>
+
             <div className={styles.socialLinks}>
               <a href="#">
                 <Linkedin size={20} />
@@ -88,7 +102,7 @@ const Footer = () => {
 
         <div className={styles.footerBottom}>
           <div className={styles.footerBottomContent}>
-            <p>© 2024 ProTrade. All rights reserved.</p>
+            <p>© 2024 GainVault. All rights reserved.</p>
             <p>Regulated by Financial Conduct Authority, Member SIPC.</p>
           </div>
         </div>

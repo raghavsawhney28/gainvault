@@ -27,6 +27,17 @@ body {
   overflow-x: hidden;
 }
 
+/* App container spacing for sticky header */
+.App {
+  padding-top: 0; /* Remove any top padding */
+}
+
+/* Ensure main content flows properly with sticky header */
+main {
+  margin-top: 0;
+  padding-top: 0;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;

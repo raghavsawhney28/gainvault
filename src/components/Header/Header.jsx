@@ -19,6 +19,16 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
   const user = username ? { username } : hookUser;
   const logout = onLogout || hookLogout;
 
+  // Debug logging
+  console.log('🔍 Header Debug:', {
+    propIsLoggedIn,
+    hookIsLoggedIn,
+    finalIsLoggedIn: isLoggedIn,
+    username,
+    hookUser,
+    finalUser: user
+  });
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);

@@ -69,6 +69,42 @@
   color: var(--accent-green);
 }
 
+/* Contact Details */
+.contactDetails {
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.contactDetails h4 {
+  color: var(--text-primary);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+}
+
+.contactItem svg {
+  color: var(--accent-green);
+  flex-shrink: 0;
+}
+
+.contactItem a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+.contactItem a:hover {
+  color: var(--accent-green);
+}
+
 .footerLinks {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

@@ -135,12 +135,15 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
         const { token, user } = await signupRes.json();
         
         // Store token and set user in state
-        await signin({ token, user, phantom: true });
+        const signinResult = await signin({ token, user, phantom: true });
+        console.log('✅ Signup result:', signinResult);
         
         setSuccess("Account created successfully! You're now signed in.");
+        // Close modal immediately after successful signup
         setTimeout(() => {
+          console.log('🎯 Calling onAuthSuccess from signup');
           onAuthSuccess?.();
-        }, 1500);
+        }, 1000);
       } else {
         const errorData = await signupRes.json().catch(() => ({}));
         throw new Error(errorData.error || "Signup failed");
@@ -208,12 +211,15 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
         const { token, user } = await signinRes.json();
         
         // Store token and set user in state
-        await signin({ token, user, phantom: true });
+        const signinResult = await signin({ token, user, phantom: true });
+        console.log('✅ Signin result:', signinResult);
         
         setSuccess("Welcome back! You're now signed in.");
+        // Close modal immediately after successful signin
         setTimeout(() => {
+          console.log('🎯 Calling onAuthSuccess from signin');
           onAuthSuccess?.();
-        }, 1500);
+        }, 1000);
       } else {
         const errorData = await signinRes.json().catch(() => ({}));
         throw new Error(errorData.error || "Signin failed");
