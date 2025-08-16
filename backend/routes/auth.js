@@ -41,7 +41,7 @@ const verifySignature = (message, signature, publicKey) => {
   }
 };
 
-// Phantom wallet sign-in route
+// Phantom wallet sign-in route (for existing users)
 router.post('/phantom-signin', async (req, res) => {
   try {
     const { publicKey, signature, message } = req.body;
@@ -57,33 +57,105 @@ router.post('/phantom-signin', async (req, res) => {
       return res.status(401).json({ error: 'Invalid signature' });
     }
 
-    // TODO: Verify nonce inside message against stored nonce here for security
-
-    // Find or create user by wallet address
-    let user = await User.findOne({ walletAddress: publicKey });
+    // Find user by wallet address
+    const user = await User.findOne({ walletAddress: publicKey });
     if (!user) {
-      user = new User({
-        username: `user_${publicKey.slice(0, 8)}`, // default username as shortened wallet address
-        walletAddress: publicKey,
-        password: crypto.randomBytes(32).toString('hex'), // random password since wallet sign-in
-      });
-      await user.save();
+      return res.status(404).json({ error: 'User not found. Please sign up first.' });
     }
 
     // Update last login
     user.lastLogin = new Date();
     await user.save();
+
     // Issue JWT token
     const token = jwt.sign(
       { id: user._id, walletAddress: user.walletAddress },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '24h' }
     );
 
-    res.json({ token });
+    res.json({ 
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        walletAddress: user.walletAddress,
+        lastLogin: user.lastLogin
+      }
+    });
   } catch (error) {
     console.error('Phantom signin error:', error);
     res.status(500).json({ error: 'Server error during Phantom signin' });
+  }
+});
+
+// Phantom wallet sign-up route (for new users)
+router.post('/phantom-signup', async (req, res) => {
+  try {
+    const { publicKey, signature, message, username, email } = req.body;
+
+    if (!publicKey || !signature || !message || !username || !email) {
+      return res.status(400).json({ error: 'Missing required fields: publicKey, signature, message, username, email' });
+    }
+
+    // Verify signature
+    const isValid = verifySignature(message, signature, publicKey);
+
+    if (!isValid) {
+      return res.status(401).json({ error: 'Invalid signature' });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({
+      $or: [{ username }, { email }, { walletAddress: publicKey }]
+    });
+
+    if (existingUser) {
+      if (existingUser.username === username) {
+        return res.status(400).json({ error: 'Username already exists' });
+      }
+      if (existingUser.email === email) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+      if (existingUser.walletAddress === publicKey) {
+        return res.status(400).json({ error: 'Wallet address already registered' });
+      }
+    }
+
+    // Create new user
+    const newUser = new User({
+      username,
+      email,
+      walletAddress: publicKey,
+      // No password needed for wallet-based auth
+    });
+
+    await newUser.save();
+
+    // Issue JWT token immediately after signup
+    const token = jwt.sign(
+      { id: newUser._id, walletAddress: newUser.walletAddress },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.status(201).json({
+      success: true,
+      message: 'User registered successfully',
+      token,
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        walletAddress: newUser.walletAddress,
+        lastLogin: newUser.lastLogin
+      }
+    });
+  } catch (error) {
+    console.error('Phantom signup error:', error);
+    res.status(500).json({ error: 'Server error during Phantom signup' });
   }
 });
 

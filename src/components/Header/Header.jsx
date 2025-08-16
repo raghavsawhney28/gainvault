@@ -6,13 +6,21 @@ import styles from './Header.module.css';
 import logo from "../../assets/logo.png";
 import useAuth from '../../hooks/useAuth'; // ✅ Now uses unified hook
 
-const Header = ({ onAuthClick }) => {
+const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username }) => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // ✅ Get auth state from unified hook
-  const { isLoggedIn, user, logout, checkAuthStatus } = useAuth();
+  // Use props if provided, otherwise fall back to hook
+  const { isLoggedIn: hookIsLoggedIn, user: hookUser, logout: hookLogout, checkAuthStatus } = useAuth();
+  
+  // Prefer props over hook values for better control
+  const isLoggedIn = propIsLoggedIn !== undefined ? propIsLoggedIn : hookIsLoggedIn;
+  const user = username ? { username } : hookUser;
+  const logout = onLogout || hookLogout;
+
+  // Debug logging
+  console.log('Header - isLoggedIn:', isLoggedIn, 'user:', user);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -55,12 +63,12 @@ const Header = ({ onAuthClick }) => {
                 </span>
                 <button className={styles.logoutButton} onClick={logout}>
                   <LogOut size={16} />
-                  Log Out
+                  Sign Out
                 </button>
               </div>
             ) : (
               <button className={styles.authButton} onClick={onAuthClick}>
-                Sign Up / Log In
+                Sign In
               </button>
             )}
             {/* <WalletButton /> */}
