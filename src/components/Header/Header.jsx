@@ -21,6 +21,7 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
 
   // Debug logging
   console.log('Header - isLoggedIn:', isLoggedIn, 'user:', user);
+  console.log('Header - props received:', { onAuthClick, onLogout, propIsLoggedIn, username });
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -61,13 +62,29 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
                 <span className={styles.welcomeMessage}>
                   Welcome, {user?.username || "Trader"}!
                 </span>
-                <button className={styles.logoutButton} onClick={logout}>
+                <button 
+                  className={styles.logoutButton} 
+                  onClick={() => {
+                    console.log("🔓 Logout button clicked");
+                    logout();
+                  }}
+                >
                   <LogOut size={16} />
                   Sign Out
                 </button>
               </div>
             ) : (
-              <button className={styles.authButton} onClick={onAuthClick}>
+              <button 
+                className={styles.authButton} 
+                onClick={() => {
+                  console.log("🔐 Auth button clicked, onAuthClick:", onAuthClick);
+                  if (onAuthClick) {
+                    onAuthClick();
+                  } else {
+                    console.error("❌ onAuthClick is not defined!");
+                  }
+                }}
+              >
                 Sign In
               </button>
             )}
