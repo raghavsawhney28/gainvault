@@ -1,8 +1,7 @@
 // backend/routes/auth.js
 import express from 'express';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto'; // built-in
+import crypto from 'crypto';
 import nacl from 'tweetnacl';
 import { PublicKey } from '@solana/web3.js';
 
@@ -11,23 +10,26 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-// In-memory store for nonces (for demo purposes only! Use DB or Redis in prod)
+// In-memory nonce store (use Redis/DB in production)
 const nonces = {};
 
-// Generate and send nonce for signing
-router.get('/nonce', (req, res) => {
+// ✅ Generate and send nonce for a given wallet
+router.get('/nonce/:publicKey', (req, res) => {
   try {
+    const { publicKey } = req.params;
+    if (!publicKey) return res.status(400).json({ error: 'Missing publicKey' });
+
     const nonce = crypto.randomBytes(16).toString('hex');
-    // For simplicity, associate nonce with some client id or wallet address via query or header
-    // Here, just send nonce to client. You should have a better mapping in prod.
+    nonces[publicKey] = nonce; // save nonce for this wallet
+
     res.json({ nonce });
   } catch (error) {
-    console.error('Error generating nonce:', error);
+    console.error('Nonce generation error:', error);
     res.status(500).json({ error: 'Failed to generate nonce' });
   }
 });
 
-// Signature verification helper
+// ✅ Helper: Verify signature
 const verifySignature = (message, signature, publicKey) => {
   try {
     const messageBytes = new TextEncoder().encode(message);
@@ -41,40 +43,40 @@ const verifySignature = (message, signature, publicKey) => {
   }
 };
 
-// Phantom wallet sign-in route (for existing users)
+// ✅ Phantom wallet sign-in
 router.post('/phantom-signin', async (req, res) => {
   try {
     const { publicKey, signature, message } = req.body;
 
     if (!publicKey || !signature || !message) {
-      return res.status(400).json({ error: 'Missing publicKey, signature, or message' });
+      return res.status(400).json({ error: 'Missing fields: publicKey, signature, message' });
     }
 
-    // Verify signature
+    // Check nonce validity
+    if (message !== nonces[publicKey]) {
+      return res.status(401).json({ error: 'Invalid or expired nonce' });
+    }
+
     const isValid = verifySignature(message, signature, publicKey);
+    if (!isValid) return res.status(401).json({ error: 'Invalid signature' });
 
-    if (!isValid) {
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
+    // Delete nonce after use
+    delete nonces[publicKey];
 
-    // Find user by wallet address
+    // Find user
     const user = await User.findOne({ walletAddress: publicKey });
-    if (!user) {
-      return res.status(404).json({ error: 'User not found. Please sign up first.' });
-    }
+    if (!user) return res.status(404).json({ error: 'User not found. Please sign up first.' });
 
-    // Update last login
     user.lastLogin = new Date();
     await user.save();
 
-    // Issue JWT token
     const token = jwt.sign(
       { id: user._id, walletAddress: user.walletAddress },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
-    res.json({ 
+    res.json({
       success: true,
       token,
       user: {
@@ -82,34 +84,38 @@ router.post('/phantom-signin', async (req, res) => {
         username: user.username,
         email: user.email,
         walletAddress: user.walletAddress,
-        lastLogin: user.lastLogin
-      }
+        lastLogin: user.lastLogin,
+      },
     });
   } catch (error) {
     console.error('Phantom signin error:', error);
-    res.status(500).json({ error: 'Server error during Phantom signin' });
+    res.status(500).json({ error: 'Server error during signin' });
   }
 });
 
-// Phantom wallet sign-up route (for new users)
+// ✅ Phantom wallet sign-up
 router.post('/phantom-signup', async (req, res) => {
   try {
     const { publicKey, signature, message, username, email } = req.body;
 
     if (!publicKey || !signature || !message || !username || !email) {
-      return res.status(400).json({ error: 'Missing required fields: publicKey, signature, message, username, email' });
+      return res.status(400).json({ error: 'Missing fields: publicKey, signature, message, username, email' });
     }
 
-    // Verify signature
+    // Check nonce validity
+    if (message !== nonces[publicKey]) {
+      return res.status(401).json({ error: 'Invalid or expired nonce' });
+    }
+
     const isValid = verifySignature(message, signature, publicKey);
+    if (!isValid) return res.status(401).json({ error: 'Invalid signature' });
 
-    if (!isValid) {
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
+    // Delete nonce after use
+    delete nonces[publicKey];
 
-    // Check if user already exists
+    // Check existing user
     const existingUser = await User.findOne({
-      $or: [{ username }, { email }, { walletAddress: publicKey }]
+      $or: [{ username }, { email }, { walletAddress: publicKey }],
     });
 
     if (existingUser) {
@@ -120,7 +126,7 @@ router.post('/phantom-signup', async (req, res) => {
         return res.status(400).json({ error: 'Email already exists' });
       }
       if (existingUser.walletAddress === publicKey) {
-        return res.status(400).json({ error: 'Wallet address already registered' });
+        return res.status(400).json({ error: 'Wallet already registered' });
       }
     }
 
@@ -129,12 +135,10 @@ router.post('/phantom-signup', async (req, res) => {
       username,
       email,
       walletAddress: publicKey,
-      // No password needed for wallet-based auth
     });
 
     await newUser.save();
 
-    // Issue JWT token immediately after signup
     const token = jwt.sign(
       { id: newUser._id, walletAddress: newUser.walletAddress },
       process.env.JWT_SECRET,
@@ -150,122 +154,30 @@ router.post('/phantom-signup', async (req, res) => {
         username: newUser.username,
         email: newUser.email,
         walletAddress: newUser.walletAddress,
-        lastLogin: newUser.lastLogin
-      }
+        lastLogin: newUser.lastLogin,
+      },
     });
   } catch (error) {
     console.error('Phantom signup error:', error);
-    res.status(500).json({ error: 'Server error during Phantom signup' });
+    res.status(500).json({ error: 'Server error during signup' });
   }
 });
 
-/**
- * @route   POST /api/auth/register
- * @desc    Register a new user
- * @access  Public
- */
-router.post('/signup', async (req, res) => {
-  try {
-    const { username, walletAddress, password } = req.body;
-
-    if (!username || !walletAddress || !password) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    const existingUser = await User.findOne({
-      $or: [{ username }, { walletAddress }]
-    });
-
-    if (existingUser) {
-      if (existingUser.username === username) {
-        return res.status(400).json({ error: 'Username already exists' });
-      }
-      if (existingUser.walletAddress === walletAddress) {
-        return res.status(400).json({ error: 'Wallet address already registered' });
-      }
-    }
-
-    const newUser = new User({
-      username,
-      walletAddress,
-      password, // hashed by model middleware
-    });
-
-    await newUser.save();
-
-    res.status(201).json({
-      success: true,
-      message: 'User registered successfully'
-    });
-  } catch (error) {
-    console.error('Register error:', error);
-    res.status(500).json({ error: 'Server error during registration' });
-  }
-});
-
-/**
- * @route   POST /api/auth/login
- * @desc    Authenticate user & get token
- * @access  Public
- */
-router.post('/signin', async (req, res) => {
-  try {
-    const { walletAddress, password } = req.body;
-
-    if (!walletAddress || !password) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    const user = await User.findOne({ walletAddress });
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-
-    user.lastLogin = new Date();
-    await user.save();
-
-    const token = jwt.sign(
-      { id: user._id, walletAddress: user.walletAddress },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-    console.log(`User ${user.username} logged in successfully`);
-    res.json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        username: user.username,
-        walletAddress: user.walletAddress,
-      }
-    });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ error: 'Server error during login' });
-  }
-});
-
-/**
- * @route   GET /api/auth/me
- * @desc    Get user info (Protected)
- * @access  Private
- */
+// ✅ Get logged-in user info
 router.get('/me', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
     res.json({
       success: true,
       user: {
         id: user._id,
         username: user.username,
+        email: user.email,
         walletAddress: user.walletAddress,
-        lastLogin: user.lastLogin
-      }
+        lastLogin: user.lastLogin,
+      },
     });
   } catch (error) {
     console.error('Fetch user error:', error);
