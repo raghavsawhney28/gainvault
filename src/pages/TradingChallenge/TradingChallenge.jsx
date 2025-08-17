@@ -6,6 +6,7 @@ import styles from './TradingChallenge.module.css';
 
 const TradingChallenge = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [challengeType, setChallengeType] = useState('twoStage');
   const { connected, publicKey, connectWallet } = usePhantomWallet();
   const {
     sendSOLPayment,
@@ -42,12 +43,12 @@ const TradingChallenge = () => {
   });
 
   const accountSizes = [
-    { value: '5k', label: '$5,000', price: 69 },
-    { value: '10k', label: '$10,000', price: 129 },
-    { value: '15k', label: '$15,000', price: 179 },
-    { value: '25k', label: '$25,000', price: 269 },
-    { value: '50k', label: '$50,000', price: 549 },
-    { value: '100k', label: '$100,000', price: 1199 },
+    { value: '5k', label: '$5,000', price: 69, singleStagePrice: 124 },
+    { value: '10k', label: '$10,000', price: 129, singleStagePrice: 232 },
+    { value: '15k', label: '$15,000', price: 179, singleStagePrice: 322 },
+    { value: '25k', label: '$25,000', price: 269, singleStagePrice: 484 },
+    { value: '50k', label: '$50,000', price: 549, singleStagePrice: 988 },
+    { value: '100k', label: '$100,000', price: 1199, singleStagePrice: 2158 },
   ];
 
   const countries = [
@@ -74,6 +75,15 @@ const TradingChallenge = () => {
     }));
   };
 
+  const handleChallengeTypeChange = (type) => {
+    setChallengeType(type);
+    // Reset account size when changing challenge type
+    setFormData(prev => ({
+      ...prev,
+      accountSize: ''
+    }));
+  };
+
   const handleNext = () => {
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
@@ -88,7 +98,9 @@ const TradingChallenge = () => {
 
   const getSelectedAccountPrice = () => {
     const selected = accountSizes.find(size => size.value === formData.accountSize);
-    return selected ? selected.price : 0;
+    if (!selected) return 0;
+    
+    return challengeType === 'twoStage' ? selected.price : selected.singleStagePrice;
   };
 
   const applyCoupon = () => {
@@ -195,6 +207,22 @@ const TradingChallenge = () => {
     <div className={styles.stepContent}>
       <h2>Account Setup</h2>
       
+      {/* Challenge Type Toggle */}
+      <div className={styles.challengeTypeToggle}>
+        <button
+          className={`${styles.toggleButton} ${challengeType === 'twoStage' ? styles.active : ''}`}
+          onClick={() => handleChallengeTypeChange('twoStage')}
+        >
+          Two Stages
+        </button>
+        <button
+          className={`${styles.toggleButton} ${challengeType === 'singleStage' ? styles.active : ''}`}
+          onClick={() => handleChallengeTypeChange('singleStage')}
+        >
+          Single Stage
+        </button>
+      </div>
+      
       <div className={styles.formGrid}>
         {/* <div className={styles.formGroup}>
           <label>Country</label>
@@ -209,7 +237,7 @@ const TradingChallenge = () => {
           </select>
         </div> */}
 
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label>Account Type</label>
           <select 
             value={formData.accountType} 
@@ -220,7 +248,7 @@ const TradingChallenge = () => {
               <option key={type} value={type}>{type}</option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         {/* <div className={styles.formGroup}>
           <label>Profit Target</label>
@@ -261,7 +289,12 @@ const TradingChallenge = () => {
               onClick={() => handleInputChange('accountSize', size.value)}
             >
               <div className={styles.accountSizeLabel}>{size.label}</div>
-              <div className={styles.accountSizePrice}>${size.price}</div>
+              <div className={styles.accountSizePrice}>
+                ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
+              </div>
+              <div className={styles.challengeTypeLabel}>
+                {challengeType === 'twoStage' ? 'Two Stages' : 'Single Stage'}
+              </div>
             </button>
           ))}
         </div>
@@ -271,7 +304,7 @@ const TradingChallenge = () => {
         <button 
           className={styles.btnPrimary}
           onClick={handleNext}
-          disabled={ !formData.accountType || !formData.accountSize || !formData.platform }
+          disabled={  !formData.accountSize || !formData.platform }
         >
           Next <ChevronRight size={16} />
         </button>

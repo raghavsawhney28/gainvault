@@ -1,62 +1,75 @@
 import React from 'react';
-import { TrendingUp, Zap, Shield, Globe, Cpu, Headphones } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { TrendingUp, Shield, Zap, Target, Users, Award } from 'lucide-react';
 import AnimatedSection from '../AnimatedSection/AnimatedSection';
 import styles from './FeaturesSection.module.css';
 
 const FeaturesSection = () => {
+  const navigate = useNavigate();
+
+  const handleStartJourney = () => {
+    navigate('/trading-challenge');
+  };
+
   const features = [
     {
       icon: TrendingUp,
-      title: 'Risk-Free Trading',
-      description: 'Trade with our capital, not yours. Keep the profits while we handle the risk.'
-    },
-    {
-      icon: Zap,
-      title: 'Instant Funding',
-      description: 'Get funded quickly and start trading altcoins with substantial capital backing.'
+      title: 'Prop Trading Excellence',
+      description: 'Access to professional trading capital with proven strategies and risk management.'
     },
     {
       icon: Shield,
-      title: 'Secure Platform',
-      description: 'Trade with confidence on our secure, regulated platform with full transparency.'
+      title: 'Risk-Free Environment',
+      description: 'Trade with confidence knowing your personal capital is never at risk.'
     },
     {
-      icon: Globe,
-      title: 'Altcoin Focus',
-      description: 'Specialized in altcoin trading with access to emerging and established cryptocurrencies.'
+      icon: Zap,
+      title: 'Lightning Fast Execution',
+      description: 'High-frequency trading capabilities with institutional-grade infrastructure.'
     },
     {
-      icon: Cpu,
-      title: 'Smart Tools',
-      description: 'Advanced trading tools and analytics designed specifically for crypto markets.'
+      icon: Target,
+      title: 'Performance-Based Funding',
+      description: 'Earn more capital as you demonstrate consistent profitable trading.'
     },
     {
-      icon: Headphones,
+      icon: Users,
       title: 'Community Support',
-      description: 'Join a community of funded traders with 24/7 support and shared strategies.'
+      description: 'Join a network of successful traders and share strategies.'
+    },
+    {
+      icon: Award,
+      title: 'Recognition & Rewards',
+      description: 'Get recognized for your trading skills with bonuses and incentives.'
     }
   ];
 
   return (
-    <section className={styles.featuresSection} id="features">
+    <section className={styles.featuresSection}>
       <div className={styles.container}>
         <AnimatedSection className={styles.featuresHeader}>
           <h2>Why Choose GainVault?</h2>
-          <p>We provide the capital, tools, and support you need to succeed in altcoin trading. Focus on what you do best - trading.</p>
+          <p>Experience the future of prop trading with our cutting-edge platform</p>
         </AnimatedSection>
-        
+
         <div className={styles.featuresGrid}>
           {features.map((feature, index) => (
-            <AnimatedSection key={index} delay={index * 100} className={styles.featureCard}>
-              <feature.icon className={styles.featureIcon} size={32} />
-              <h3>{feature.title}</h3>
-              <p>{feature.description}</p>
+            <AnimatedSection key={index} delay={index * 100}>
+              <div className={styles.featureCard}>
+                <div className={styles.featureIcon}>
+                  <feature.icon size={32} />
+                </div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </div>
             </AnimatedSection>
           ))}
         </div>
 
         <AnimatedSection className={styles.featuresCta}>
-          <button className={styles.btnOutline}>Start Your Journey</button>
+          <button className={styles.btnOutline} onClick={handleStartJourney}>
+            Start Your Journey
+          </button>
         </AnimatedSection>
       </div>
     </section>
