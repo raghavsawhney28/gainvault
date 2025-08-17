@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Users, 
   DollarSign, 
@@ -9,7 +9,8 @@ import {
   Download,
   CheckCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
 import styles from './Referral.module.css';
@@ -19,53 +20,86 @@ const Referral = () => {
   const [referralData, setReferralData] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawalMethod, setWithdrawalMethod] = useState('bank');
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showSuccessCard, setShowSuccessCard] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetchReferralData();
-    }
-  }, [isLoggedIn]);
+  // Memoized fetch function for better performance
+  const fetchReferralData = useCallback(async () => {
+    if (!isLoggedIn) return;
 
-  const fetchReferralData = async () => {
     try {
       setLoading(true);
-      
-      // Fetch referral code and stats
-      const [codeRes, statsRes, transactionsRes] = await Promise.all([
+      setError(null);
+      setLoadingProgress(0);
+
+      // Simulate progress for better UX
+      const progressInterval = setInterval(() => {
+        setLoadingProgress(prev => Math.min(prev + 15, 90));
+      }, 200);
+
+      // Fetch data with timeout and better error handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      const [codeRes, statsRes, transactionsRes] = await Promise.allSettled([
         fetch('https://gainvault.onrender.com/api/referral/code', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
+          signal: controller.signal
         }),
         fetch('https://gainvault.onrender.com/api/referral/stats', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
+          signal: controller.signal
         }),
         fetch('https://gainvault.onrender.com/api/referral/transactions', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
+          signal: controller.signal
         })
       ]);
 
-      if (codeRes.ok && statsRes.ok && transactionsRes.ok) {
-        const [codeData, statsData, transactionsData] = await Promise.all([
-          codeRes.json(),
-          statsRes.json(),
-          transactionsRes.json()
-        ]);
+      clearTimeout(timeoutId);
+      clearInterval(progressInterval);
 
-        setReferralData({
-          ...codeData,
-          stats: statsData.stats
-        });
-        setTransactions(transactionsData.transactions);
+      // Check if any requests failed
+      const failedRequests = [codeRes, statsRes, transactionsRes].filter(
+        result => result.status === 'rejected' || !result.value.ok
+      );
+
+      if (failedRequests.length > 0) {
+        throw new Error('Some data failed to load');
       }
+
+      // Process successful responses
+      const [codeData, statsData, transactionsData] = await Promise.all([
+        codeRes.value.json(),
+        statsRes.value.json(),
+        transactionsRes.value.json()
+      ]);
+
+      setReferralData({
+        ...codeData,
+        stats: statsData.stats
+      });
+      setTransactions(transactionsData.transactions);
+      setLoadingProgress(100);
+
+      // Small delay to show completion
+      setTimeout(() => setLoading(false), 300);
+
     } catch (error) {
       console.error('Error fetching referral data:', error);
-    } finally {
+      setError(error.message || 'Failed to load referral data');
       setLoading(false);
     }
-  };
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    fetchReferralData();
+  }, [fetchReferralData]);
 
   const copyReferralLink = async () => {
     try {
@@ -99,9 +133,15 @@ const Referral = () => {
 
       if (response.ok) {
         const result = await response.json();
-        alert('Withdrawal request submitted successfully!');
         setShowWithdrawModal(false);
+        setShowSuccessCard(true);
         setWithdrawAmount('');
+        
+        // Auto-hide success card after 3 seconds
+        setTimeout(() => {
+          setShowSuccessCard(false);
+        }, 3000);
+        
         fetchReferralData(); // Refresh data
       } else {
         const error = await response.json();
@@ -111,6 +151,10 @@ const Referral = () => {
       console.error('Withdrawal error:', error);
       alert('Withdrawal failed');
     }
+  };
+
+  const retryFetch = () => {
+    fetchReferralData();
   };
 
   if (!isLoggedIn) {
@@ -126,13 +170,77 @@ const Referral = () => {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>Loading referral data...</div>
+        <div className={styles.loadingContainer}>
+          <div className={styles.loadingSpinner}>
+            <Loader2 size={48} className={styles.spinningIcon} />
+          </div>
+          <h2 className={styles.loadingTitle}>Loading Referral Dashboard</h2>
+          <p className={styles.loadingSubtitle}>Preparing your data...</p>
+          
+          {/* Progress Bar */}
+          <div className={styles.progressBar}>
+            <div 
+              className={styles.progressFill} 
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
+          
+          <div className={styles.loadingStats}>
+            <div className={styles.loadingStat}>
+              <div className={styles.loadingDot} />
+              <span>Fetching referral code</span>
+            </div>
+            <div className={styles.loadingStat}>
+              <div className={styles.loadingDot} />
+              <span>Loading statistics</span>
+            </div>
+            <div className={styles.loadingStat}>
+              <div className={styles.loadingDot} />
+              <span>Retrieving transactions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.errorContainer}>
+          <AlertCircle size={64} className={styles.errorIcon} />
+          <h2 className={styles.errorTitle}>Failed to Load Data</h2>
+          <p className={styles.errorMessage}>{error}</p>
+          <button className={styles.retryButton} onClick={retryFetch}>
+            <Loader2 size={16} />
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className={styles.container}>
+      {/* Success Card Overlay */}
+      {showSuccessCard && (
+        <div className={styles.successOverlay}>
+          <div className={styles.successCard}>
+            <div className={styles.successIcon}>
+              <CheckCircle size={64} />
+            </div>
+            <h2 className={styles.successTitle}>Withdrawal Request Submitted!</h2>
+            <p className={styles.successMessage}>Your withdrawal request has been successfully submitted and is being processed.</p>
+            <button 
+              className={styles.successButton}
+              onClick={() => setShowSuccessCard(false)}
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className={styles.header}>
         <h1>Referral Dashboard</h1>
         <p>Earn rewards by referring friends to GainVault</p>
