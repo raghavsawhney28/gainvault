@@ -42,12 +42,12 @@ const TradingChallenge = () => {
   });
 
   const accountSizes = [
-    { value: '5k', label: '$5,000', price: 49 },
-    { value: '10k', label: '$10,000', price: 99 },
-    { value: '15k', label: '$15,000', price: 149 },
-    { value: '25k', label: '$25,000', price: 249 },
-    { value: '50k', label: '$50,000', price: 399 },
-    { value: '100k', label: '$100,000', price: 599 },
+    { value: '5k', label: '$5,000', price: 69 },
+    { value: '10k', label: '$10,000', price: 129 },
+    { value: '15k', label: '$15,000', price: 179 },
+    { value: '25k', label: '$25,000', price: 269 },
+    { value: '50k', label: '$50,000', price: 549 },
+    { value: '100k', label: '$100,000', price: 1199 },
   ];
 
   const countries = [

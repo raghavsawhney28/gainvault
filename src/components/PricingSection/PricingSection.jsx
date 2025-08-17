@@ -12,7 +12,7 @@ const PricingSection = () => {
     {
       name: "BASE",
       value: "$5,000",
-      cost: 49,
+      cost: 69,
       details: {
         profitTarget: ["10%", "5%"],
         maxDailyLoss: ["5%", "5%"],
@@ -26,7 +26,7 @@ const PricingSection = () => {
       name: "STARTER",
       value: "$10,000",
       tag: "BEST SELLER",
-      cost: 99,
+      cost: 129,
       details: {
         profitTarget: ["10%", "5%"],
         maxDailyLoss: ["5%", "5%"],
@@ -40,7 +40,7 @@ const PricingSection = () => {
       name: "SKILLED",
       value: "$15,000",
       tag: "NEW",
-      cost: 149,
+      cost: 179,
       isDefault: true,
       details: {
         profitTarget: ["10%", "5%"],
@@ -54,7 +54,7 @@ const PricingSection = () => {
     {
       name: "INTERMEDIATE",
       value: "$25,000",
-      cost: 249,
+      cost: 269,
       details: {
         profitTarget: ["10%", "5%"],
         maxDailyLoss: ["5%", "5%"],
@@ -67,7 +67,7 @@ const PricingSection = () => {
     {
       name: "ADVANCED",
       value: "$50,000",
-      cost: 399,
+      cost: 549,
       details: {
         profitTarget: ["10%", "5%"],
         maxDailyLoss: ["5%", "5%"],
@@ -81,7 +81,7 @@ const PricingSection = () => {
       name: "EXPERT",
       value: "$100,000",
       tag: "POPULAR",
-      cost: 599,
+      cost: 1199,
       details: {
         profitTarget: ["10%", "5%"],
         maxDailyLoss: ["5%", "5%"],
