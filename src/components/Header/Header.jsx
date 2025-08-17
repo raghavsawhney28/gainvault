@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, Loader2 } from 'lucide-react';
 import WalletButton from '../WalletButton/WalletButton';
 import styles from './Header.module.css';
 import logo from "../../assets/logo.png";
@@ -10,6 +10,7 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Use props if provided, otherwise fall back to hook
   const { isLoggedIn: hookIsLoggedIn, user: hookUser, logout: hookLogout } = useAuth();
@@ -38,6 +39,17 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
 
   const handleStartTrading = () => {
     navigate('/trading-challenge');
+  };
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -70,12 +82,15 @@ const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username })
                 </span>
                 <button 
                   className={styles.logoutButton} 
-                  onClick={() => {
-                    logout();
-                  }}
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
                 >
-                  <LogOut size={16} />
-                  Sign Out
+                  {isLoggingOut ? (
+                    <Loader2 size={16} className={styles.spinner} />
+                  ) : (
+                    <LogOut size={16} />
+                  )}
+                  {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
                 </button>
               </div>
             ) : (
