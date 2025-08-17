@@ -1,5 +1,5 @@
 import React from "react";
-import { Linkedin, Twitter, Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle } from "lucide-react";
 import styles from "./Footer.module.css";
 import logo from "../../assets/logo.png";
 
@@ -65,7 +65,6 @@ const Footer = () => {
               </div>
             ))}
           </div>
-
           <div className={styles.newsletter}>
             <h4>Stay Updated</h4>
             <p>

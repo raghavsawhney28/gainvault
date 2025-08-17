@@ -1,0 +1,68 @@
+/* Unified Background Styles */
+.unifiedBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 3D Globe Canvas */
+.globeCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Noise overlay for grainy effect */
+.noiseOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXWBgYGHh4d5eXlzc3OLi4ubm5uVlZWPj4+NjY19fX2JiYl/f39ra2uRkZGZmZlpaWmXl5dvb29xcXGTk5NnZ2c8TV1mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVEjHqmdSDoAgDARBk2/4+z8uVwVRQLvbIeQFCJecDqYq2v4kE2Y6IvdgObyIeRCHGvjTMsQYECUeM3oB3A2U5fAogLHYuA2A4gPYoJwH3gRy5xHlJ2QnzssD8A+gL2d3sKkAAAAASUVORK5CYII=');
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .globeCanvas {
+    opacity: 0.8;
+  }
+
+  .noiseOverlay {
+    opacity: 0.05;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .globeCanvas {
+    opacity: 0.6;
+  }
+
+  .noiseOverlay {
+    opacity: 0.03;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .globeCanvas {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Performance optimizations */
+.globeCanvas {
+  will-change: transform;
+  backface-visibility: hidden;
+}
