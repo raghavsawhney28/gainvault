@@ -281,8 +281,6 @@ const Referral = () => {
                   value={withdrawalMethod} 
                   onChange={(e) => setWithdrawalMethod(e.target.value)}
                 >
-                  <option value="bank">Bank Transfer</option>
-                  <option value="paypal">PayPal</option>
                   <option value="crypto">Cryptocurrency</option>
                 </select>
               </div>

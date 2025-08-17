@@ -5,27 +5,14 @@ import logo from "../../assets/logo.png";
 
 const Footer = () => {
   const footerLinks = {
-    Platform: [
-      "Trading Tools",
-      "Market Data",
-      "API Documentation",
-      "Mobile App",
-      "Desktop Platform",
-    ],
-    Company: ["About Us", "Careers", "Press", "Blog", "Contact"],
-    Resources: [
-      "Help Center",
-      "Trading Guides",
-      "Webinars",
-      "Status Page",
-      "Community",
-    ],
+    
+    Company: ["About Us",  "Contact"],
+    
     Legal: [
       "Privacy Policy",
       "Terms of Service",
       "Risk Disclosure",
-      "Compliance",
-      "Licenses",
+      
     ],
   };
 
@@ -62,14 +49,6 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className={styles.socialLinks}>
-              <a href="#">
-                <Linkedin size={20} />
-              </a>
-              <a href="#">
-                <Twitter size={20} />
-              </a>
-            </div>
           </div>
 
           <div className={styles.footerLinks}>
