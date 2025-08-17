@@ -281,7 +281,7 @@ const Referral = () => {
                   value={withdrawalMethod} 
                   onChange={(e) => setWithdrawalMethod(e.target.value)}
                 >
-                  <option value="crypto">Cryptocurrency</option>
+                  <option value="crypto">Connected Wallet</option>
                 </select>
               </div>
 

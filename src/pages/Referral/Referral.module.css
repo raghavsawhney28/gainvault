@@ -4,7 +4,7 @@
   padding: 2rem;
   min-height: 100vh;
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-  margin-top: 0;
+  margin-top: 80px; /* Account for fixed header height */
   position: relative;
   overflow: hidden;
 }
@@ -815,6 +815,7 @@
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
+    margin-top: 70px; /* Adjust for mobile header height */
   }
   
   .header h1 {
@@ -867,6 +868,10 @@
 }
 
 @media (max-width: 480px) {
+  .container {
+    margin-top: 65px; /* Adjust for extra small mobile header height */
+  }
+  
   .header h1 {
     font-size: 2rem;
   }

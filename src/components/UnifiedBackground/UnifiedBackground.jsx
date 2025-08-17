@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styles from './UnifiedBackground.module.css';
 
 const UnifiedBackground = () => {
@@ -9,6 +10,17 @@ const UnifiedBackground = () => {
   const globeRef = useRef(null);
   const starsRef = useRef(null);
   const cameraRef = useRef(null);
+  const location = useLocation();
+  const [backgroundOpacity, setBackgroundOpacity] = useState(1);
+
+  // Update background opacity based on current page
+  useEffect(() => {
+    if (location.pathname === '/trading-challenge' || location.pathname === '/rules') {
+      setBackgroundOpacity(0.13);
+    } else {
+      setBackgroundOpacity(1);
+    }
+  }, [location.pathname]);
 
   // Initialize Three.js scene
   const initThreeJS = useCallback(() => {
@@ -37,11 +49,11 @@ const UnifiedBackground = () => {
     // Core of the globe
     const coreGeometry = new THREE.SphereGeometry(GLOBE_RADIUS, 64, 64);
     const coreMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0x22C55E, // GainVault green
-      roughness: 0.7, 
-      metalness: 0.1,
+      color: 0x1a1a1a, // Dark gray/black
+      roughness: 0.8, 
+      metalness: 0.2,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.9
     });
     const core = new THREE.Mesh(coreGeometry, coreMaterial);
     globeGroup.add(core);
@@ -49,12 +61,12 @@ const UnifiedBackground = () => {
     // Static dots on globe
     const pointsGeometry = new THREE.SphereGeometry(GLOBE_RADIUS + 0.1, 45, 45);
     const pointsMaterial = new THREE.PointsMaterial({
-      color: 0x22C55E,
+      color: 0x666666, // Medium gray
       size: 0.2,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
       transparent: true,
-      opacity: 0.7
+      opacity: 0.6
     });
     const points = new THREE.Points(pointsGeometry, pointsMaterial);
     globeGroup.add(points);
@@ -67,10 +79,10 @@ const UnifiedBackground = () => {
         128
       );
       const ringMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x22C55E, 
+        color: 0x444444, // Dark gray
         side: THREE.DoubleSide, 
         transparent: true, 
-        opacity: 0.3 
+        opacity: 0.4 
       });
       const ring = new THREE.Mesh(ringGeometry, ringMaterial);
       ring.rotation.x = Math.PI / 2;
@@ -91,24 +103,24 @@ const UnifiedBackground = () => {
     }
     particleGeometry.setAttribute('position', new THREE.Float32BufferAttribute(particleVertices, 3));
     const particleMaterial = new THREE.PointsMaterial({
-      color: 0x22C55E,
+      color: 0x888888, // Light gray
       size: 0.3,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.5,
       blending: THREE.AdditiveBlending
     });
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     globeGroup.add(particles);
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0x22C55E, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0xcccccc, 0.6);
     directionalLight.position.set(50, 20, 30);
     scene.add(directionalLight);
 
     // Add point light that follows the globe
-    const pointLight = new THREE.PointLight(0x22C55E, 1, 100);
+    const pointLight = new THREE.PointLight(0xaaaaaa, 0.8, 100);
     pointLight.position.set(0, 0, 0);
     globeGroup.add(pointLight);
 
@@ -123,10 +135,10 @@ const UnifiedBackground = () => {
     }
     starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
     const starMaterial = new THREE.PointsMaterial({
-      color: 0x22C55E,
+      color: 0x999999, // Medium gray
       size: 0.7,
       transparent: true,
-      opacity: 0.6
+      opacity: 0.5
     });
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
@@ -276,10 +288,14 @@ const UnifiedBackground = () => {
       <canvas 
         ref={canvasRef} 
         className={styles.globeCanvas}
+        style={{ opacity: backgroundOpacity }}
       />
       
       {/* Noise overlay for grainy effect */}
-      <div className={styles.noiseOverlay} />
+      <div 
+        className={styles.noiseOverlay} 
+        style={{ opacity: backgroundOpacity * 0.08 }}
+      />
     </div>
   );
 };

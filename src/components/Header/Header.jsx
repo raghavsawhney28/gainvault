@@ -1,125 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, Loader2 } from 'lucide-react';
-import WalletButton from '../WalletButton/WalletButton';
+import React, { useState, useEffect } from 'react';
+import { Menu, X, User, LogOut } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 import styles from './Header.module.css';
-import logo from "../../assets/logo.png";
-import useAuth from '../../hooks/useAuth'; // ✅ Now uses unified hook
 
-const Header = ({ onAuthClick, onLogout, isLoggedIn: propIsLoggedIn, username }) => {
-  const navigate = useNavigate();
-  const [isScrolled, setIsScrolled] = useState(false);
+const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  // Use props if provided, otherwise fall back to hook
-  const { isLoggedIn: hookIsLoggedIn, user: hookUser, logout: hookLogout } = useAuth();
-  
-  // Prefer props over hook values for better control
-  const isLoggedIn = propIsLoggedIn !== undefined ? propIsLoggedIn : hookIsLoggedIn;
-  const user = username ? { username } : hookUser;
-  const logout = onLogout || hookLogout;
-
-  // Debug logging
-  console.log('🔍 Header Debug:', {
-    propIsLoggedIn,
-    hookIsLoggedIn,
-    finalIsLoggedIn: isLoggedIn,
-    username,
-    hookUser,
-    finalUser: user
-  });
+  const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
     window.addEventListener('scroll', handleScroll);
-
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []); // Remove checkAuthStatus dependency
+  }, []);
 
-  const handleStartTrading = () => {
-    navigate('/trading-challenge');
+  const handleLogoClick = () => {
+    // Navigate to homepage
+    navigate('/');
+    // Close mobile menu if open
+    setIsMobileMenuOpen(false);
   };
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      setIsLoggingOut(false);
-    }
+  const handleNavClick = (path) => {
+    navigate(path);
+    setIsMobileMenuOpen(false);
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path;
   };
 
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
-      <div className={styles.container}>
-        <div className={styles.headerContent}>
-          <div className={styles.logo}>
-            <div className={styles.logoIcon}>
-              <img src={logo} alt="GainVault Logo" className={styles.logoImage} />
-            </div>
-            <span>GainVault</span>
+      <div className={styles.headerContent}>
+        {/* Logo */}
+        <div className={styles.logo} onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+          <div className={styles.logoIcon}>
+            <img src={logo} alt="GainVault Logo" className={styles.logoImage} />
           </div>
-          
-          <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.navOpen : ''}`}>
-            <a href="#platform">Platform</a>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#about">About</a>
-            <a href="/rules" onClick={(e) => { e.preventDefault(); navigate('/rules'); }}>Rules</a>
-            {isLoggedIn && (
-              <a href="/referral" onClick={(e) => { e.preventDefault(); navigate('/referral'); }}>Referrals</a>
-            )}
-          </nav>
-
-          <div className={styles.headerActions}>
-            {isLoggedIn ? (
-              <div className={styles.userSection}>
-                <span className={styles.welcomeMessage}>
-                  Welcome, {user?.username || "Trader"}!
-                </span>
-                <button 
-                  className={styles.logoutButton} 
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                >
-                  {isLoggingOut ? (
-                    <Loader2 size={16} className={styles.spinner} />
-                  ) : (
-                    <LogOut size={16} />
-                  )}
-                  {isLoggingOut ? 'Signing Out...' : 'Sign Out'}
-                </button>
-              </div>
-            ) : (
-              <button 
-                className={styles.authButton} 
-                onClick={() => {
-                  if (onAuthClick) {
-                    onAuthClick();
-                  } else {
-                    console.error("❌ onAuthClick is not defined!");
-                  }
-                }}
-              >
-                Sign In
-              </button>
-            )}
-            {/* <WalletButton /> */}
-            <button className={styles.btnPrimary} onClick={handleStartTrading}>
-              Start Trading
-            </button>
-          </div>
-
-          <button 
-            className={styles.mobileMenuToggle}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <span>GainVault</span>
         </div>
+
+        {/* Navigation */}
+        <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.mobileOpen : ''}`}>
+          <a 
+            className={isActive('/') ? styles.active : ''} 
+            onClick={() => handleNavClick('/')}
+          >
+            Home
+          </a>
+          <a 
+            className={isActive('/trading-challenge') ? styles.active : ''} 
+            onClick={() => handleNavClick('/trading-challenge')}
+          >
+            Trading Challenge
+          </a>
+          <a 
+            className={isActive('/rules') ? styles.active : ''} 
+            onClick={() => handleNavClick('/rules')}
+          >
+            Rules
+          </a>
+          <a 
+            className={isActive('/referral') ? styles.active : ''} 
+            onClick={() => handleNavClick('/referral')}
+          >
+            Referral
+          </a>
+        </nav>
+
+        {/* Header Actions */}
+        <div className={styles.headerActions}>
+          {isLoggedIn ? (
+            <div className={styles.userSection}>
+              <div className={styles.welcomeMessage}>
+                Welcome, <span className={styles.username}>{username}</span>
+              </div>
+              <button className={styles.logoutButton} onClick={onLogout}>
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button className={styles.authButton} onClick={onAuthClick}>
+              <User size={16} />
+              Login
+            </button>
+          )}
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <button 
+          className={styles.mobileMenuToggle}
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
     </header>
   );

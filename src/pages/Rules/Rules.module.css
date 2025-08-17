@@ -4,6 +4,7 @@
   background: linear-gradient(135deg, var(--primary-bg) 0%, #0F1419 100%);
   color: var(--text-primary);
   padding: calc(var(--spacing-unit) * 12) 0 calc(var(--spacing-unit) * 8) 0;
+  margin-top: 80px; /* Account for fixed header height */
 }
 
 .container {
@@ -328,6 +329,7 @@
 
   .rulesPage {
     padding: calc(var(--spacing-unit) * 8) 0 calc(var(--spacing-unit) * 4) 0;
+    margin-top: 70px; /* Adjust for mobile header height */
   }
 
   .rulesGrid {
@@ -368,6 +370,10 @@
 }
 
 @media (max-width: 480px) {
+  .rulesPage {
+    margin-top: 65px; /* Adjust for extra small mobile header height */
+  }
+  
   .rulesGrid {
     grid-template-columns: 1fr;
   }
