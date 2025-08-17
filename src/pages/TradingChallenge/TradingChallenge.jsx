@@ -56,11 +56,11 @@ const TradingChallenge = () => {
   ];
 
   const accountTypes = [
-    ' 1 Step  -------  12% Phase 1','2 Step  --------10% Phase 1, 5% Phase 2'
+    '2 Step  --------10% Phase 1, 5% Phase 2'
   ];
 
   const profitTargets = [
-     '10% Phase 1, 5% Phase 2', '12% Phase 1'
+     '10% Phase 1, 5% Phase 2'
   ];
 
   const platforms = [
