@@ -1,6 +1,6 @@
 /* Footer Styles */
 .footer {
-  background-color: var(--primary-bg);
+  
   padding: calc(var(--spacing-unit) * 8) 0 0 0;
 }
 

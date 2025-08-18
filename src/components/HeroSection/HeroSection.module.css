@@ -5,7 +5,7 @@
   position: relative;
   overflow: hidden;
   min-height: 100vh;
-  background-color: var(--primary-bg);
+  
 }
 
 .container {

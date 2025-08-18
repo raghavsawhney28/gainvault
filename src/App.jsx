@@ -9,7 +9,6 @@ import TradingChallenge from './pages/TradingChallenge/TradingChallenge';
 import Rules from './pages/Rules/Rules';
 import Referral from './pages/Referral/Referral';
 import AuthPage from './components/AuthPage/AuthPage';
-import UnifiedBackground from './components/UnifiedBackground/UnifiedBackground';
 import useAuth from './hooks/useAuth';
 import './App.css';
 
@@ -48,9 +47,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* Unified 3D Background */}
-      <UnifiedBackground />
-      
       <Header 
         isLoggedIn={isLoggedIn}
         username={user?.username}
