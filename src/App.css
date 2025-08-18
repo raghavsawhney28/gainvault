@@ -3,12 +3,16 @@
 
 /* CSS Variables */
 :root {
-  --primary-bg: #0A0E1A;
-  --card-bg: #1A202C;
-  --accent-green: #2DDA7D;
-  --text-primary: #FFFFFF;
-  --text-secondary: #B0B8C4;
-  --border-color: #30363D;
+  --primary-bg: #FFFFFF;
+  --card-bg: #F8F9FA;
+  --accent-green: #10B981;
+  --accent-green-hover: #059669;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --border-color: #D1D5DB;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --spacing-unit: 8px;
 }
 

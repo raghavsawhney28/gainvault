@@ -1,6 +1,6 @@
 .pricingSection {
   padding: 4rem 0;
-  /* background: #30363D; */
+  background: var(--primary-bg);
 }
 
 .container {
@@ -17,7 +17,7 @@
 .pricingHeader h2 {
   font-size: 3rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary);
   margin: 0;
   letter-spacing: -0.025em;
 }
@@ -32,13 +32,13 @@
 }
 
 .toggleButton {
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
   border-radius: 50px;
   padding: 1rem 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: white;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 1rem;
   backdrop-filter: blur(10px);
@@ -47,17 +47,17 @@
 }
 
 .toggleButton:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: var(--border-color);
+  border-color: var(--accent-green);
   transform: translateY(-2px);
 }
 
 .toggleButton.active {
-  background: #2DDA7D;
-  border-color: #2DDA7D;
-  color: white;
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  color: var(--primary-bg);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(45, 218, 125, 0.3);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
 }
 
 /* Plan Selection */
@@ -70,29 +70,30 @@
 }
 
 .planButton {
-  background: white;
-  border: 2px solid #e2e8f0;
+  background: var(--primary-bg);
+  border: 2px solid var(--border-color);
   border-radius: 50px;
   padding: 1rem 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 120px;
   text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
 }
 
 .planButton:hover {
-  border-color: #667eea;
+  border-color: var(--accent-green);
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 .planButton.selected {
-  background: #667eea;
-  border-color: #667eea;
-  color: white;
+  background: var(--accent-green);
+  border-color: var(--accent-green);
+  color: var(--primary-bg);
   transform: translateY(-2px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.3);
 }
 
 .planName {
@@ -104,11 +105,11 @@
 .planValue {
   font-weight: 700;
   font-size: 1rem;
-  color: #667eea;
+  color: var(--accent-green);
 }
 
 .planButton.selected .planValue {
-  color: white;
+  color: var(--primary-bg);
 }
 
 .planTag {
@@ -119,47 +120,49 @@
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  color: #d2d5dd;
+  color: var(--text-secondary);
 }
 
 .planButton.selected .planTag {
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Objective Section */
 .objectiveSection {
-  /* background: white; */
+  background: var(--card-bg);
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
 }
 
 .objectiveSection h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #a3c2f5;
+  color: var(--text-primary);
   margin: 0 0 1.5rem 0;
   text-align: center;
 }
 
 .objectiveTable {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
+  background: var(--primary-bg);
 }
 
 .tableHeader {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  /* background: #f8f9ff; */
-  border-bottom: 1px solid #e3e8ff;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .headerCell {
   padding: 1rem;
   font-weight: 600;
-  color: #667eea;
+  color: var(--accent-green);
   text-align: center;
   font-size: 0.875rem;
 }
@@ -167,7 +170,12 @@
 .tableRow {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--primary-bg);
+}
+
+.tableRow:nth-child(even) {
+  background: var(--card-bg);
 }
 
 .tableRow:last-child {
@@ -180,8 +188,7 @@
   align-items: center;
   gap: 0.5rem;
   font-weight: 500;
-  color: #fdfeff;
-  /* background: #f8f9ff; */
+  color: var(--text-primary);
   font-size: 0.875rem;
 }
 
@@ -189,7 +196,7 @@
   padding: 1rem;
   text-align: center;
   font-weight: 600;
-  color: #fcfcfc;
+  color: var(--text-primary);
   font-size: 0.875rem;
 }
 
@@ -203,7 +210,7 @@
 
 .footnote {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-style: italic;
   max-width: 300px;
 }
@@ -217,12 +224,12 @@
 .challengePrice {
   font-size: 2.5rem;
   font-weight: 700;
-  color: white;
+  color: var(--accent-green);
 }
 
 .startChallengeButton {
-  background: #2DDA7D;
-  color: white;
+  background: var(--accent-green);
+  color: var(--primary-bg);
   border: none;
   padding: 1rem 2rem;
   border-radius: 8px;
@@ -230,13 +237,13 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .startChallengeButton:hover {
-  background: #25c06e;
+  background: var(--accent-green-hover);
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Responsive Design */

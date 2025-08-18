@@ -1,33 +1,44 @@
 /* Trading Challenge Page Styles */
-.tradingChallenge {
+.challengePage {
+  padding: calc(var(--spacing-unit) * 8) 0;
+  background-color: var(--primary-bg);
   min-height: 100vh;
-  background-color: #1C1E26;
-  color: #A0A4AE;
-  padding: calc(var(--spacing-unit) * 12) 0 calc(var(--spacing-unit) * 8) 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 16px;
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 calc(var(--spacing-unit) * 3);
 }
 
-/* Progress Bar */
-.progressBar {
-  position: relative;
-  margin-bottom: calc(var(--spacing-unit) * 6);
-  background-color: #2A2D3A;
-  border-radius: calc(var(--spacing-unit) * 2);
-  padding: calc(var(--spacing-unit) * 3);
+.challengeHeader {
+  text-align: center;
+  margin-bottom: calc(var(--spacing-unit) * 8);
 }
 
+.challengeHeader h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.challengeHeader p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: calc(var(--spacing-unit) * 3) auto 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Progress Steps */
 .progressSteps {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: calc(var(--spacing-unit) * 6);
   position: relative;
-  z-index: 2;
 }
 
 .progressStep {
@@ -35,34 +46,38 @@
   flex-direction: column;
   align-items: center;
   gap: calc(var(--spacing-unit) * 1);
+  position: relative;
+  z-index: 2;
 }
 
 .stepNumber {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #3A3D4A;
-  color: #A0A4AE;
+  background-color: var(--border-color);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 .progressStep.active .stepNumber {
-  background-color: #007BFF;
-  color: white;
+  background-color: var(--accent-green);
+  color: var(--primary-bg);
 }
 
 .stepLabel {
   font-size: 0.875rem;
   font-weight: 500;
   text-align: center;
+  color: var(--text-secondary);
 }
 
 .progressStep.active .stepLabel {
-  color: #007BFF;
+  color: var(--accent-green);
 }
 
 .progressLine {
@@ -70,7 +85,7 @@
   top: 50%;
   left: 0;
   height: 2px;
-  background-color: #007BFF;
+  background-color: var(--accent-green);
   transition: width 0.3s ease;
   z-index: 1;
   transform: translateY(-50%);
@@ -78,14 +93,52 @@
 
 /* Step Container */
 .stepContainer {
-  background-color: #2A2D3A;
+  background-color: var(--card-bg);
   border-radius: calc(var(--spacing-unit) * 2);
   padding: calc(var(--spacing-unit) * 4);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+}
+
+/* Challenge Type Toggle */
+.challengeTypeToggle {
+  display: flex;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.toggleButton {
+  background-color: var(--primary-bg);
+  border: 2px solid var(--border-color);
+  border-radius: calc(var(--spacing-unit) * 3);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 1rem;
+  min-width: 140px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.toggleButton:hover {
+  border-color: var(--accent-green);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.toggleButton.active {
+  background-color: var(--accent-green);
+  border-color: var(--accent-green);
+  color: var(--primary-bg);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .stepContent h2 {
-  color: white;
+  color: var(--text-primary);
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: calc(var(--spacing-unit) * 4);
@@ -107,7 +160,7 @@
 }
 
 .formGroup label {
-  color: white;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 0.875rem;
 }
@@ -115,10 +168,10 @@
 .formGroup input,
 .formGroup select {
   padding: calc(var(--spacing-unit) * 2);
-  border: 1px solid #3A3D4A;
+  border: 1px solid var(--border-color);
   border-radius: calc(var(--spacing-unit) * 1);
-  background-color: #1C1E26;
-  color: white;
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
   font-size: 1rem;
   transition: border-color 0.3s ease;
 }
@@ -126,110 +179,11 @@
 .formGroup input:focus,
 .formGroup select:focus {
   outline: none;
-  border-color: #007BFF;
+  border-color: var(--accent-green);
 }
 
 .formGroup input::placeholder {
-  color: #6B7280;
-}
-
-/* Account Size Section */
-.accountSizeSection {
-  margin-bottom: calc(var(--spacing-unit) * 4);
-}
-
-.accountSizeSection label {
-  color: white;
-  font-weight: 600;
-  font-size: 0.875rem;
-  display: block;
-  margin-bottom: calc(var(--spacing-unit) * 2);
-}
-
-.accountSizeGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: calc(var(--spacing-unit) * 2);
-}
-
-.accountSizeCard {
-  background-color: #1C1E26;
-  border: 2px solid #3A3D4A;
-  border-radius: calc(var(--spacing-unit) * 1);
-  padding: calc(var(--spacing-unit) * 3);
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.accountSizeCard:hover {
-  border-color: #007BFF;
-  transform: translateY(-2px);
-}
-
-.accountSizeCard.selected {
-  border-color: #007BFF;
-  background-color: rgba(0, 123, 255, 0.1);
-}
-
-.accountSizeLabel {
-  color: white;
-  font-weight: 600;
-  font-size: 1.1rem;
-  margin-bottom: calc(var(--spacing-unit) * 1);
-}
-
-.accountSizePrice {
-  color: #28A745;
-  font-weight: 700;
-  font-size: 1.25rem;
-  margin-bottom: calc(var(--spacing-unit) * 0.5);
-}
-
-.challengeTypeLabel {
-  color: #A0A4AE;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Challenge Type Toggle */
-.challengeTypeToggle {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.toggleButton {
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50px;
-  padding: 1rem 2rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  backdrop-filter: blur(10px);
-  min-width: 140px;
-  text-align: center;
-}
-
-.toggleButton:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-2px);
-}
-
-.toggleButton.active {
-  background: #2DDA7D;
-  border-color: #2DDA7D;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(45, 218, 125, 0.3);
+  color: var(--text-secondary);
 }
 
 /* Coupon Section */
@@ -246,37 +200,159 @@
   flex: 1;
 }
 
-/* Summary Card */
-.summaryCard {
-  background-color: #1C1E26;
-  border: 1px solid #3A3D4A;
-  border-radius: calc(var(--spacing-unit) * 2);
+/* Account Size Section */
+.accountSizeSection {
   margin-bottom: calc(var(--spacing-unit) * 4);
-  overflow: hidden;
 }
 
-.summaryHeader {
-  background-color: #007BFF;
-  padding: calc(var(--spacing-unit) * 3);
+.accountSizeSection label {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.accountSizeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.accountSizeCard {
+  padding: calc(var(--spacing-unit) * 2);
+  border: 2px solid var(--border-color);
+  border-radius: calc(var(--spacing-unit) * 1);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--primary-bg);
+  box-shadow: var(--shadow-sm);
+}
+
+.accountSizeCard:hover {
+  border-color: var(--accent-green);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.accountSizeCard.selected {
+  border-color: var(--accent-green);
+  background-color: rgba(16, 185, 129, 0.05);
+  box-shadow: var(--shadow-md);
+}
+
+.accountSizeLabel {
+  color: var(--text-primary);
+  margin: 0 0 calc(var(--spacing-unit) * 1) 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.accountSizePrice {
+  color: var(--accent-green);
+  margin: 0 0 calc(var(--spacing-unit) * 1) 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.challengeTypeLabel {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Challenge Type Section */
+.challengeTypeSection {
+  margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.challengeTypeSection label {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.challengeTypeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.challengeTypeOption {
+  padding: calc(var(--spacing-unit) * 2);
+  border: 2px solid var(--border-color);
+  border-radius: calc(var(--spacing-unit) * 1);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--primary-bg);
+}
+
+.challengeTypeOption:hover {
+  border-color: var(--accent-green);
+  transform: translateY(-2px);
+}
+
+.challengeTypeOption.selected {
+  border-color: var(--accent-green);
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+.challengeTypeOption h4 {
+  color: var(--text-primary);
+  margin: 0 0 calc(var(--spacing-unit) * 1) 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.challengeTypeOption p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Summary Section */
+.summarySection {
+  background-color: var(--card-bg);
+  border-radius: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 4);
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Summary Card */
+.summaryCard {
+  background-color: var(--card-bg);
+  border-radius: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 4);
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
 }
 
 .summaryHeader h3 {
-  color: white;
-  font-size: 1.25rem;
+  color: var(--text-primary);
+  font-size: 1.5rem;
   font-weight: 600;
-  margin: 0;
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  text-align: center;
 }
 
 .summaryDetails {
-  padding: calc(var(--spacing-unit) * 3);
+  margin-bottom: calc(var(--spacing-unit) * 3);
 }
 
 .summaryRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: calc(var(--spacing-unit) * 1) 0;
-  border-bottom: 1px solid #3A3D4A;
+  padding: calc(var(--spacing-unit) * 1.5) 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .summaryRow:last-child {
@@ -284,33 +360,76 @@
 }
 
 .summaryRow span:first-child {
-  color: #A0A4AE;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .summaryRow span:last-child {
-  color: white;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 .summaryTotal {
-  background-color: #2A2D3A;
-  padding: calc(var(--spacing-unit) * 3);
+  border-top: 2px solid var(--border-color);
+  padding-top: calc(var(--spacing-unit) * 2);
 }
 
 .totalRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: calc(var(--spacing-unit) * 1);
 }
 
 .totalRow span:first-child {
-  color: white;
-  font-size: 1.25rem;
+  color: var(--text-secondary);
   font-weight: 600;
+  font-size: 1.125rem;
 }
 
 .totalPrice {
-  color: #ffffff;
+  color: var(--accent-green);
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.summarySection h3 {
+  color: var(--text-primary);
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: calc(var(--spacing-unit) * 3);
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.summaryItem {
+  text-align: center;
+}
+
+.summaryItem h4 {
+  color: var(--text-secondary);
+  margin: 0 0 calc(var(--spacing-unit) * 1) 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summaryItem p {
+  color: var(--text-primary);
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.totalPrice {
+  color: var(--text-primary);
   font-size: 2rem;
   font-weight: 700;
 }
@@ -325,7 +444,7 @@
   align-items: center;
   gap: calc(var(--spacing-unit) * 2);
   cursor: pointer;
-  color: white;
+  color: var(--text-primary);
   font-size: 1rem;
 }
 
@@ -336,15 +455,15 @@
 .checkmark {
   width: 20px;
   height: 20px;
-  border: 2px solid #3A3D4A;
+  border: 2px solid var(--border-color);
   border-radius: 4px;
   position: relative;
   transition: all 0.3s ease;
 }
 
 .checkboxLabel input[type="checkbox"]:checked + .checkmark {
-  background-color: #007BFF;
-  border-color: #007BFF;
+  background-color: var(--accent-green);
+  border-color: var(--accent-green);
 }
 
 .checkboxLabel input[type="checkbox"]:checked + .checkmark::after {
@@ -354,7 +473,7 @@
   top: 2px;
   width: 6px;
   height: 10px;
-  border: solid white;
+  border: solid var(--primary-bg);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -367,6 +486,7 @@
   margin-top: calc(var(--spacing-unit) * 4);
 }
 
+/* Button Base Styles */
 .btnPrimary,
 .btnSecondary,
 .btnSuccess {
@@ -382,51 +502,102 @@
   gap: calc(var(--spacing-unit) * 1);
   min-width: 140px;
   justify-content: center;
+  box-shadow: var(--shadow-sm);
+  font-family: inherit;
+  text-decoration: none;
 }
 
+
+
 .btnPrimary {
-  background-color: #007BFF;
-  color: white;
+  background-color: var(--accent-green);
+  color: var(--primary-bg);
   margin-left: auto;
 }
 
 .btnPrimary:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--accent-green-hover);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .btnPrimary:disabled {
-  background-color: #3A3D4A;
-  color: #6B7280;
+  background-color: var(--border-color);
+  color: var(--text-secondary);
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btnPrimary:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 .btnSecondary {
   background-color: transparent;
-  color: #A0A4AE;
-  border: 1px solid #3A3D4A;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
 }
 
 .btnSecondary:hover {
-  background-color: #3A3D4A;
-  color: white;
+  background-color: var(--border-color);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btnSecondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.1);
 }
 
 .btnSuccess {
-  background-color: #1766ce;
-  color: white;
-  margin-left: auto;
+  background-color: var(--accent-green);
+  color: var(--primary-bg);
 }
 
-.btnSuccess:hover:not(:disabled) {
-  background-color: #477cf0;
+.btnSuccess:hover {
+  background-color: var(--accent-green-hover);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
+.btnSuccess:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Additional Button Enhancements */
+.btnPrimary:active,
+.btnSecondary:active,
+.btnSuccess:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Button with Icon Styles */
+.btnPrimary svg,
+.btnSecondary svg,
+.btnSuccess svg {
+  transition: transform 0.2s ease;
+}
+
+.btnPrimary:hover svg,
+.btnSecondary:hover svg,
+.btnSuccess:hover svg {
+  transform: scale(1.1);
+}
+
+/* Disabled Button States */
+.btnSecondary:disabled,
 .btnSuccess:disabled {
-  background-color: #3A3D4A;
-  color: #6B7280;
+  background-color: var(--border-color);
+  color: var(--text-secondary);
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  border-color: var(--border-color);
 }
 
 /* SOL Conversion Display */
@@ -435,18 +606,18 @@
   justify-content: space-between;
   align-items: center;
   padding: calc(var(--spacing-unit) * 2) 0;
-  border-top: 1px solid #3A3D4A;
+  border-top: 1px solid var(--border-color);
   margin-top: calc(var(--spacing-unit) * 2);
 }
 
 .solAmount {
-  color: #9945FF;
+  color: var(--accent-green);
   font-weight: 700;
   font-size: 1.25rem;
 }
 
 .solRate {
-  color: #6B7280;
+  color: var(--text-secondary);
   font-size: 0.875rem;
 }
 
@@ -455,12 +626,12 @@
   display: flex;
   align-items: center;
   gap: calc(var(--spacing-unit) * 2);
-  background-color: rgba(255, 165, 2, 0.1);
-  border: 1px solid rgba(255, 165, 2, 0.3);
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: calc(var(--spacing-unit) * 1);
   padding: calc(var(--spacing-unit) * 3);
   margin-bottom: calc(var(--spacing-unit) * 4);
-  color: #FFA502;
+  color: var(--accent-green);
 }
 
 .walletPrompt svg {
@@ -503,7 +674,7 @@
 }
 
 .statusContent p {
-  color: #A0A4AE;
+  color: var(--text-secondary);
   margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
@@ -516,7 +687,7 @@
 .transactionId {
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.875rem;
-  color: #22C55E;
+  color: var(--accent-green);
   margin-bottom: calc(var(--spacing-unit) * 1);
 }
 
@@ -524,7 +695,7 @@
   display: inline-flex;
   align-items: center;
   gap: calc(var(--spacing-unit) * 1);
-  color: #007BFF;
+  color: var(--accent-green);
   text-decoration: none;
   font-size: 0.875rem;
   font-weight: 500;
@@ -532,7 +703,7 @@
 }
 
 .solscanLink:hover {
-  color: #0056b3;
+  color: var(--accent-green-hover);
 }
 
 /* Spinning Animation */
@@ -549,95 +720,36 @@
   }
 }
 
-/* Mobile Responsiveness */
+/* Mobile Styles */
 @media (max-width: 768px) {
   .container {
     padding: 0 calc(var(--spacing-unit) * 2);
   }
 
-  .tradingChallenge {
-    padding: calc(var(--spacing-unit) * 8) 0 calc(var(--spacing-unit) * 4) 0;
+  .challengeHeader h1 {
+    font-size: 2.5rem;
   }
 
   .stepContainer {
     padding: calc(var(--spacing-unit) * 3);
   }
 
-  .stepContent h2 {
-    font-size: 1.5rem;
-  }
-
-  .challengeTypeToggle {
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .toggleButton {
-    padding: 0.75rem 1.5rem;
-    min-width: 120px;
-    font-size: 0.875rem;
-  }
-
   .formGrid {
     grid-template-columns: 1fr;
-    gap: calc(var(--spacing-unit) * 2);
   }
 
-  .accountSizeGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .accountSizeGrid,
+  .challengeTypeGrid {
+    grid-template-columns: 1fr;
   }
 
   .stepNavigation {
     flex-direction: column;
   }
 
-  .btnPrimary {
-    margin-left: 0;
-  }
-
+  .btnPrimary,
+  .btnSecondary,
   .btnSuccess {
-    margin-left: 0;
-  }
-
-  .progressSteps {
-    flex-direction: column;
-    gap: calc(var(--spacing-unit) * 2);
-  }
-
-  .progressLine {
-    display: none;
-  }
-
-  .couponInput {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .challengeTypeToggle {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .toggleButton {
-    width: 200px;
-    padding: 0.875rem 1rem;
-  }
-
-  .accountSizeGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .summaryRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: calc(var(--spacing-unit) * 1);
-  }
-
-  .totalRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: calc(var(--spacing-unit) * 1);
+    width: 100%;
   }
 }

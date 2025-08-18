@@ -15,17 +15,16 @@
 }
 
 .successCard {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  border: 1px solid rgba(45, 218, 125, 0.3);
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--card-bg) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
   border-radius: 24px;
   padding: 3rem;
   max-width: 500px;
   width: 90%;
   text-align: center;
   box-shadow: 
-    0 40px 80px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(45, 218, 125, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 40px 80px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(34, 197, 94, 0.1);
   backdrop-filter: blur(20px);
   animation: slideUp 0.4s ease;
   position: relative;
@@ -39,7 +38,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #2DDA7D 0%, #25c06e 50%, #16a34a 100%);
+  background: linear-gradient(90deg, var(--accent-green) 0%, #1d9f5a 50%, #15803d 100%);
 }
 
 .successIcon {
@@ -48,8 +47,8 @@
 }
 
 .successIcon svg {
-  color: #2DDA7D;
-  filter: drop-shadow(0 0 20px rgba(45, 218, 125, 0.5));
+  color: var(--accent-green);
+  filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.5));
   animation: successBounce 0.8s ease-out 0.5s both;
 }
 
@@ -88,14 +87,13 @@
 .successTitle {
   font-size: 2rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   animation: fadeInUp 0.6s ease-out 0.7s both;
 }
 
 .successMessage {
-  color: #cccccc;
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin-bottom: 2rem;
   line-height: 1.6;
@@ -103,8 +101,8 @@
 }
 
 .successButton {
-  background: linear-gradient(135deg, #2DDA7D 0%, #25c06e 50%, #16a34a 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--accent-green) 0%, #1d9f5a 50%, #15803d 100%);
+  color: var(--primary-bg);
   border: none;
   padding: 1rem 2.5rem;
   border-radius: 16px;
@@ -113,7 +111,7 @@
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 8px 25px rgba(45, 218, 125, 0.4),
+    0 8px 25px rgba(34, 197, 94, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
@@ -138,7 +136,7 @@
 .successButton:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 
-    0 15px 40px rgba(45, 218, 125, 0.5),
+    0 15px 40px rgba(34, 197, 94, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -183,7 +181,7 @@
   margin: 0 auto;
   padding: 2rem;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #2d2d2d 100%);
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--card-bg) 50%, var(--border-color) 100%);
   margin-top: 80px; /* Account for fixed header height */
   position: relative;
   overflow: hidden;
@@ -197,9 +195,8 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(64, 64, 64, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(128, 128, 128, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(96, 96, 96, 0.08) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
 }
@@ -220,12 +217,9 @@
   font-size: 3rem;
   margin-bottom: 1rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #e5e5e5 0%, #cccccc 50%, #999999 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  animation: glow 3s ease-in-out infinite alternate;
+  color: var(--text-primary);
+  text-shadow: none;
+  animation: none;
 }
 
 @keyframes glow {
@@ -239,23 +233,19 @@
 
 .header p {
   font-size: 1.2rem;
-  opacity: 0.9;
-  color: #cccccc;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: var(--text-secondary);
+  text-shadow: none;
 }
 
 /* Loading States */
 .loadingContainer {
   text-align: center;
-  color: white;
+  color: var(--text-primary);
   padding: 6rem 2rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
   animation: fadeInUp 0.6s ease-out;
 }
 
@@ -265,7 +255,7 @@
 }
 
 .spinningIcon {
-  color: #cccccc;
+  color: var(--text-secondary);
   animation: spin 1.5s linear infinite;
 }
 
@@ -294,14 +284,14 @@
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #e5e5e5 0%, #cccccc 100%);
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .loadingSubtitle {
-  color: #999999;
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }
@@ -365,15 +355,12 @@
 /* Error States */
 .errorContainer {
   text-align: center;
-  color: white;
+  color: var(--text-primary);
   padding: 6rem 2rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
   animation: fadeInUp 0.6s ease-out;
 }
 
@@ -393,18 +380,18 @@
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: #ff6b6b;
+  color: #ef4444;
 }
 
 .errorMessage {
-  color: #cccccc;
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }
 
 .retryButton {
-  background: linear-gradient(135deg, #666666 0%, #888888 100%);
-  color: white;
+  background: var(--accent-green);
+  color: var(--primary-bg);
   border: none;
   padding: 1rem 2rem;
   border-radius: 16px;
@@ -419,22 +406,19 @@
 }
 
 .retryButton:hover {
-  background: linear-gradient(135deg, #888888 0%, #aaaaaa 100%);
+  background: var(--accent-green-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Referral Code Section */
 .referralCodeSection {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 2.5rem;
   margin-bottom: 2rem;
-  backdrop-filter: blur(20px);
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -460,11 +444,11 @@
 
 .referralCodeSection h2 {
   margin-bottom: 2rem;
-  color: white;
+  color: var(--text-primary);
   font-size: 1.8rem;
   font-weight: 600;
   text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .codeDisplay {
@@ -483,16 +467,14 @@
 .code {
   font-size: 2.5rem;
   font-weight: 800;
-  color: #cccccc;
-  background: linear-gradient(135deg, rgba(128, 128, 128, 0.15), rgba(64, 64, 64, 0.05));
+  color: var(--text-primary);
+  background: var(--primary-bg);
   padding: 1.5rem 2.5rem;
   border-radius: 20px;
-  border: 2px solid rgba(128, 128, 128, 0.4);
+  border: 2px solid var(--border-color);
   letter-spacing: 3px;
   font-family: 'Courier New', monospace;
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-md);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -522,8 +504,8 @@
 }
 
 .copyButton {
-  background: linear-gradient(135deg, #666666 0%, #888888 50%, #aaaaaa 100%);
-  color: white;
+  background: var(--accent-green);
+  color: var(--primary-bg);
   border: none;
   padding: 1rem 2rem;
   border-radius: 16px;
@@ -534,9 +516,7 @@
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
 }
@@ -564,14 +544,13 @@
 }
 
 .referralLink {
-  color: #999999;
+  color: var(--text-secondary);
   font-size: 1rem;
   word-break: break-all;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--primary-bg);
   padding: 1.5rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
   transition: all 0.3s ease;
 }
 
@@ -589,14 +568,11 @@
 }
 
 .statCard {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 2rem;
-  backdrop-filter: blur(20px);
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-lg);
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -640,17 +616,15 @@
 }
 
 .statIcon {
-  background: linear-gradient(135deg, #666666 0%, #888888 50%, #aaaaaa 100%);
-  color: white;
+  background: var(--accent-green);
+  color: var(--primary-bg);
   width: 70px;
   height: 70px;
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
   flex-shrink: 0;
   transition: all 0.3s ease;
   position: relative;
@@ -683,34 +657,27 @@
 .statContent h3 {
   font-size: 2.5rem;
   font-weight: 800;
-  color: white;
+  color: var(--text-primary);
   margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  background: linear-gradient(135deg, #ffffff 0%, #e5e5e5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  text-shadow: none;
 }
 
 .statContent p {
-  color: #cccccc;
+  color: var(--text-secondary);
   margin: 0;
   font-size: 1rem;
   font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 /* Wallet Section */
 .walletSection {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 2.5rem;
   margin-bottom: 2rem;
-  backdrop-filter: blur(20px);
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
 }
@@ -733,16 +700,16 @@
 }
 
 .walletHeader h2 {
-  color: white;
+  color: var(--text-primary);
   margin: 0;
   font-size: 1.8rem;
   font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .withdrawButton {
-  background: linear-gradient(135deg, #666666 0%, #888888 50%, #aaaaaa 100%);
-  color: white;
+  background: var(--accent-green);
+  color: var(--primary-bg);
   border: none;
   padding: 1rem 2rem;
   border-radius: 16px;
@@ -753,9 +720,7 @@
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
 }
@@ -799,46 +764,39 @@
   display: block;
   font-size: 4rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #cccccc 0%, #999999 50%, #666666 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-green);
   margin-bottom: 0.5rem;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  animation: pulse 2s ease-in-out infinite;
+  text-shadow: none;
+  animation: none;
 }
 
 .balanceLabel {
-  color: #cccccc;
+  color: var(--text-secondary);
   font-size: 1.1rem;
   font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .pendingEarnings {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: linear-gradient(135deg, rgba(128, 128, 128, 0.15), rgba(64, 64, 64, 0.05));
-  color: #cccccc;
+  background: var(--primary-bg);
+  color: var(--text-secondary);
   padding: 1.5rem;
   border-radius: 16px;
-  border: 1px solid rgba(128, 128, 128, 0.3);
+  border: 1px solid var(--border-color);
   font-weight: 500;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Transactions Section */
 .transactionsSection {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 2.5rem;
-  backdrop-filter: blur(20px);
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
 }
@@ -855,10 +813,10 @@
 
 .transactionsSection h2 {
   margin-bottom: 2rem;
-  color: white;
+  color: var(--text-primary);
   font-size: 1.8rem;
   font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .transactionsList {
@@ -872,9 +830,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--primary-bg);
   border-radius: 16px;
-  border-left: 4px solid #666666;
+  border-left: 4px solid var(--accent-green);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -910,14 +868,14 @@
 
 .transactionType {
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   font-size: 1.1rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .transactionDate {
   font-size: 0.9rem;
-  color: #999999;
+  color: var(--text-secondary);
 }
 
 .transactionAmount {
@@ -930,14 +888,11 @@
 .amount {
   font-weight: 700;
   font-size: 1.2rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .amount.positive {
-  background: linear-gradient(135deg, #cccccc 0%, #999999 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-green);
 }
 
 .amount.negative {
@@ -949,23 +904,22 @@
 
 .status {
   font-size: 0.85rem;
-  color: #999999;
+  color: var(--text-secondary);
   text-transform: capitalize;
   padding: 0.25rem 0.75rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--border-color);
   border-radius: 8px;
-  backdrop-filter: blur(10px);
 }
 
 .noTransactions {
   text-align: center;
-  color: #999999;
+  color: var(--text-secondary);
   font-style: italic;
   padding: 3rem;
   font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--primary-bg);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
 }
 
 /* Modal */
@@ -994,7 +948,7 @@
 }
 
 .modal {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--border-color) 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   padding: 2.5rem;
@@ -1022,11 +976,11 @@
 
 .modal h3 {
   margin-bottom: 2rem;
-  color: white;
+  color: var(--text-primary);
   text-align: center;
   font-size: 1.8rem;
   font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .modalContent {
@@ -1043,33 +997,32 @@
 
 .inputGroup label {
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   font-size: 1rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 .inputGroup input,
 .inputGroup select {
   padding: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border-color);
   border-radius: 16px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  background: var(--primary-bg);
+  color: var(--text-primary);
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
 }
 
 .inputGroup input:focus,
 .inputGroup select:focus {
   outline: none;
-  border-color: #666666;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 4px rgba(128, 128, 128, 0.1);
+  border-color: var(--accent-green);
+  background: var(--primary-bg);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
 .inputGroup input::placeholder {
-  color: #999999;
+  color: var(--text-secondary);
 }
 
 .modalActions {
@@ -1080,8 +1033,8 @@
 }
 
 .cancelButton {
-  background: linear-gradient(135deg, #444444 0%, #666666 100%);
-  color: white;
+  background: var(--text-secondary);
+  color: var(--primary-bg);
   border: none;
   padding: 1rem 2rem;
   border-radius: 16px;
@@ -1089,18 +1042,18 @@
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-md);
 }
 
 .cancelButton:hover {
-  background: linear-gradient(135deg, #666666 0%, #888888 100%);
+  background: var(--text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-lg);
 }
 
 .confirmButton {
-  background: linear-gradient(135deg, #666666 0%, #888888 50%, #aaaaaa 100%);
-  color: white;
+  background: var(--accent-green);
+  color: var(--primary-bg);
   border: none;
   padding: 1rem 2rem;
   border-radius: 16px;
@@ -1108,9 +1061,7 @@
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
-    0 8px 25px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
 }
@@ -1132,34 +1083,26 @@
 
 .confirmButton:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Loading and Not Logged In */
 .loading,
 .notLoggedIn {
   text-align: center;
-  color: white;
+  color: var(--text-primary);
   padding: 6rem 2rem;
   font-size: 1.4rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  box-shadow: 
-    0 25px 50px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
 }
 
 .notLoggedIn h2 {
-  background: linear-gradient(135deg, #cccccc 0%, #999999 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
   margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
 }
 
 /* Responsive Design */

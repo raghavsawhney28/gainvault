@@ -47,18 +47,74 @@ const ThreeDBackground = ({ children, sectionId }) => {
     const core = new THREE.Mesh(coreGeometry, coreMaterial);
     globeGroup.add(core);
 
-    // Static dots on globe
-    const pointsGeometry = new THREE.SphereGeometry(GLOBE_RADIUS + 0.1, 45, 45);
-    const pointsMaterial = new THREE.PointsMaterial({
-      color: 0x22C55E,
-      size: 0.2,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
+    // Create Bitcoin icon texture
+    const createBitcoinTexture = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 64;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, 64, 64);
+      
+      // Bitcoin symbol (₿)
+      ctx.fillStyle = '#F7931A'; // Bitcoin orange
+      ctx.font = 'bold 48px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('₿', 32, 32);
+      
+      return canvas;
+    };
+
+    // Bitcoin icons on globe (reduced from 45x45 to 32x32)
+    const bitcoinGeometry = new THREE.SphereGeometry(GLOBE_RADIUS + 0.1, 32, 32);
+    const bitcoinMaterial = new THREE.MeshBasicMaterial({
+      color: 0xF7931A, // Bitcoin orange
       transparent: true,
-      opacity: 0.7
+      opacity: 0.8,
+      side: THREE.DoubleSide
     });
-    const points = new THREE.Points(pointsGeometry, pointsMaterial);
-    globeGroup.add(points);
+    
+    // Create individual Bitcoin icons
+    const bitcoinGroup = new THREE.Group();
+    const bitcoinPositions = [];
+    
+    // Generate positions for Bitcoin icons
+    for (let i = 0; i < 32; i++) {
+      for (let j = 0; j < 32; j++) {
+        const phi = (i / 31) * Math.PI;
+        const theta = (j / 31) * Math.PI * 2;
+        
+        const x = (GLOBE_RADIUS + 0.1) * Math.sin(phi) * Math.cos(theta);
+        const y = (GLOBE_RADIUS + 0.1) * Math.cos(phi);
+        const z = (GLOBE_RADIUS + 0.1) * Math.sin(phi) * Math.sin(theta);
+        
+        bitcoinPositions.push({ x, y, z, phi, theta });
+      }
+    }
+    
+    // Create Bitcoin icon sprites
+    bitcoinPositions.forEach((pos, index) => {
+      if (index % 6 === 0) { // Reduce density by only placing every 6th icon
+        const bitcoinIcon = new THREE.Sprite(
+          new THREE.SpriteMaterial({
+            map: new THREE.CanvasTexture(createBitcoinTexture()),
+            transparent: true,
+            opacity: 0.7
+          })
+        );
+        bitcoinIcon.position.set(pos.x, pos.y, pos.z);
+        bitcoinIcon.scale.set(1.5, 1.5, 1.5);
+        
+        // Make icon face camera
+        bitcoinIcon.material.rotation = Math.atan2(pos.x, pos.z);
+        
+        bitcoinGroup.add(bitcoinIcon);
+      }
+    });
+    
+    globeGroup.add(bitcoinGroup);
 
     // Concentric rings around the globe
     for (let i = 1; i <= 3; i++) {
@@ -78,10 +134,10 @@ const ThreeDBackground = ({ children, sectionId }) => {
       globeGroup.add(ring);
     }
 
-    // Add floating particles around the globe
+    // Add floating particles around the globe (reduced from 200 to 80)
     const particleGeometry = new THREE.BufferGeometry();
     const particleVertices = [];
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 80; i++) {
       const angle = Math.random() * Math.PI * 2;
       const radius = GLOBE_RADIUS + 5 + Math.random() * 10;
       const height = (Math.random() - 0.5) * 20;
@@ -113,10 +169,10 @@ const ThreeDBackground = ({ children, sectionId }) => {
     pointLight.position.set(0, 0, 0);
     globeGroup.add(pointLight);
 
-    // Dynamic starfield background
+    // Dynamic starfield background (reduced from 8000 to 3000)
     const starGeometry = new THREE.BufferGeometry();
     const starVertices = [];
-    for (let i = 0; i < 8000; i++) {
+    for (let i = 0; i < 3000; i++) {
       const x = (Math.random() - 0.5) * 2000;
       const y = (Math.random() - 0.5) * 2000;
       const z = (Math.random() - 0.5) * 2000;
