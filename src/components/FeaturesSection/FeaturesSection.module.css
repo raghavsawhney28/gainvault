@@ -128,7 +128,7 @@
       rgba(0,0,0,0.02) 100%
     );
     /* Auto-scroll animation */
-    position: relative;
+    /* position: relative; */
   }
 
   /* Auto-scroll progress indicator */
