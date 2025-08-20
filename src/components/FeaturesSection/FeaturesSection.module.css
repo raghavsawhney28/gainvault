@@ -127,6 +127,25 @@
       transparent 95%, 
       rgba(0,0,0,0.02) 100%
     );
+    /* Auto-scroll animation */
+    position: relative;
+  }
+
+  /* Auto-scroll progress indicator */
+  .featuresGrid::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-green), transparent);
+    animation: autoScrollProgress 3s linear infinite;
+    width: 100%;
+  }
+
+  @keyframes autoScrollProgress {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
 
   .featuresGrid::-webkit-scrollbar {
@@ -183,6 +202,8 @@
     0%, 100% { opacity: 0.3; }
     50% { opacity: 0.7; }
   }
+
+
 }
 
 /* Small Mobile Styles */
