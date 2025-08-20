@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, TrendingUp, Clock, Target, AlertTriangle, Zap } from 'lucide-react';
+import { Star, TrendingUp, Clock, Target, AlertTriangle, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AnimatedSection from '../AnimatedSection/AnimatedSection';
 import styles from './PricingSection.module.css';
@@ -7,6 +7,7 @@ import styles from './PricingSection.module.css';
 const PricingSection = () => {
   const [selectedPlan, setSelectedPlan] = useState('SKILLED');
   const [challengeType, setChallengeType] = useState('twoStage');
+  const [currentPlanIndex, setCurrentPlanIndex] = useState(2); // SKILLED is default
   const navigate = useNavigate();
 
   const challengePlans = [
@@ -104,6 +105,8 @@ const PricingSection = () => {
 
   const handlePlanSelect = (planName) => {
     setSelectedPlan(planName);
+    const index = challengePlans.findIndex(plan => plan.name === planName);
+    setCurrentPlanIndex(index);
   };
 
   const handleChallengeTypeChange = (type) => {
@@ -123,11 +126,24 @@ const PricingSection = () => {
     return challengeType === 'twoStage' ? selectedPlanData.cost : selectedPlanData.singleStageCost;
   };
 
+  const nextPlan = () => {
+    const nextIndex = (currentPlanIndex + 1) % challengePlans.length;
+    setCurrentPlanIndex(nextIndex);
+    setSelectedPlan(challengePlans[nextIndex].name);
+  };
+
+  const prevPlan = () => {
+    const prevIndex = currentPlanIndex === 0 ? challengePlans.length - 1 : currentPlanIndex - 1;
+    setCurrentPlanIndex(prevIndex);
+    setSelectedPlan(challengePlans[prevIndex].name);
+  };
+
   return (
     <section className={styles.pricingSection} id="pricing">
       <div className={styles.container}>
         <AnimatedSection className={styles.pricingHeader}>
           <h2>CHALLENGE PLANS</h2>
+          <p>Choose your path to prop trading success</p>
         </AnimatedSection>
 
         {/* Challenge Type Toggle */}
@@ -146,8 +162,40 @@ const PricingSection = () => {
           </button>
         </div>
 
-        {/* Challenge Plan Selection */}
-        <div className={styles.planSelection}>
+        {/* Mobile Plan Navigation */}
+        <div className={styles.mobilePlanNav}>
+          <button 
+            className={styles.navButton} 
+            onClick={prevPlan}
+            aria-label="Previous plan"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          
+          <div className={styles.currentPlanDisplay}>
+            <div className={styles.planName}>{selectedPlanData.name}</div>
+            <div className={styles.planValue}>{selectedPlanData.value}</div>
+            {selectedPlanData.tag && (
+              <div className={styles.planTag}>
+                {selectedPlanData.tag === "BEST SELLER" && <Star size={12} />}
+                {selectedPlanData.tag === "NEW" && <TrendingUp size={12} />}
+                {selectedPlanData.tag === "POPULAR" && <Zap size={12} />}
+                {selectedPlanData.tag}
+              </div>
+            )}
+          </div>
+          
+          <button 
+            className={styles.navButton} 
+            onClick={nextPlan}
+            aria-label="Next plan"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+
+        {/* Desktop Plan Selection */}
+        <div className={styles.desktopPlanSelection}>
           {challengePlans.map((plan) => (
             <button
               key={plan.name}
@@ -168,10 +216,191 @@ const PricingSection = () => {
           ))}
         </div>
 
-        {/* Objective Table */}
+        {/* Plan Progress Indicator */}
+        <div className={styles.planProgress}>
+          {challengePlans.map((_, index) => (
+            <div 
+              key={index}
+              className={`${styles.progressDot} ${index === currentPlanIndex ? styles.active : ''}`}
+              onClick={() => {
+                setCurrentPlanIndex(index);
+                setSelectedPlan(challengePlans[index].name);
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Objective Section */}
         <div className={styles.objectiveSection}>
-          <h3>Objective</h3>
-          <div className={styles.objectiveTable}>
+          <h3>Challenge Objectives</h3>
+          
+          {/* Mobile-friendly objective display */}
+          <div className={styles.objectiveGrid}>
+            <div className={styles.objectiveCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardIcon}>
+                  <Target size={24} />
+                </div>
+                <h4>Profit Target</h4>
+              </div>
+              <div className={styles.cardContent}>
+                {challengeType === 'twoStage' ? (
+                  <div className={styles.stagesContainer}>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 1</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.profitTarget[0]}</div>
+                    </div>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 2</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.profitTarget[1]}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.singleValue}>
+                    <div className={styles.valueDisplay}>{selectedPlanData.details.profitTarget[0]}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.objectiveCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardIcon}>
+                  <AlertTriangle size={24} />
+                </div>
+                <h4>Max Daily Loss</h4>
+              </div>
+              <div className={styles.cardContent}>
+                {challengeType === 'twoStage' ? (
+                  <div className={styles.stagesContainer}>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 1</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.maxDailyLoss[0]}</div>
+                    </div>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 2</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.maxDailyLoss[1]}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.singleValue}>
+                    <div className={styles.valueDisplay}>{selectedPlanData.details.maxDailyLoss[0]}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.objectiveCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardIcon}>
+                  <AlertTriangle size={24} />
+                </div>
+                <h4>Max Loss</h4>
+              </div>
+              <div className={styles.cardContent}>
+                {challengeType === 'twoStage' ? (
+                  <div className={styles.stagesContainer}>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 1</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.maxLoss[0]}</div>
+                    </div>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 2</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.maxLoss[1]}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.singleValue}>
+                    <div className={styles.valueDisplay}>{selectedPlanData.details.maxLoss[0]}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.objectiveCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardIcon}>
+                  <Clock size={24} />
+                </div>
+                <h4>Min Trading Days</h4>
+              </div>
+              <div className={styles.cardContent}>
+                {challengeType === 'twoStage' ? (
+                  <div className={styles.stagesContainer}>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 1</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.minTradingDays[0]}</div>
+                    </div>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 2</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.minTradingDays[1]}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.singleValue}>
+                    <div className={styles.valueDisplay}>{selectedPlanData.details.minTradingDays[0]}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.objectiveCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardIcon}>
+                  <Clock size={24} />
+                </div>
+                <h4>Trading Period</h4>
+              </div>
+              <div className={styles.cardContent}>
+                {challengeType === 'twoStage' ? (
+                  <div className={styles.stagesContainer}>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 1</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.tradingPeriod[0]}</div>
+                    </div>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 2</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.tradingPeriod[1]}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.singleValue}>
+                    <div className={styles.valueDisplay}>{selectedPlanData.details.tradingPeriod[0]}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.objectiveCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardIcon}>
+                  <Zap size={24} />
+                </div>
+                <h4>Max Leverage</h4>
+              </div>
+              <div className={styles.cardContent}>
+                {challengeType === 'twoStage' ? (
+                  <div className={styles.stagesContainer}>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 1</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.maxLeverage[0]}</div>
+                    </div>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 2</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.maxLeverage[1]}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.singleValue}>
+                    <div className={styles.valueDisplay}>{selectedPlanData.details.maxLeverage[0]}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop table (hidden on mobile) */}
+          <div className={styles.desktopTable}>
             <div className={styles.tableHeader}>
               <div className={styles.headerCell}>Gainvault</div>
               {challengeType === 'twoStage' ? (
@@ -187,7 +416,7 @@ const PricingSection = () => {
             <div className={styles.tableRow}>
               <div className={styles.labelCell}>
                 <Target size={16} />
-                Profit Target
+                <span>Profit Target</span>
               </div>
               {challengeType === 'twoStage' ? (
                 <>
@@ -202,7 +431,7 @@ const PricingSection = () => {
             <div className={styles.tableRow}>
               <div className={styles.labelCell}>
                 <AlertTriangle size={16} />
-                Max Daily Loss
+                <span>Max Daily Loss</span>
               </div>
               {challengeType === 'twoStage' ? (
                 <>
@@ -217,7 +446,7 @@ const PricingSection = () => {
             <div className={styles.tableRow}>
               <div className={styles.labelCell}>
                 <AlertTriangle size={16} />
-                Max Loss
+                <span>Max Loss</span>
               </div>
               {challengeType === 'twoStage' ? (
                 <>
@@ -232,7 +461,7 @@ const PricingSection = () => {
             <div className={styles.tableRow}>
               <div className={styles.labelCell}>
                 <Clock size={16} />
-                Min Trading Days
+                <span>Min Trading Days</span>
               </div>
               {challengeType === 'twoStage' ? (
                 <>
@@ -247,7 +476,7 @@ const PricingSection = () => {
             <div className={styles.tableRow}>
               <div className={styles.labelCell}>
                 <Clock size={16} />
-                Trading Period
+                <span>Trading Period</span>
               </div>
               {challengeType === 'twoStage' ? (
                 <>
@@ -262,7 +491,7 @@ const PricingSection = () => {
             <div className={styles.tableRow}>
               <div className={styles.labelCell}>
                 <Zap size={16} />
-                Max Leverage
+                <span>Max Leverage</span>
               </div>
               {challengeType === 'twoStage' ? (
                 <>
