@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, User, LogOut, Settings, UserCheck, Bell, ChevronDown } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Bell, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import styles from './Header.module.css';
 
 const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(false);
   const [userInitial, setUserInitial] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,30 +33,20 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Show welcome animation when user first signs in
+  // Set user initial when user logs in
   useEffect(() => {
     if (isLoggedIn && username) {
       setUserInitial(username.charAt(0).toUpperCase());
-      setShowWelcomeAnimation(true);
-      
-      // Hide welcome animation after 3 seconds
-      const timer = setTimeout(() => {
-        setShowWelcomeAnimation(false);
-      }, 3000);
-
-      return () => clearTimeout(timer);
     }
   }, [isLoggedIn, username]);
 
   const handleLogoClick = () => {
     navigate('/');
-    setIsMobileMenuOpen(false);
     setShowProfileDropdown(false);
   };
 
   const handleNavClick = (path) => {
     navigate(path);
-    setIsMobileMenuOpen(false);
     setShowProfileDropdown(false);
   };
 
@@ -105,102 +93,129 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.headerContent}>
-        {/* Logo */}
-        <div className={styles.logo} onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
-          <div className={styles.logoIcon}>
-            <img src={logo} alt="GainVault Logo" className={styles.logoImage} />
-          </div>
-          <span>GainVault</span>
-        </div>
+        {/* Left Side - Hamburger Menu */}
+        <div className={styles.leftSection}>
+          <div className={styles.hamburgerContainer} ref={profileDropdownRef}>
+            <button 
+              className={styles.hamburgerButton}
+              onClick={handleProfileClick}
+              aria-label="Menu"
+            >
+              <Menu size={24} />
+            </button>
 
-        {/* Navigation */}
-        <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.mobileOpen : ''}`}>
-          <a 
-            className={isActive('/') ? styles.active : ''} 
-            onClick={() => handleNavClick('/')}
-          >
-            Home
-          </a>
-          <a 
-            className={isActive('/trading-challenge') ? styles.active : ''} 
-            onClick={() => handleNavClick('/trading-challenge')}
-          >
-            Trading Challenge
-          </a>
-          <a 
-            className={isActive('/rules') ? styles.active : ''} 
-            onClick={() => handleNavClick('/rules')}
-          >
-            Rules
-          </a>
-          <a 
-            className={isActive('/referral') ? styles.active : ''} 
-            onClick={() => handleNavClick('/referral')}
-          >
-            Referral
-          </a>
-        </nav>
-
-        {/* Header Actions */}
-        <div className={styles.headerActions}>
-          {isLoggedIn ? (
-            <div className={styles.userSection}>
-              {/* Welcome Animation */}
-              {showWelcomeAnimation && (
-                <div className={styles.welcomeAnimation}>
-                  <UserCheck size={16} />
-                  <span>Welcome back, {username}!</span>
+            {/* Mega Menu Dropdown */}
+            {showProfileDropdown && (
+              <div className={styles.megaMenuDropdown}>
+                <div className={styles.megaMenuHeader}>
+                  <div className={styles.megaMenuTitle}>Navigation Menu</div>
                 </div>
-              )}
-              
-              {/* Hamburger Menu */}
-              <div className={styles.hamburgerContainer} ref={profileDropdownRef}>
-                <button 
-                  className={styles.hamburgerButton}
-                  onClick={handleProfileClick}
-                  aria-label="Menu"
-                >
-                  <Menu size={24} />
-                </button>
-
-                {/* Hamburger Dropdown */}
-                {showProfileDropdown && (
-                  <div className={styles.hamburgerDropdown}>
-                    <div className={styles.dropdownHeader}>
-                      <div 
-                        className={styles.dropdownProfileIcon}
-                        style={{ backgroundColor: getProfileColor() }}
-                      >
-                        {userInitial}
-                      </div>
-                      <div className={styles.dropdownUserInfo}>
-                        <span className={styles.dropdownUsername}>{username}</span>
-                        <span className={styles.dropdownStatus}>Online</span>
-                      </div>
-                    </div>
-                    
-                    <div className={styles.dropdownDivider} />
-                    
-                    <div className={styles.dropdownMenu}>
+                
+                <div className={styles.megaMenuContent}>
+                  <div className={styles.megaMenuSection}>
+                    <h3>Main Pages</h3>
+                    <div className={styles.megaMenuItems}>
                       <button 
-                        className={styles.dropdownItem}
-                        onClick={() => handleProfileAction('profile')}
+                        className={styles.megaMenuItem}
+                        onClick={() => handleNavClick('/')}
                       >
-                        <User size={16} />
-                        <span>Dashboard</span>
+                        <span>Home</span>
                       </button>
-                      
                       <button 
-                        className={styles.dropdownItem}
-                        onClick={() => handleProfileAction('logout')}
+                        className={styles.megaMenuItem}
+                        onClick={() => handleNavClick('/trading-challenge')}
                       >
-                        <LogOut size={16} />
-                        <span>Sign Out</span>
+                        <span>Trading Challenge</span>
+                      </button>
+                      <button 
+                        className={styles.megaMenuItem}
+                        onClick={() => handleNavClick('/rules')}
+                      >
+                        <span>Rules</span>
+                      </button>
+                      <button 
+                        className={styles.megaMenuItem}
+                        onClick={() => handleNavClick('/referral')}
+                      >
+                        <span>Referral</span>
                       </button>
                     </div>
                   </div>
-                )}
+                  
+
+                </div>
               </div>
+            )}
+          </div>
+        </div>
+
+        {/* Center - Logo */}
+        <div className={styles.centerSection}>
+          <div className={styles.logo} onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+            <div className={styles.logoIcon}>
+              <img src={logo} alt="GainVault Logo" className={styles.logoImage} />
+            </div>
+            <span>GainVault</span>
+          </div>
+        </div>
+
+        {/* Right Side - Account Section */}
+        <div className={styles.rightSection}>
+          {isLoggedIn ? (
+            <div className={styles.accountSection} ref={profileDropdownRef}>
+              <div 
+                className={styles.accountInfo}
+                onClick={handleProfileClick}
+              >
+                <div 
+                  className={styles.accountAvatar}
+                  style={{ backgroundColor: getProfileColor() }}
+                >
+                  {userInitial}
+                </div>
+                <div className={styles.accountDetails}>
+                  <span className={styles.accountUsername}>{username}</span>
+                  <span className={styles.accountStatus}>Online</span>
+                </div>
+              </div>
+
+              {/* Account Dropdown */}
+              {showProfileDropdown && (
+                <div className={styles.accountDropdown}>
+                  <div className={styles.dropdownHeader}>
+                    <div 
+                      className={styles.dropdownProfileIcon}
+                      style={{ backgroundColor: getProfileColor() }}
+                    >
+                      {userInitial}
+                    </div>
+                    <div className={styles.dropdownUserInfo}>
+                      <span className={styles.dropdownUsername}>{username}</span>
+                      <span className={styles.dropdownStatus}>Online</span>
+                    </div>
+                  </div>
+                  
+                  <div className={styles.dropdownDivider} />
+                  
+                  <div className={styles.dropdownMenu}>
+                    <button 
+                      className={styles.dropdownItem}
+                      onClick={() => handleProfileAction('profile')}
+                    >
+                      <User size={16} />
+                      <span>Dashboard</span>
+                    </button>
+                    
+                    <button 
+                      className={styles.dropdownItem}
+                      onClick={() => handleProfileAction('logout')}
+                    >
+                      <LogOut size={16} />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <button className={styles.authButton} onClick={onAuthClick}>
@@ -210,13 +225,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
           )}
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <button 
-          className={styles.mobileMenuToggle}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+
       </div>
     </header>
   );
