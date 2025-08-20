@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, User, LogOut, Settings, Bell, ChevronDown } from 'lucide-react';
+import { Menu, X, LogOut, Settings, Bell, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import logo from '../../assets/logo.png';
 import styles from './Header.module.css';
 
 const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showHamburgerDropdown, setShowHamburgerDropdown] = useState(false);
+  const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [userInitial, setUserInitial] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const profileDropdownRef = useRef(null);
+  const hamburgerDropdownRef = useRef(null);
+  const accountDropdownRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,11 +24,14 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle profile dropdown click outside
+  // Handle dropdown clicks outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
-        setShowProfileDropdown(false);
+      if (hamburgerDropdownRef.current && !hamburgerDropdownRef.current.contains(event.target)) {
+        setShowHamburgerDropdown(false);
+      }
+      if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target)) {
+        setShowAccountDropdown(false);
       }
     };
 
@@ -42,24 +48,32 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
 
   const handleLogoClick = () => {
     navigate('/');
-    setShowProfileDropdown(false);
+    setShowHamburgerDropdown(false);
+    setShowAccountDropdown(false);
   };
 
   const handleNavClick = (path) => {
     navigate(path);
-    setShowProfileDropdown(false);
+    setShowHamburgerDropdown(false);
+    setShowAccountDropdown(false);
   };
 
   const isActive = (path) => {
     return location.pathname === path;
   };
 
-  const handleProfileClick = () => {
-    setShowProfileDropdown(!showProfileDropdown);
+  const handleHamburgerClick = () => {
+    setShowHamburgerDropdown(!showHamburgerDropdown);
+    setShowAccountDropdown(false); // Close account dropdown when opening hamburger
+  };
+
+  const handleAccountClick = () => {
+    setShowAccountDropdown(!showAccountDropdown);
+    setShowHamburgerDropdown(false); // Close hamburger dropdown when opening account
   };
 
   const handleProfileAction = (action) => {
-    setShowProfileDropdown(false);
+    setShowAccountDropdown(false);
     
     switch (action) {
       case 'profile':
@@ -95,17 +109,17 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
       <div className={styles.headerContent}>
         {/* Left Side - Hamburger Menu */}
         <div className={styles.leftSection}>
-          <div className={styles.hamburgerContainer} ref={profileDropdownRef}>
+          <div className={styles.hamburgerContainer} ref={hamburgerDropdownRef}>
             <button 
               className={styles.hamburgerButton}
-              onClick={handleProfileClick}
+              onClick={handleHamburgerClick}
               aria-label="Menu"
             >
               <Menu size={24} />
             </button>
 
             {/* Mega Menu Dropdown */}
-            {showProfileDropdown && (
+            {showHamburgerDropdown && (
               <div className={styles.megaMenuDropdown}>
                 <div className={styles.megaMenuHeader}>
                   <div className={styles.megaMenuTitle}>Navigation Menu</div>
@@ -162,36 +176,22 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
         {/* Right Side - Account Section */}
         <div className={styles.rightSection}>
           {isLoggedIn ? (
-            <div className={styles.accountSection} ref={profileDropdownRef}>
+            <div className={styles.accountSection} ref={accountDropdownRef}>
               <div 
                 className={styles.accountInfo}
-                onClick={handleProfileClick}
+                onClick={handleAccountClick}
               >
-                <div 
-                  className={styles.accountAvatar}
-                  style={{ backgroundColor: getProfileColor() }}
-                >
-                  {userInitial}
-                </div>
-                <div className={styles.accountDetails}>
-                  <span className={styles.accountUsername}>{username}</span>
-                  <span className={styles.accountStatus}>Online</span>
+                <div className={styles.accountAvatar}>
+                  <PersonOutlineIcon />
                 </div>
               </div>
 
               {/* Account Dropdown */}
-              {showProfileDropdown && (
+              {showAccountDropdown && (
                 <div className={styles.accountDropdown}>
                   <div className={styles.dropdownHeader}>
-                    <div 
-                      className={styles.dropdownProfileIcon}
-                      style={{ backgroundColor: getProfileColor() }}
-                    >
-                      {userInitial}
-                    </div>
                     <div className={styles.dropdownUserInfo}>
                       <span className={styles.dropdownUsername}>{username}</span>
-                      <span className={styles.dropdownStatus}>Online</span>
                     </div>
                   </div>
                   
@@ -202,7 +202,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
                       className={styles.dropdownItem}
                       onClick={() => handleProfileAction('profile')}
                     >
-                      <User size={16} />
+                      <PersonOutlineIcon />
                       <span>Dashboard</span>
                     </button>
                     
@@ -219,7 +219,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
             </div>
           ) : (
             <button className={styles.authButton} onClick={onAuthClick}>
-              <User size={16} />
+              <PersonOutlineIcon />
               Login
             </button>
           )}
