@@ -70,8 +70,8 @@
 }
 
 .logoImage {
-  width: 32px;
-  height: 32px;
+  width: 60px;
+  height: 60px;
   border-radius: 6px;
   object-fit: cover;
   display: block;
@@ -620,8 +620,8 @@
   }
 
   .logoImage {
-    width: 28px;
-    height: 28px;
+    width: 60px;
+    height: 60px;
     border-radius: 6px;
     object-fit: cover;
   }
