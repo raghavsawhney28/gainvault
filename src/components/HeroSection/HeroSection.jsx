@@ -27,6 +27,15 @@ const HeroSection = () => {
 
   return (
     <section className={styles.hero}>
+      {/* Phoenix Background Image */}
+      <div className={styles.phoenixBackground}>
+        <img 
+          src="/phoenix.png" 
+          alt="Phoenix - Symbol of Power and Renewal" 
+          className={styles.phoenixImage}
+        />
+      </div>
+      
       <div className={styles.container}>
         <animated.div style={heroAnimation} className={styles.heroContent}>
           <div className={styles.taglineContainer}>

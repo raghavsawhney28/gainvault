@@ -139,6 +139,12 @@
     min-height: 100vh;
   }
 
+  .phoenixImage {
+    width: 350px;
+    height: 350px;
+    margin-top: calc(var(--spacing-unit) * 2);
+  }
+
   .heroActions {
     flex-direction: column;
     align-items: center;
@@ -156,7 +162,54 @@
     padding: calc(var(--spacing-unit) * 12) 0 calc(var(--spacing-unit) * 6) 0;
   }
   
+  .phoenixImage {
+    width: 250px;
+    height: 250px;
+    margin-top: calc(var(--spacing-unit) * 1);
+  }
+  
   .heroSubtitle {
     font-size: 1.1rem;
   }
+}
+
+/* Phoenix Background */
+.phoenixBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.phoenixImage {
+  width: 500px;
+  height: 500px;
+  object-fit: contain;
+  margin-top: calc(var(--spacing-unit) * 4);
+  position: relative;
+  animation: float 6s ease-in-out infinite;
+  transition: all 0.3s ease;
+
+  filter: brightness(0.8);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+/* Ensure hero content is above the phoenix background */
+.heroContent {
+  position: relative;
+  z-index: 2;
 }
