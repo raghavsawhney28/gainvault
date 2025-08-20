@@ -29,15 +29,6 @@ const TradingChallenge = () => {
     platform: '',
     accountSize: '',
     
-    // Billing Details
-    firstName: '',
-    lastName: '',
-    billingCountry: '',
-    billingAddress: '',
-    city: '',
-    postalCode: '',
-    couponCode: '',
-    
     // Order Summary
     agreeToTerms: false
   });
@@ -85,14 +76,14 @@ const TradingChallenge = () => {
   };
 
   const handleNext = () => {
-    if (currentStep < 3) {
-      setCurrentStep(currentStep + 1);
+    if (currentStep < 2) {
+      setCurrentStep(2);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+      setCurrentStep(1);
     }
   };
 
@@ -103,10 +94,7 @@ const TradingChallenge = () => {
     return challengeType === 'twoStage' ? selected.price : selected.singleStagePrice;
   };
 
-  const applyCoupon = () => {
-    // Placeholder for coupon logic
-    alert('Coupon functionality would be implemented here');
-  };
+
 
   const handleConfirmOrder = () => {
     if (!formData.agreeToTerms) {
@@ -312,104 +300,6 @@ const TradingChallenge = () => {
     </div>
   );
 
-  const renderBillingDetails = () => (
-    <div className={styles.stepContent}>
-      <h2>Billing Details</h2>
-      
-      <div className={styles.formGrid}>
-        <div className={styles.formGroup}>
-          <label>Name</label>
-          <input
-            type="text"
-            value={formData.firstName}
-            onChange={(e) => handleInputChange('firstName', e.target.value)}
-            placeholder="Enter your name"
-          />
-        </div>
-
-        {/* <div className={styles.formGroup}>
-          <label>Last Name</label>
-          <input
-            type="text"
-            value={formData.lastName}
-            onChange={(e) => handleInputChange('lastName', e.target.value)}
-            placeholder="Enter your last name"
-          />
-        </div> */}
-
-        <div className={styles.formGroup}>
-          <label>Country</label>
-          <input
-            type="text"
-            value={formData.billingCountry}
-            onChange={(e) => handleInputChange('billingCountry', e.target.value)}
-            placeholder="Enter your country"
-          />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label>Billing Address</label>
-          <input
-            type="text"
-            value={formData.billingAddress}
-            onChange={(e) => handleInputChange('billingAddress', e.target.value)}
-            placeholder="Enter your billing address"
-          />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label>City</label>
-          <input
-            type="text"
-            value={formData.city}
-            onChange={(e) => handleInputChange('city', e.target.value)}
-            placeholder="Enter your city"
-          />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label>Postal Code</label>
-          <input
-            type="text"
-            value={formData.postalCode}
-            onChange={(e) => handleInputChange('postalCode', e.target.value)}
-            placeholder="Enter your postal code"
-          />
-        </div>
-      </div>
-
-      <div className={styles.couponSection}>
-        <div className={styles.formGroup}>
-          <label>Coupon Code</label>
-          <div className={styles.couponInput}>
-            <input
-              type="text"
-              value={formData.couponCode}
-              onChange={(e) => handleInputChange('couponCode', e.target.value)}
-              placeholder="Enter coupon code"
-            />
-            <button className={styles.btnSecondary} onClick={applyCoupon}>
-              Apply
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.stepNavigation}>
-        <button className={styles.btnSecondary} onClick={handleBack}>
-          <ChevronLeft size={16} /> Back
-        </button>
-        <button 
-          className={styles.btnPrimary}
-          onClick={handleNext}
-          disabled={!formData.firstName  || !formData.billingAddress}
-        >
-          Proceed to Summary <ChevronRight size={16} />
-        </button>
-      </div>
-    </div>
-  );
-
   const renderOrderSummary = () => (
     <div className={styles.stepContent}>
       <h2>Order Summary</h2>
@@ -511,7 +401,7 @@ const TradingChallenge = () => {
       <div className={styles.container}>
         <div className={styles.progressBar}>
           <div className={styles.progressSteps}>
-            {[1, 2, 3].map(step => (
+            {[1, 2].map(step => (
               <div 
                 key={step}
                 className={`${styles.progressStep} ${
@@ -521,22 +411,17 @@ const TradingChallenge = () => {
                 <div className={styles.stepNumber}>{step}</div>
                 <div className={styles.stepLabel}>
                   {step === 1 && 'Account Setup'}
-                  {step === 2 && 'Billing Details'}
-                  {step === 3 && 'Order Summary'}
+                  {step === 2 && 'Order Summary'}
                 </div>
               </div>
             ))}
           </div>
-          <div 
-            className={styles.progressLine}
-            style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
-          ></div>
+
         </div>
 
         <div className={styles.stepContainer}>
           {currentStep === 1 && renderAccountSetup()}
-          {currentStep === 2 && renderBillingDetails()}
-          {currentStep === 3 && renderOrderSummary()}
+          {currentStep === 2 && renderOrderSummary()}
         </div>
       </div>
     </div>

@@ -153,29 +153,19 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
                 </div>
               )}
               
-              {/* Profile Icon */}
-              <div className={styles.profileContainer} ref={profileDropdownRef}>
+              {/* Hamburger Menu */}
+              <div className={styles.hamburgerContainer} ref={profileDropdownRef}>
                 <button 
-                  className={styles.profileButton}
+                  className={styles.hamburgerButton}
                   onClick={handleProfileClick}
-                  aria-label="Profile menu"
+                  aria-label="Menu"
                 >
-                  <div 
-                    className={styles.profileIcon}
-                    style={{ backgroundColor: getProfileColor() }}
-                  >
-                    {userInitial}
-                  </div>
-                  <span className={styles.username}>{username}</span>
-                  <ChevronDown 
-                    size={16} 
-                    className={`${styles.dropdownArrow} ${showProfileDropdown ? styles.rotated : ''}`}
-                  />
+                  <Menu size={24} />
                 </button>
 
-                {/* Profile Dropdown */}
+                {/* Hamburger Dropdown */}
                 {showProfileDropdown && (
-                  <div className={styles.profileDropdown}>
+                  <div className={styles.hamburgerDropdown}>
                     <div className={styles.dropdownHeader}>
                       <div 
                         className={styles.dropdownProfileIcon}
@@ -200,20 +190,14 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
                         <span>Dashboard</span>
                       </button>
                       
-                      
-                      
-                      
+                      <button 
+                        className={styles.dropdownItem}
+                        onClick={() => handleProfileAction('logout')}
+                      >
+                        <LogOut size={16} />
+                        <span>Sign Out</span>
+                      </button>
                     </div>
-                    
-                    <div className={styles.dropdownDivider} />
-                    
-                    <button 
-                      className={`${styles.dropdownItem} ${styles.logoutItem}`}
-                      onClick={() => handleProfileAction('logout')}
-                    >
-                      <LogOut size={16} />
-                      <span>Sign Out</span>
-                    </button>
                   </div>
                 )}
               </div>

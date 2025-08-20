@@ -143,70 +143,44 @@
   }
 }
 
-/* Profile Container */
-.profileContainer {
+/* Hamburger Container */
+.hamburgerContainer {
   position: relative;
 }
 
-.profileButton {
+.hamburgerButton {
   display: flex;
   align-items: center;
-  gap: calc(var(--spacing-unit) * 1);
+  justify-content: center;
   background: rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: calc(var(--spacing-unit) * 1.5);
-  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 1.5);
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   min-height: 44px;
+  min-width: 44px;
 }
 
-.profileButton:hover {
+.hamburgerButton:hover {
   background: rgba(0, 0, 0, 0.1);
   border-color: rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.profileIcon {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.hamburgerButton svg {
   color: var(--text-primary);
-  font-weight: 700;
-  font-size: 1rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
 
-.profileButton:hover .profileIcon {
+.hamburgerButton:hover svg {
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.username {
-  color: var(--text-primary);
-  font-weight: 500;
-  font-size: 0.875rem;
-  white-space: nowrap;
-}
-
-.dropdownArrow {
-  color: var(--text-secondary);
-  transition: transform 0.3s ease;
-}
-
-.dropdownArrow.rotated {
-  transform: rotate(180deg);
-}
-
-/* Profile Dropdown */
-.profileDropdown {
+/* Hamburger Dropdown */
+.hamburgerDropdown {
   position: absolute;
   top: calc(100% + calc(var(--spacing-unit) * 1));
   right: 0;
@@ -445,21 +419,16 @@
     padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
   }
 
-  .profileButton {
-    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1);
+  .hamburgerButton {
+    padding: calc(var(--spacing-unit) * 1);
   }
 
-  .profileIcon {
-    width: 28px;
-    height: 28px;
-    font-size: 0.875rem;
+  .hamburgerButton svg {
+    width: 20px;
+    height: 20px;
   }
 
-  .username {
-    font-size: 0.8rem;
-  }
-
-  .profileDropdown {
+  .hamburgerDropdown {
     min-width: 250px;
     right: calc(var(--spacing-unit) * -1);
   }
@@ -508,21 +477,16 @@
     display: none; /* Hide welcome animation on very small screens */
   }
 
-  .profileButton {
-    padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 0.75);
+  .hamburgerButton {
+    padding: calc(var(--spacing-unit) * 0.75);
   }
 
-  .profileIcon {
-    width: 24px;
-    height: 24px;
-    font-size: 0.75rem;
+  .hamburgerButton svg {
+    width: 18px;
+    height: 18px;
   }
 
-  .username {
-    display: none; /* Hide username on very small screens */
-  }
-
-  .profileDropdown {
+  .hamburgerDropdown {
     min-width: 220px;
     right: calc(var(--spacing-unit) * -1.5);
   }
