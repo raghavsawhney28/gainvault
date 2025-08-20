@@ -399,26 +399,6 @@ const TradingChallenge = () => {
   return (
     <div className={styles.tradingChallenge}>
       <div className={styles.container}>
-        <div className={styles.progressBar}>
-          <div className={styles.progressSteps}>
-            {[1, 2].map(step => (
-              <div 
-                key={step}
-                className={`${styles.progressStep} ${
-                  step <= currentStep ? styles.active : ''
-                }`}
-              >
-                <div className={styles.stepNumber}>{step}</div>
-                <div className={styles.stepLabel}>
-                  {step === 1 && 'Account Setup'}
-                  {step === 2 && 'Order Summary'}
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-
         <div className={styles.stepContainer}>
           {currentStep === 1 && renderAccountSetup()}
           {currentStep === 2 && renderOrderSummary()}

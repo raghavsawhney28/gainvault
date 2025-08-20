@@ -11,6 +11,8 @@
 }
 
 .container {
+  top: 5.5rem;
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 calc(var(--spacing-unit) * 3);
@@ -37,67 +39,7 @@
   line-height: 1.6;
 }
 
-/* Progress Steps */
-.progressSteps {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: calc(var(--spacing-unit) * 6);
-  position: relative;
-  flex-wrap: wrap;
-  gap: calc(var(--spacing-unit) * 2);
-}
 
-.progressStep {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 1);
-  position: relative;
-  z-index: 2;
-  min-width: 80px;
-}
-
-.stepNumber {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--border-color);
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.progressStep.active .stepNumber {
-  background-color: var(--accent-green);
-  color: var(--primary-bg);
-}
-
-.stepLabel {
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-align: center;
-  color: var(--text-secondary);
-}
-
-.progressStep.active .stepLabel {
-  color: var(--accent-green);
-}
-
-.progressLine {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  height: 2px;
-  background-color: var(--accent-green);
-  transition: width 0.3s ease;
-  z-index: 1;
-  transform: translateY(-50%);
-}
 
 /* Step Container */
 .stepContainer {
@@ -785,14 +727,7 @@
     width: 100%;
   }
 
-  .progressSteps {
-    flex-direction: column;
-    gap: calc(var(--spacing-unit) * 3);
-  }
 
-  .progressLine {
-    display: none;
-  }
 
   .toggleButton {
     min-width: 120px;

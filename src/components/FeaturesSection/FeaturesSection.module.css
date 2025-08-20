@@ -34,6 +34,7 @@
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: calc(var(--spacing-unit) * 4);
   margin-bottom: calc(var(--spacing-unit) * 8);
+  scroll-behavior: smooth;
 }
 
 .featureCard {
@@ -42,6 +43,12 @@
   border-radius: calc(var(--spacing-unit) * 2);
   border: 1px solid var(--border-color);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Ensure consistent card dimensions */
+  min-height: 280px;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .featureCard:hover {
@@ -101,6 +108,103 @@
   }
 
   .featuresGrid {
-    grid-template-columns: 1fr;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: calc(var(--spacing-unit) * 2);
+    padding: calc(var(--spacing-unit) * 1) 0;
+    margin: 0 calc(var(--spacing-unit) * -2);
+    padding-left: calc(var(--spacing-unit) * 2);
+    padding-right: calc(var(--spacing-unit) * 2);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scroll-behavior: smooth;
+    /* Add subtle shadow to indicate scrollable content */
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(0,0,0,0.02) 5%, 
+      transparent 95%, 
+      rgba(0,0,0,0.02) 100%
+    );
+  }
+
+  .featuresGrid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .featureCard {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    margin-right: calc(var(--spacing-unit) * 2);
+    /* Enhanced mobile card styles */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    /* Maintain consistent card dimensions */
+    min-height: 280px;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Ensure consistent padding */
+    padding: calc(var(--spacing-unit) * 4);
+  }
+
+  .featureCard:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  .featureCard:last-child {
+    margin-right: calc(var(--spacing-unit) * 2);
+  }
+
+  /* Add scroll indicator */
+  .featuresGrid::after {
+    content: '';
+    flex: 0 0 calc(var(--spacing-unit) * 2);
+  }
+
+  /* Add subtle scroll hint */
+  .featuresGrid::before {
+    content: '← Scroll →';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    pointer-events: none;
+    animation: fadeInOut 3s ease-in-out infinite;
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+}
+
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+  .featuresGrid {
+    gap: calc(var(--spacing-unit) * 1.5);
+    padding-left: calc(var(--spacing-unit) * 1.5);
+    padding-right: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .featureCard {
+    flex: 0 0 280px;
+    padding: calc(var(--spacing-unit) * 4);
+    min-height: 280px;
+    height: 280px;
+  }
+
+  .featureCard h3 {
+    font-size: 1.5rem;
+  }
+
+  .featureCard p {
+    font-size: 0.73rem;
   }
 }
