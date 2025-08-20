@@ -88,11 +88,11 @@ const FeaturesSection = () => {
       title: 'Performance-Based Funding',
       description: 'Earn more capital as you demonstrate consistent profitable trading.'
     },
-    {
-      icon: Users,
-      title: 'Community Support',
-      description: 'Join a network of successful traders and share strategies.'
-    },
+    // {
+    //   icon: Users,
+    //   title: 'Community Support',
+    //   description: 'Join a network of successful traders and share strategies.'
+    // },
     {
       icon: Award,
       title: 'Recognition & Rewards',
