@@ -11,13 +11,10 @@
   transition: all 0.3s ease;
 }
 
-.header.scrolled {
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
+
 
 .headerContent {
-  max-width: 1200px;
+  max-width: 122rem;
   margin: 0 auto;
   padding: 0 calc(var(--spacing-unit) * 3);
   display: flex;
@@ -262,7 +259,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.275);
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: calc(var(--spacing-unit) * 1.5);
   padding: calc(var(--spacing-unit) * 1.5);
@@ -274,14 +271,14 @@
 }
 
 .hamburgerButton:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.375);
   border-color: rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .hamburgerButton svg {
-  color: var(--text-primary);
+  color: black;
   transition: all 0.3s ease;
 }
 
@@ -681,11 +678,13 @@
 
   .hamburgerButton {
     padding: calc(var(--spacing-unit) * 1);
+    
   }
 
   .hamburgerButton svg {
     width: 20px;
     height: 20px;
+    
   }
 
   .hamburgerDropdown {

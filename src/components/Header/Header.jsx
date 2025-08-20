@@ -121,13 +121,11 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
             {/* Mega Menu Dropdown */}
             {showHamburgerDropdown && (
               <div className={styles.megaMenuDropdown}>
-                <div className={styles.megaMenuHeader}>
-                  <div className={styles.megaMenuTitle}>Navigation Menu</div>
-                </div>
+                
                 
                 <div className={styles.megaMenuContent}>
                   <div className={styles.megaMenuSection}>
-                    <h3>Main Pages</h3>
+                    
                     <div className={styles.megaMenuItems}>
                       <button 
                         className={styles.megaMenuItem}
