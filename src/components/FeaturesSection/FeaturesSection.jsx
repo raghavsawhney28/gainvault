@@ -10,16 +10,29 @@ const FeaturesSection = () => {
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile device
+  // Detect mobile device - more robust approach
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const width = window.innerWidth;
+      setIsMobile(width <= 768);
     };
     
+    // Initial check
     checkMobile();
-    window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    // Debounced resize handler
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkMobile, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const handleStartJourney = () => {

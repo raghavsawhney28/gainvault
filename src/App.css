@@ -155,4 +155,116 @@ body {
   * {
     -webkit-overflow-scrolling: touch;
   }
+  
+  /* Improve touch targets */
+  button, 
+  [role="button"], 
+  input, 
+  select, 
+  textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better mobile spacing */
+  .main-content > * {
+    margin-bottom: calc(var(--spacing-unit) * 4);
+  }
+  
+  /* Improve mobile typography */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+  
+  p {
+    line-height: 1.5;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+  
+  /* Mobile-friendly button styles */
+  .btnPrimary, .btnSecondary, .btnOutline {
+    border-radius: calc(var(--spacing-unit) * 1.5);
+    font-weight: 600;
+    letter-spacing: 0.025em;
+  }
+  
+  /* Improve mobile card layouts */
+  .featureCard, .pricingCard, .objectiveCard {
+    border-radius: calc(var(--spacing-unit) * 2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Better mobile form elements */
+  input, textarea, select {
+    border-radius: calc(var(--spacing-unit) * 1.5);
+    border: 1px solid var(--border-color);
+    padding: calc(var(--spacing-unit) * 2);
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  /* Mobile navigation improvements */
+  .nav a, .nav button {
+    padding: calc(var(--spacing-unit) * 2.5);
+    border-radius: calc(var(--spacing-unit) * 1);
+  }
+  
+  /* Mobile section spacing */
+  section {
+    padding: calc(var(--spacing-unit) * 6) 0;
+  }
+  
+  /* Mobile container padding */
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 2);
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  /* Further reduce spacing on very small screens */
+  .main-content > * {
+    margin-bottom: calc(var(--spacing-unit) * 3);
+  }
+  
+  section {
+    padding: calc(var(--spacing-unit) * 4) 0;
+  }
+  
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 1.5);
+  }
+  
+  /* Smaller touch targets for very small screens */
+  button, 
+  [role="button"], 
+  input, 
+  select, 
+  textarea {
+    min-height: 40px;
+    min-width: 40px;
+  }
+  
+  /* Compact mobile typography */
+  h1 {
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.5rem, 7vw, 1.8rem);
+  }
+  
+  h3 {
+    font-size: clamp(1.3rem, 6vw, 1.5rem);
+  }
+  
+  p {
+    font-size: 0.95rem;
+  }
+  
+  /* Mobile button sizing */
+  .btnPrimary, .btnSecondary, .btnOutline {
+    padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
+    font-size: 0.95rem;
+  }
 }

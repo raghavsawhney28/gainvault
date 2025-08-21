@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import HeroSection from './components/HeroSection/HeroSection';
@@ -85,4 +85,4 @@ function App() {
   );
 }
 
-export default React.memo(App);
+export default memo(App);

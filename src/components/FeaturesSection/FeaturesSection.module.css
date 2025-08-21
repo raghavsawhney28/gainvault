@@ -103,8 +103,28 @@
 
 /* Mobile Styles */
 @media (max-width: 768px) {
+  .featuresSection {
+    padding: calc(var(--spacing-unit) * 8) 0;
+  }
+  
   .container {
     padding: 0 calc(var(--spacing-unit) * 2);
+  }
+  
+  .featuresHeader {
+    margin-bottom: calc(var(--spacing-unit) * 6);
+    padding: 0 calc(var(--spacing-unit) * 1);
+  }
+  
+  .featuresHeader h2 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+  }
+  
+  .featuresHeader p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    padding: 0 calc(var(--spacing-unit) * 1);
   }
 
   .featuresGrid {
@@ -127,8 +147,7 @@
       transparent 95%, 
       rgba(0,0,0,0.02) 100%
     );
-    /* Auto-scroll animation */
-    /* position: relative; */
+    position: relative;
   }
 
   /* Auto-scroll progress indicator */
@@ -202,30 +221,78 @@
     0%, 100% { opacity: 0.3; }
     50% { opacity: 0.7; }
   }
-
-
+  
+  .featuresCta {
+    margin-top: calc(var(--spacing-unit) * 4);
+    padding: 0 calc(var(--spacing-unit) * 2);
+  }
+  
+  .btnOutline {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3);
+    font-size: 1rem;
+  }
 }
 
 /* Small Mobile Styles */
 @media (max-width: 480px) {
+  .featuresSection {
+    padding: calc(var(--spacing-unit) * 6) 0;
+  }
+  
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 1.5);
+  }
+  
+  .featuresHeader {
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    padding: 0;
+  }
+  
+  .featuresHeader h2 {
+    font-size: clamp(1.6rem, 7vw, 2rem);
+    margin-bottom: calc(var(--spacing-unit) * 1);
+  }
+  
+  .featuresHeader p {
+    font-size: 1rem;
+    padding: 0;
+  }
+  
   .featuresGrid {
     gap: calc(var(--spacing-unit) * 1.5);
     padding-left: calc(var(--spacing-unit) * 1.5);
     padding-right: calc(var(--spacing-unit) * 1.5);
+    margin: 0 calc(var(--spacing-unit) * -1.5);
   }
 
   .featureCard {
-    flex: 0 0 280px;
-    padding: calc(var(--spacing-unit) * 4.5);
-    min-height: 280px;
-    height: 280px;
+    flex: 0 0 260px;
+    padding: calc(var(--spacing-unit) * 3.5);
+    min-height: 260px;
+    height: 260px;
   }
 
   .featureCard h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
   }
 
   .featureCard p {
-    font-size: 0.73rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  .featuresCta {
+    margin-top: calc(var(--spacing-unit) * 3);
+    padding: 0;
+  }
+  
+  .btnOutline {
+    max-width: 260px;
+    padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
+    font-size: 0.95rem;
   }
 }

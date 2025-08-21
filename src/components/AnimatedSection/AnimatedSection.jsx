@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSpring, animated, config } from '@react-spring/web';
 
 // Intersection Observer Hook for animations
@@ -30,38 +30,57 @@ const AnimatedSection = ({ children, className = "", delay = 0 }) => {
   const [ref, inView] = useInView();
   const [isMobile, setIsMobile] = useState(false);
   
-  // Detect mobile device
+  // Detect mobile device - more robust approach
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const width = window.innerWidth;
+      setIsMobile(width <= 768);
     };
     
+    // Initial check
     checkMobile();
-    window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    // Debounced resize handler
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkMobile, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
   
-  // Disable animations on mobile for better performance
-  if (isMobile) {
-    return (
-      <div ref={ref} className={className}>
-        {children}
-      </div>
-    );
-  }
-  
+  // Always create the animation, even if we don't use it
   const animation = useSpring({
     opacity: inView ? 1 : 0,
     transform: inView ? 'translateY(0px)' : 'translateY(30px)',
     delay: delay,
     config: config.gentle,
   });
-
+  
+  // Memoize the mobile check to prevent unnecessary re-renders
+  const shouldDisableAnimation = useMemo(() => isMobile, [isMobile]);
+  
+  // Always render the same structure, but conditionally apply styles
   return (
-    <animated.div ref={ref} style={animation} className={className}>
-      {children}
-    </animated.div>
+    <div ref={ref} className={className}>
+      {shouldDisableAnimation ? (
+        // Mobile version - no animation
+        <div style={{ opacity: 1, transform: 'none' }}>
+          {children}
+        </div>
+      ) : (
+        // Desktop version - with animation
+        <animated.div style={animation}>
+          {children}
+        </animated.div>
+      )}
+    </div>
   );
 };
 

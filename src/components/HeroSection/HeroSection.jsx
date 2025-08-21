@@ -1,23 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSpring, animated, config } from '@react-spring/web';
-import { Play } from 'lucide-react';
+import { Play, ChevronDown } from 'lucide-react';
 import styles from './HeroSection.module.css';
 
 const HeroSection = () => {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile device
+  // Detect mobile device - more robust approach
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const width = window.innerWidth;
+      setIsMobile(width <= 768);
     };
     
+    // Initial check
     checkMobile();
-    window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    // Debounced resize handler
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkMobile, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const heroAnimation = useSpring({
@@ -30,6 +43,16 @@ const HeroSection = () => {
 
   const handleStartTrading = () => {
     navigate('/trading-challenge');
+  };
+
+  const handleScrollDown = () => {
+    const featuresSection = document.querySelector('.featuresSection');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
 
   const taglines = [
@@ -86,6 +109,18 @@ const HeroSection = () => {
             </button>
           </div>
         </animated.div>
+      </div>
+      
+      {/* Mobile-friendly scroll indicator */}
+      <div className={styles.scrollIndicator}>
+        <button 
+          className={styles.scrollButton}
+          onClick={handleScrollDown}
+          aria-label="Scroll to features"
+        >
+          <span className={styles.scrollText}>Scroll</span>
+          <ChevronDown size={16} className={styles.scrollIcon} />
+        </button>
       </div>
     </section>
   );
