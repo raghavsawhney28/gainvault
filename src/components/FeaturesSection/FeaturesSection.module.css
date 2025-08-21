@@ -152,18 +152,32 @@
 
   /* Auto-scroll progress indicator */
   .featuresGrid::after {
+    display: none;
+  }
+
+  /* Auto-scroll indicator */
+  .featuresGrid::before {
     content: '';
     position: absolute;
-    bottom: -5px;
+    top: -8px;
     left: 0;
     height: 3px;
     background: linear-gradient(90deg, var(--accent-green), transparent);
-    animation: autoScrollProgress 3s linear infinite;
     width: 100%;
+    opacity: 0.6;
+    animation: autoScrollIndicator 4s ease-in-out infinite;
+    transition: opacity 0.3s ease;
   }
 
-  @keyframes autoScrollProgress {
+  /* Pause state - reduce opacity */
+  .featuresGrid.paused::before {
+    opacity: 0.2;
+    animation-play-state: paused;
+  }
+
+  @keyframes autoScrollIndicator {
     0% { transform: translateX(-100%); }
+    50% { transform: translateX(0%); }
     100% { transform: translateX(100%); }
   }
 
@@ -178,14 +192,17 @@
     /* Enhanced mobile card styles */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    /* Maintain consistent card dimensions */
-    min-height: 280px;
-    height: 280px;
+    /* Responsive card dimensions for mobile */
+    min-height: 260px;
+    height: auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     /* Ensure consistent padding */
-    padding: calc(var(--spacing-unit) * 4);
+    padding: calc(var(--spacing-unit) * 3.5);
+    /* Responsive width based on screen size */
+    width: calc(100vw - calc(var(--spacing-unit) * 6));
+    max-width: 280px;
   }
 
   .featureCard:active {
@@ -203,23 +220,9 @@
     flex: 0 0 calc(var(--spacing-unit) * 2);
   }
 
-  /* Add subtle scroll hint */
+  /* Remove scroll hint text */
   .featuresGrid::before {
-    content: '← Scroll →';
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    opacity: 0.7;
-    pointer-events: none;
-    animation: fadeInOut 3s ease-in-out infinite;
-  }
-
-  @keyframes fadeInOut {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
+    display: none;
   }
   
   .featuresCta {
@@ -270,9 +273,10 @@
 
   .featureCard {
     flex: 0 0 260px;
-    padding: calc(var(--spacing-unit) * 3.5);
-    min-height: 260px;
-    height: 260px;
+    padding: calc(var(--spacing-unit) * 3);
+    min-height: 240px;
+    width: calc(100vw - calc(var(--spacing-unit) * 5));
+    max-width: 260px;
   }
 
   .featureCard h3 {

@@ -101,14 +101,49 @@ router.post('/phantom-signin', async (req, res) => {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email,
         walletAddress: user.walletAddress,
-        lastLogin: user.lastLogin,
-      },
+        email: user.email,
+        referralCode: user.referralCode,
+        referredBy: user.referredBy,
+        referralCount: user.referralCount,
+        totalEarnings: user.totalEarnings,
+        lastLogin: user.lastLogin
+      }
     });
   } catch (error) {
     console.error('❌ Phantom signin error:', error);
-    res.status(500).json({ error: 'Server error during signin' });
+    res.status(500).json({ error: 'Authentication failed' });
+  }
+});
+
+// ✅ Logout endpoint
+router.post('/logout', auth, async (req, res) => {
+  try {
+    // Since we're using JWT tokens, we don't need to invalidate them server-side
+    // The client will remove the token from localStorage
+    // In a production environment, you might want to implement a token blacklist
+    
+    res.json({ 
+      success: true, 
+      message: 'Logged out successfully' 
+    });
+  } catch (error) {
+    console.error('❌ Logout error:', error);
+    res.status(500).json({ error: 'Logout failed' });
+  }
+});
+
+// ✅ Optional logout endpoint (no auth required) - for expired tokens
+router.post('/logout-optional', async (req, res) => {
+  try {
+    // This endpoint allows logout even with expired/invalid tokens
+    res.json({ 
+      success: true, 
+      message: 'Logged out successfully' 
+    });
+  } catch (error) {
+    console.error('❌ Logout error:', error);
+    res.status(500).json({ error: 'Logout failed' });
   }
 });
 

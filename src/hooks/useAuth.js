@@ -145,10 +145,20 @@ const useAuth = () => {
   // ✅ Clean logout
   const logout = useCallback(async () => {
     try {
-      await api.post('/auth/logout'); // optional
+      // Try the main logout endpoint first
+      await api.post('/auth/logout');
     } catch (error) {
       console.error('Logout API call failed:', error);
+      
+      // If main logout fails (e.g., expired token), try optional logout
+      try {
+        await api.post('/auth/logout-optional');
+      } catch (optionalError) {
+        console.error('Optional logout also failed:', optionalError);
+        // Continue with logout anyway - this is just for logging
+      }
     } finally {
+      // Always clean up local storage and state
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
       setIsLoggedIn(false);

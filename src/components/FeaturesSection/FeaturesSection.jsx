@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Shield, Zap, Target, Users, Award } from 'lucide-react';
 import AnimatedSection from '../AnimatedSection/AnimatedSection';
@@ -8,6 +8,7 @@ const FeaturesSection = () => {
   const navigate = useNavigate();
   const scrollContainerRef = useRef(null);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   // Detect mobile device - more robust approach
@@ -41,58 +42,60 @@ const FeaturesSection = () => {
 
   // Auto-scroll functionality - disabled on mobile for better performance
   useEffect(() => {
-    if (!scrollContainerRef.current || isMobile) return;
+    if (isMobile) return; // Disable auto-scroll on mobile
+    
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
 
-    let scrollInterval;
-    let currentScroll = 0;
-    const cardWidth = 280 + 16; // card width + gap
-    const totalCards = 6;
-    const maxScroll = (totalCards - 1) * cardWidth;
+    let animationId;
+    let scrollDirection = 1; // 1 for right, -1 for left
+    let currentScrollLeft = 0;
 
     const autoScroll = () => {
-      if (!isAutoScrolling) return;
+      if (!scrollContainer || isPaused) return;
+
+      const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
       
-      currentScroll += cardWidth;
-      if (currentScroll > maxScroll) {
-        currentScroll = 0;
-        // Smooth reset to beginning
-        if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollTo({
-            left: 0,
-            behavior: 'smooth'
-          });
-        }
-        return;
+      if (currentScrollLeft >= maxScrollLeft) {
+        scrollDirection = -1; // Change direction to left
+      } else if (currentScrollLeft <= 0) {
+        scrollDirection = 1; // Change direction to right
       }
-      
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollTo({
-          left: currentScroll,
-          behavior: 'smooth'
-        });
-      }
+
+      currentScrollLeft += scrollDirection * 2; // Scroll speed
+      scrollContainer.scrollLeft = currentScrollLeft;
+
+      animationId = requestAnimationFrame(autoScroll);
     };
 
-    // Start auto-scroll after initial delay
+    // Start auto-scroll after a delay
     const startDelay = setTimeout(() => {
-      scrollInterval = setInterval(autoScroll, 3000); // Scroll every 3 seconds
+      animationId = requestAnimationFrame(autoScroll);
     }, 2000);
 
     return () => {
       clearTimeout(startDelay);
-      if (scrollInterval) {
-        clearInterval(scrollInterval);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
       }
     };
-  }, [isAutoScrolling, isMobile]);
+  }, [isMobile, isPaused]);
 
   // Pause auto-scroll on user interaction
-  const handleScrollInteraction = () => {
-    if (isMobile) return; // Don't handle on mobile
+  const handleScrollInteraction = useCallback(() => {
+    if (isMobile) return;
+    
+    setIsPaused(true);
     setIsAutoScrolling(false);
-    // Resume auto-scroll after 5 seconds of inactivity
-    setTimeout(() => setIsAutoScrolling(true), 5000);
-  };
+    
+    // Resume auto-scroll after 3 seconds of no interaction
+    const resumeTimer = setTimeout(() => {
+      setIsPaused(false);
+      setIsAutoScrolling(true);
+    }, 3000);
+    
+    return () => clearTimeout(resumeTimer);
+  }, [isMobile]);
 
   const features = [
     {
@@ -136,7 +139,7 @@ const FeaturesSection = () => {
         </AnimatedSection>
 
         <div 
-          className={styles.featuresGrid}
+          className={`${styles.featuresGrid} ${isPaused ? styles.paused : ''}`}
           ref={scrollContainerRef}
           onTouchStart={!isMobile ? handleScrollInteraction : undefined}
           onMouseDown={!isMobile ? handleScrollInteraction : undefined}

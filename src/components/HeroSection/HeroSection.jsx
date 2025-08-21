@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSpring, animated, config } from '@react-spring/web';
-import { Play, ChevronDown } from 'lucide-react';
+import { Play } from 'lucide-react';
 import styles from './HeroSection.module.css';
 
 const HeroSection = () => {
@@ -41,18 +41,8 @@ const HeroSection = () => {
     config: isMobile ? { duration: 100 } : config.gentle, // Faster animation on mobile
   });
 
-  const handleStartTrading = () => {
+  const handleStartJourney = () => {
     navigate('/trading-challenge');
-  };
-
-  const handleScrollDown = () => {
-    const featuresSection = document.querySelector('.featuresSection');
-    if (featuresSection) {
-      featuresSection.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
   };
 
   const taglines = [
@@ -100,7 +90,7 @@ const HeroSection = () => {
           <div className={styles.heroActions}>
             <button 
               className={`${styles.btnPrimary} ${styles.btnLarge}`}
-              onClick={handleStartTrading}
+              onClick={handleStartJourney}
             >
               Get Funded Now →
             </button>
@@ -111,17 +101,6 @@ const HeroSection = () => {
         </animated.div>
       </div>
       
-      {/* Mobile-friendly scroll indicator */}
-      <div className={styles.scrollIndicator}>
-        <button 
-          className={styles.scrollButton}
-          onClick={handleScrollDown}
-          aria-label="Scroll to features"
-        >
-          <span className={styles.scrollText}>Scroll</span>
-          <ChevronDown size={16} className={styles.scrollIcon} />
-        </button>
-      </div>
     </section>
   );
 };

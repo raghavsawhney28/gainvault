@@ -23,6 +23,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'https://raghavsawhney28.github.io',
   'https://gainvault-capital.onrender.com',
+  'https://gainvault.onrender.com',
   'https://zp1v56uxy8rdx5ypatb0ockcb9tr6a-oci3-6eac18kw--5173--96435430.local-credentialless.webcontainer-api.io'
 ];
 
