@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import HeroSection from './components/HeroSection/HeroSection';
@@ -21,7 +21,7 @@ function App() {
     checkAuthStatus();
   }, [checkAuthStatus]);
 
-  const handleAuthSuccess = () => {
+  const handleAuthSuccess = useCallback(() => {
     console.log('🎉 Auth success callback triggered');
     setShowAuthModal(false);
     // Force a re-check of auth status
@@ -29,38 +29,47 @@ function App() {
       console.log('🔄 Force refreshing auth after success');
       forceRefreshAuth();
     }, 100);
-  };
+  }, [forceRefreshAuth]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
-  };
+  }, [logout]);
 
-  const openAuthModal = () => {
+  const openAuthModal = useCallback(() => {
     setShowAuthModal(true);
-  };
+  }, []);
 
-  const closeAuthModal = () => {
+  const closeAuthModal = useCallback(() => {
     setShowAuthModal(false);
-  };
+  }, []);
+
+  // Memoize user data to prevent unnecessary re-renders
+  const userData = useMemo(() => ({
+    isLoggedIn,
+    username: user?.username
+  }), [isLoggedIn, user?.username]);
+
+  // Memoize main content to prevent unnecessary re-renders
+  const mainContent = useMemo(() => (
+    <main className="main-content">
+      <HeroSection />
+      <FeaturesSection />
+      <PricingSection />
+    </main>
+  ), []);
 
   console.log('🔍 App Component Debug:', { isLoggedIn, user, username: user?.username });
 
   return (
     <div className="App">
       <Header 
-        isLoggedIn={isLoggedIn}
-        username={user?.username}
+        isLoggedIn={userData.isLoggedIn}
+        username={userData.username}
         onAuthClick={openAuthModal}
         onLogout={handleLogout}
       />
       <Routes>
-        <Route path="/" element={
-          <main className="main-content">
-            <HeroSection />
-            <FeaturesSection />
-            <PricingSection />
-          </main>
-        } />
+        <Route path="/" element={mainContent} />
         <Route path="/trading-challenge" element={<TradingChallenge />} />
         <Route path="/rules" element={<Rules />} />
         <Route path="/referral" element={<Referral />} />
@@ -76,4 +85,4 @@ function App() {
   );
 }
 
-export default App;
+export default React.memo(App);

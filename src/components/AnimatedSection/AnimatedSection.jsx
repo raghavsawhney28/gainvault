@@ -28,6 +28,28 @@ const useInView = (threshold = 0.1) => {
 // Animated Section Component
 const AnimatedSection = ({ children, className = "", delay = 0 }) => {
   const [ref, inView] = useInView();
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  // Disable animations on mobile for better performance
+  if (isMobile) {
+    return (
+      <div ref={ref} className={className}>
+        {children}
+      </div>
+    );
+  }
   
   const animation = useSpring({
     opacity: inView ? 1 : 0,

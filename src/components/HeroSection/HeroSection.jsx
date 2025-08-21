@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSpring, animated, config } from '@react-spring/web';
 import { Play } from 'lucide-react';
@@ -6,13 +6,26 @@ import styles from './HeroSection.module.css';
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const heroAnimation = useSpring({
     opacity: 1,
     transform: 'translateY(0px)',
     from: { opacity: 0, transform: 'translateY(50px)' },
-    delay: 200,
-    config: config.gentle,
+    delay: isMobile ? 0 : 200, // No delay on mobile for better performance
+    config: isMobile ? { duration: 100 } : config.gentle, // Faster animation on mobile
   });
 
   const handleStartTrading = () => {
@@ -40,7 +53,13 @@ const HeroSection = () => {
         <animated.div style={heroAnimation} className={styles.heroContent}>
           <div className={styles.taglineContainer}>
             {taglines.map((tagline, index) => (
-              <div key={index} className={styles.tagline} style={{ animationDelay: `${index * 0.5}s` }}>
+              <div 
+                key={index} 
+                className={styles.tagline} 
+                style={{ 
+                  animationDelay: isMobile ? '0s' : `${index * 0.5}s` // No delay on mobile
+                }}
+              >
                 {tagline}
               </div>
             ))}

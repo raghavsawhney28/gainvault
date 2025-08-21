@@ -154,6 +154,23 @@
     width: 100%;
     max-width: 300px;
   }
+  
+  /* Disable animations on mobile for better performance */
+  .tagline {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  /* Reduce transition complexity on mobile */
+  .btnPrimary, .btnSecondary {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .btnPrimary:hover, .btnSecondary:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
 }
 
 /* Extra small mobile devices */

@@ -8,14 +8,27 @@ const FeaturesSection = () => {
   const navigate = useNavigate();
   const scrollContainerRef = useRef(null);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleStartJourney = () => {
     navigate('/trading-challenge');
   };
 
-  // Auto-scroll functionality
+  // Auto-scroll functionality - disabled on mobile for better performance
   useEffect(() => {
-    if (!scrollContainerRef.current) return;
+    if (!scrollContainerRef.current || isMobile) return;
 
     let scrollInterval;
     let currentScroll = 0;
@@ -58,10 +71,11 @@ const FeaturesSection = () => {
         clearInterval(scrollInterval);
       }
     };
-  }, [isAutoScrolling]);
+  }, [isAutoScrolling, isMobile]);
 
   // Pause auto-scroll on user interaction
   const handleScrollInteraction = () => {
+    if (isMobile) return; // Don't handle on mobile
     setIsAutoScrolling(false);
     // Resume auto-scroll after 5 seconds of inactivity
     setTimeout(() => setIsAutoScrolling(true), 5000);
@@ -111,12 +125,12 @@ const FeaturesSection = () => {
         <div 
           className={styles.featuresGrid}
           ref={scrollContainerRef}
-          onTouchStart={handleScrollInteraction}
-          onMouseDown={handleScrollInteraction}
-          onWheel={handleScrollInteraction}
+          onTouchStart={!isMobile ? handleScrollInteraction : undefined}
+          onMouseDown={!isMobile ? handleScrollInteraction : undefined}
+          onWheel={!isMobile ? handleScrollInteraction : undefined}
         >
           {features.map((feature, index) => (
-            <AnimatedSection key={index} delay={index * 100}>
+            <AnimatedSection key={index} delay={isMobile ? 0 : index * 100}>
               <div className={styles.featureCard}>
                 <div className={styles.featureIcon}>
                   <feature.icon size={32} />
@@ -127,8 +141,6 @@ const FeaturesSection = () => {
             </AnimatedSection>
           ))}
         </div>
-
-
 
         <AnimatedSection className={styles.featuresCta}>
           <button className={styles.btnOutline} onClick={handleStartJourney}>
