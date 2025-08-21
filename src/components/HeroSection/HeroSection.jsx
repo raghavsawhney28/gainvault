@@ -27,14 +27,6 @@ const HeroSection = () => {
 
   return (
     <section className={styles.hero}>
-      {/* Noise Background Canvas */}
-      <canvas 
-        id="noise" 
-        className={styles.noiseCanvas}
-        width="1920" 
-        height="917"
-      />
-      
       {/* Phoenix Background Image */}
       {/* <div className={styles.phoenixBackground}>
         <img 
