@@ -151,6 +151,12 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
                       >
                         <span>Referral</span>
                       </button>
+                      <button 
+                        className={styles.megaMenuItem}
+                        onClick={() => handleNavClick(`/dashboard/${username}`)}
+                      >
+                        <span>Dashboard</span>
+                      </button>
                     </div>
                   </div>
                   
@@ -198,10 +204,18 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
                   <div className={styles.dropdownMenu}>
                     <button 
                       className={styles.dropdownItem}
-                      onClick={() => handleProfileAction('profile')}
+                      onClick={() => handleNavClick(`/dashboard/${username}`)}
                     >
                       <PersonOutlineIcon />
                       <span>Dashboard</span>
+                    </button>
+                    
+                    <button 
+                      className={styles.dropdownItem}
+                      onClick={() => handleProfileAction('profile')}
+                    >
+                      <PersonOutlineIcon />
+                      <span>Profile</span>
                     </button>
                     
                     <button 

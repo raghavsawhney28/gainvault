@@ -8,6 +8,7 @@ import Footer from './components/Footer/Footer';
 import TradingChallenge from './pages/TradingChallenge/TradingChallenge';
 import Rules from './pages/Rules/Rules';
 import Referral from './pages/Referral/Referral';
+import Dashboard from './pages/Dashboard/Dashboard';
 import AuthPage from './components/AuthPage/AuthPage';
 import useAuth from './hooks/useAuth';
 import './App.css';
@@ -73,6 +74,7 @@ function App() {
         <Route path="/trading-challenge" element={<TradingChallenge />} />
         <Route path="/rules" element={<Rules />} />
         <Route path="/referral" element={<Referral />} />
+        <Route path="/dashboard/:username" element={<Dashboard />} />
       </Routes>
       <Footer />
       {showAuthModal && (
