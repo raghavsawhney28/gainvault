@@ -55,16 +55,8 @@ const HeroSection = () => {
 
   return (
     <section className={styles.hero}>
-      {/* Background Effects */}
-      <div className={styles.backgroundEffects}>
-        {/* Ripple Background */}
-        <Ripple 
-          mainCircleSize={300}
-          mainCircleOpacity={0.15}
-          numCircles={6}
-        />
-        
-        {/* Particles Background */}
+      {/* Particles Background - Full Page */}
+      <div className={styles.particlesContainer}>
         <Particles 
           quantity={300}
           staticity={30}
@@ -72,6 +64,18 @@ const HeroSection = () => {
           size={0.6}
           color="#4A90E2"
         />
+      </div>
+      
+      {/* Background Effects Container */}
+      <div className={styles.backgroundEffects}>
+        {/* Ripple Background - HeroSection Only */}
+        <div className={styles.rippleContainer}>
+          <Ripple 
+            mainCircleSize={200}
+            mainCircleOpacity={0.35}
+            numCircles={8}
+          />
+        </div>
       </div>
       
       <div className={styles.container}>

@@ -13,8 +13,9 @@ const Ripple = ({
     
     // Set canvas size
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const container = canvas.parentElement;
+      canvas.width = container.offsetWidth;
+      canvas.height = container.offsetHeight;
     };
     
     resizeCanvas();
@@ -50,7 +51,7 @@ const Ripple = ({
         ctx.save();
         ctx.globalAlpha = this.opacity;
         ctx.strokeStyle = '#4A90E2';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3; // Increased from 2 to 3 for better visibility
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
         ctx.stroke();
@@ -74,10 +75,10 @@ const Ripple = ({
 
       // Create new ripples periodically
       if (ripples.length < numCircles) {
-        const x = canvas.width / 2; // Fixed center position
-        const y = canvas.height / 2; // Fixed center position
+        const x = canvas.width / 2; // Center horizontally
+        const y = canvas.height * 0.25; // Start from 35% down (moved higher up)
         const size = mainCircleSize + Math.random() * 100;
-        const opacity = mainCircleOpacity + Math.random() * 0.2 + 0.1; // Increased base opacity
+        const opacity = mainCircleOpacity + Math.random() * 0.3 + 0.2; // Increased base opacity further
         const speed = 1 + Math.random() * 1; // Reduced speed range from 2-4 to 1-2
         
         ripples.push(new RippleCircle(x, y, size, opacity, speed));
@@ -115,7 +116,7 @@ const Ripple = ({
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
-        zIndex: 0
+        zIndex: 10
       }}
     />
   );
