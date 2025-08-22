@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from 'react';
 
 const Particles = ({ 
   className = '',
-  quantity = 200, // Increased from 100 to 200 for more density
+  quantity = 200000, // Increased from 100 to 200 for more density
   staticity = 50,
   ease = 50,
-  size = 0.4,
+  size = 2, // Increased from 0.4 to 2.0 for larger dots
   refresh = false,
   color = '#ffffff',
   vx = 0,
@@ -33,7 +33,7 @@ const Particles = ({
         this.y = Math.random() * canvas.height;
         this.vx = (Math.random() - 0.5) * 0.3 + vx; // Reduced base velocity for more static feel
         this.vy = (Math.random() - 0.5) * 0.3 + vy;
-        this.size = Math.random() * size + 0.5; // Use configurable size
+        this.size = Math.random() * size + 1.5; // Increased base size from 0.5 to 1.5 for larger dots
         this.opacity = Math.random() * 0.6 + 0.3; // Increased opacity for better visibility
         this.baseColor = color;
         this.color = color === '#ffffff' ? `hsl(${Math.random() * 60 + 180}, 70%, 60%)` : color;
