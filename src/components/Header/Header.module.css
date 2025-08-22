@@ -879,6 +879,7 @@
   .drawerUserSection,
   .drawerAuthSection {
     padding: 1rem;
+    margin-bottom: 12%;
   }
 
   .drawerUserInfo {
