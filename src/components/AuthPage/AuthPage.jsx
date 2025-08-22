@@ -7,6 +7,9 @@ import {
   CheckCircle,
   AlertCircle,
   Loader2,
+  ArrowRight,
+  Sparkles,
+  Shield,
 } from "lucide-react";
 import usePhantomWallet from "../../hooks/usePhantomWallet";
 import useAuth from "../../hooks/useAuth";
@@ -245,31 +248,66 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
       <div className={styles.authOverlay}>
         <div className={styles.authModal}>
           <div className={styles.authHeader}>
-            <h2>Welcome to GainVault</h2>
-            <button className={styles.closeButton} onClick={onClose}>×</button>
+            <div className={styles.headerContent}>
+              <div className={styles.logoSection}>
+                <div className={styles.logoIcon}>
+                  <Sparkles size={24} />
+                </div>
+                <h2>Welcome to GainVault</h2>
+              </div>
+              <button className={styles.closeButton} onClick={onClose}>
+                <span>×</span>
+              </button>
+            </div>
           </div>
           
           <div className={styles.authContent}>
             <div className={styles.choiceSection}>
-              <h3>Choose your option:</h3>
+              <div className={styles.welcomeText}>
+                <h3>Choose your journey</h3>
+                <p>Join thousands of traders unlocking their potential</p>
+              </div>
               
-              <button
-                className={styles.choiceButton}
-                onClick={() => setAuthMode("signup")}
-                style={{ backgroundColor: '#2DDA7D', color: 'white' }}
-              >
-                <User size={20} />
-                Create New Account
-              </button>
-              
-              <button
-                className={styles.choiceButton}
-                onClick={() => setAuthMode("signin")}
-                style={{ backgroundColor: '#4A90E2', color: 'white' }}
-              >
-                <Wallet size={20} />
-                Sign In with Wallet
-              </button>
+              <div className={styles.choiceButtons}>
+                <button
+                  className={styles.choiceButton}
+                  onClick={() => setAuthMode("signup")}
+                >
+                  <div className={styles.buttonIcon}>
+                    <User size={24} />
+                  </div>
+                  <div className={styles.buttonContent}>
+                    <h4>Create New Account</h4>
+                    <p>Start your trading journey today</p>
+                  </div>
+                  <ArrowRight size={20} className={styles.arrowIcon} />
+                </button>
+                
+                <button
+                  className={styles.choiceButton}
+                  onClick={() => setAuthMode("signin")}
+                >
+                  <div className={styles.buttonIcon}>
+                    <Wallet size={24} />
+                  </div>
+                  <div className={styles.buttonContent}>
+                    <h4>Sign In with Wallet</h4>
+                    <p>Welcome back to your account</p>
+                  </div>
+                  <ArrowRight size={20} className={styles.arrowIcon} />
+                </button>
+              </div>
+
+              <div className={styles.features}>
+                <div className={styles.feature}>
+                  <Shield size={16} />
+                  <span>Secure wallet authentication</span>
+                </div>
+                <div className={styles.feature}>
+                  <Sparkles size={16} />
+                  <span>Instant account access</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -283,36 +321,74 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
       <div className={styles.authOverlay}>
         <div className={styles.authModal}>
           <div className={styles.authHeader}>
-            <h2>
-              {authMode === "signup" ? "Create Account" : "Sign In"}
-            </h2>
-            <button className={styles.closeButton} onClick={onClose}>×</button>
-            <button className={styles.backButton} onClick={resetAuth}>← Back</button>
+            <div className={styles.headerContent}>
+              <div className={styles.logoSection}>
+                <div className={styles.logoIcon}>
+                  <Wallet size={24} />
+                </div>
+                <h2>
+                  {authMode === "signup" ? "Create Account" : "Sign In"}
+                </h2>
+              </div>
+              <div className={styles.headerActions}>
+                <button className={styles.backButton} onClick={resetAuth}>
+                  <span>←</span>
+                  <span>Back</span>
+                </button>
+                <button className={styles.closeButton} onClick={onClose}>
+                  <span>×</span>
+                </button>
+              </div>
+            </div>
           </div>
           
           <div className={styles.authContent}>
             <div className={styles.walletSection}>
-              <h3>Connect Your Phantom Wallet</h3>
+              <div className={styles.walletHeader}>
+                <h3>Connect Your Phantom Wallet</h3>
+                <p>Secure authentication with your Solana wallet</p>
+              </div>
+              
               {!isPhantomInstalled ? (
                 <div className={styles.walletPrompt}>
-                  <AlertCircle size={20} />
-                  <span>Phantom wallet not detected</span>
+                  <AlertCircle size={24} />
+                  <div className={styles.promptContent}>
+                    <h4>Phantom wallet not detected</h4>
+                    <p>Install Phantom to continue with secure authentication</p>
+                  </div>
                   <button
                     className={styles.installButton}
                     onClick={() => window.open("https://phantom.app/", "_blank")}
                   >
                     Install Phantom
+                    <ArrowRight size={16} />
                   </button>
                 </div>
               ) : (
-                <button
-                  className={styles.connectButton}
-                  onClick={connectWallet}
-                  disabled={connecting || isLoading}
-                >
-                  <Wallet size={16} />
-                  {connecting ? "Connecting..." : "Connect Phantom Wallet"}
-                </button>
+                <div className={styles.connectSection}>
+                  <div className={styles.walletInfo}>
+                    <Wallet size={32} />
+                    <h4>Ready to connect?</h4>
+                    <p>Click below to securely connect your Phantom wallet</p>
+                  </div>
+                  <button
+                    className={styles.connectButton}
+                    onClick={connectWallet}
+                    disabled={connecting || isLoading}
+                  >
+                    {connecting ? (
+                      <>
+                        <Loader2 size={20} className={styles.spinner} />
+                        Connecting...
+                      </>
+                    ) : (
+                      <>
+                        <Wallet size={20} />
+                        Connect Phantom Wallet
+                      </>
+                    )}
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -328,9 +404,21 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
         <div className={styles.authModal}>
           <div className={styles.authContent}>
             <div className={styles.successSection}>
-              <CheckCircle size={48} className={styles.successIcon} />
+              <div className={styles.successIcon}>
+                <CheckCircle size={48} />
+              </div>
               <h3>Success!</h3>
               <p>{success}</p>
+              <div className={styles.successFeatures}>
+                <div className={styles.feature}>
+                  <Shield size={16} />
+                  <span>Account secured</span>
+                </div>
+                <div className={styles.feature}>
+                  <Sparkles size={16} />
+                  <span>Ready to trade</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -344,9 +432,23 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
       <div className={styles.authOverlay}>
         <div className={styles.authModal}>
           <div className={styles.authHeader}>
-            <h2>Complete Your Profile</h2>
-            <button className={styles.closeButton} onClick={onClose}>×</button>
-            <button className={styles.backButton} onClick={resetAuth}>← Back</button>
+            <div className={styles.headerContent}>
+              <div className={styles.logoSection}>
+                <div className={styles.logoIcon}>
+                  <User size={24} />
+                </div>
+                <h2>Complete Your Profile</h2>
+              </div>
+              <div className={styles.headerActions}>
+                <button className={styles.backButton} onClick={resetAuth}>
+                  <span>←</span>
+                  <span>Back</span>
+                </button>
+                <button className={styles.closeButton} onClick={onClose}>
+                  <span>×</span>
+                </button>
+              </div>
+            </div>
           </div>
           
           <div className={styles.authContent}>
@@ -409,25 +511,17 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                 type="submit"
                 className={styles.submitButton}
                 disabled={isLoading}
-                style={{ 
-                  backgroundColor: '#2DDA7D', 
-                  color: 'white', 
-                  padding: '12px 24px',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: isLoading ? 'not-allowed' : 'pointer',
-                  opacity: isLoading ? 0.6 : 1
-                }}
               >
                 {isLoading ? (
                   <>
-                    <Loader2 size={16} className={styles.spinner} />
+                    <Loader2 size={18} className={styles.spinner} />
                     Creating Account...
                   </>
                 ) : (
-                  "Create Account"
+                  <>
+                    Create Account
+                    <ArrowRight size={18} />
+                  </>
                 )}
               </button>
             </form>
@@ -443,15 +537,31 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
       <div className={styles.authOverlay}>
         <div className={styles.authModal}>
           <div className={styles.authHeader}>
-            <h2>Sign In</h2>
-            <button className={styles.closeButton} onClick={onClose}>×</button>
-            <button className={styles.backButton} onClick={resetAuth}>← Back</button>
+            <div className={styles.headerContent}>
+              <div className={styles.logoSection}>
+                <div className={styles.logoIcon}>
+                  <Wallet size={24} />
+                </div>
+                <h2>Sign In</h2>
+              </div>
+              <div className={styles.headerActions}>
+                <button className={styles.backButton} onClick={resetAuth}>
+                  <span>←</span>
+                  <span>Back</span>
+                </button>
+                <button className={styles.closeButton} onClick={onClose}>
+                  <span>×</span>
+                </button>
+              </div>
+            </div>
           </div>
           
           <div className={styles.authContent}>
             <div className={styles.signinSection}>
-              <h3>Ready to sign in?</h3>
-              <p>Click the button below to sign in with your connected wallet.</p>
+              <div className={styles.signinHeader}>
+                <h3>Ready to sign in?</h3>
+                <p>Click the button below to securely sign in with your connected wallet.</p>
+              </div>
               
               {errorToShow && (
                 <div className={styles.errorMessage}>
@@ -464,28 +574,19 @@ const AuthPage = ({ onAuthSuccess, onClose }) => {
                 className={styles.submitButton}
                 onClick={handleSignin}
                 disabled={isLoading}
-                style={{ 
-                  backgroundColor: '#4A90E2', 
-                  color: 'white', 
-                  padding: '12px 24px',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: isLoading ? 'not-allowed' : 'pointer',
-                  opacity: isLoading ? 0.6 : 1
-                }}
               >
                 {isLoading ? (
                   <>
-                    <Loader2 size={16} className={styles.spinner} />
+                    <Loader2 size={18} className={styles.spinner} />
                     Signing In...
                   </>
                 ) : (
-                  "Sign In with Wallet"
+                  <>
+                    Sign In with Wallet
+                    <ArrowRight size={18} />
+                  </>
                 )}
               </button>
-            
             </div>
           </div>
         </div>
