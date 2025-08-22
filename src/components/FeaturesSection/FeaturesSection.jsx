@@ -40,10 +40,8 @@ const FeaturesSection = () => {
     navigate('/trading-challenge');
   };
 
-  // Auto-scroll functionality - disabled on mobile for better performance
+  // Auto-scroll functionality - enabled on all devices
   useEffect(() => {
-    if (isMobile) return; // Disable auto-scroll on mobile
-    
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
 
@@ -62,7 +60,9 @@ const FeaturesSection = () => {
         scrollDirection = 1; // Change direction to right
       }
 
-      currentScrollLeft += scrollDirection * 2; // Scroll speed
+      // Adjust scroll speed based on device type
+      const scrollSpeed = isMobile ? 1 : 2;
+      currentScrollLeft += scrollDirection * scrollSpeed;
       scrollContainer.scrollLeft = currentScrollLeft;
 
       animationId = requestAnimationFrame(autoScroll);
@@ -83,8 +83,6 @@ const FeaturesSection = () => {
 
   // Pause auto-scroll on user interaction
   const handleScrollInteraction = useCallback(() => {
-    if (isMobile) return;
-    
     setIsPaused(true);
     setIsAutoScrolling(false);
     
@@ -95,7 +93,7 @@ const FeaturesSection = () => {
     }, 3000);
     
     return () => clearTimeout(resumeTimer);
-  }, [isMobile]);
+  }, []);
 
   const features = [
     {
@@ -141,9 +139,9 @@ const FeaturesSection = () => {
         <div 
           className={`${styles.featuresGrid} ${isPaused ? styles.paused : ''}`}
           ref={scrollContainerRef}
-          onTouchStart={!isMobile ? handleScrollInteraction : undefined}
-          onMouseDown={!isMobile ? handleScrollInteraction : undefined}
-          onWheel={!isMobile ? handleScrollInteraction : undefined}
+          onTouchStart={handleScrollInteraction}
+          onMouseDown={handleScrollInteraction}
+          onWheel={handleScrollInteraction}
         >
           {features.map((feature, index) => (
             <AnimatedSection key={index} delay={isMobile ? 0 : index * 100}>

@@ -179,6 +179,7 @@
     opacity: 0.6;
     animation: autoScrollIndicator 4s ease-in-out infinite;
     transition: opacity 0.3s ease;
+    display: block;
   }
 
   /* Pause state - reduce opacity */
@@ -191,6 +192,16 @@
     0% { transform: translateX(-100%); }
     50% { transform: translateX(0%); }
     100% { transform: translateX(100%); }
+  }
+
+  /* Mobile-specific auto-scroll animation */
+  @media (max-width: 768px) {
+    .featuresGrid::before {
+      height: 4px;
+      top: -6px;
+      animation: autoScrollIndicator 6s ease-in-out infinite;
+      background: linear-gradient(90deg, var(--accent-green), #4A90E2, transparent);
+    }
   }
 
   .featuresGrid::-webkit-scrollbar {
