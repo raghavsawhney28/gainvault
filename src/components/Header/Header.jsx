@@ -12,6 +12,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [userInitial, setUserInitial] = useState('');
   const [opened, { open, close }] = useDisclosure(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const accountDropdownRef = useRef(null);
@@ -21,8 +22,20 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
       setIsScrolled(window.scrollY > 10);
     };
 
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    
+    // Set initial mobile state
+    handleResize();
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   // Handle dropdown clicks outside
@@ -200,7 +213,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
         opened={opened}
         onClose={close}
         position="left"
-        size="sm"
+        size={isMobile ? '100%' : 'sm'}
         overlayProps={{ opacity: 0.5, blur: 4 }}
         withCloseButton={false}
         zIndex={1001}
