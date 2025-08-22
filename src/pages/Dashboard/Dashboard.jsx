@@ -58,140 +58,18 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import { LineChart, areaElementClasses } from '@mui/x-charts/LineChart';
-import { useYScale, useDrawingArea } from '@mui/x-charts/hooks';
+import ReactApexChart from 'react-apexcharts';
 import AnimatedSection from '../../components/AnimatedSection/AnimatedSection';
 import styles from './Dashboard.module.css';
-
-// Dynamic ColorPalette component that only shows red where equity actually goes below threshold
-const ColorPalette = ({ id, equityData, threshold }) => {
-  const { top, height, bottom } = useDrawingArea();
-  const svgHeight = top + bottom + height;
-  const scale = useYScale();
-
-  // Find the minimum equity value to determine the actual range
-  const minEquity = Math.min(...equityData);
-  const maxEquity = Math.max(...equityData);
-  
-  // Only show red if we actually go below the threshold
-  const showRedZone = minEquity < threshold;
-  
-  // Calculate the actual red zone range (only if needed)
-  const redZoneStart = showRedZone ? Math.max(minEquity, threshold - 1000) : threshold;
-  const redZoneEnd = showRedZone ? minEquity : threshold;
-
-  return (
-    <defs>
-      <linearGradient
-        id={id}
-        x1="0"
-        x2="0"
-        y1="0"
-        y2={`${svgHeight}px`}
-        gradientUnits="userSpaceOnUse"
-      >
-        {/* Green zone above threshold */}
-        <stop
-          offset={scale(maxEquity) / svgHeight}
-          stopColor="#11B678"
-          stopOpacity={1}
-        />
-        <stop
-          offset={scale(threshold + 1000) / svgHeight}
-          stopColor="#11B678"
-          stopOpacity={1}
-        />
-        <stop
-          offset={scale(threshold + 1000) / svgHeight}
-          stopColor="#10A367"
-          stopOpacity={1}
-        />
-        <stop
-          offset={scale(threshold + 500) / svgHeight}
-          stopColor="#10A367"
-          stopOpacity={1}
-        />
-        <stop
-          offset={scale(threshold + 500) / svgHeight}
-          stopColor="#0F9256"
-          stopOpacity={1}
-        />
-        <stop
-          offset={scale(threshold + 100) / svgHeight}
-          stopColor="#0F9256"
-          stopOpacity={1}
-        />
-        <stop
-          offset={scale(threshold + 100) / svgHeight}
-          stopColor="#0E8145"
-          stopOpacity={1}
-        />
-        <stop
-          offset={scale(threshold) / svgHeight}
-          stopColor="#0E8145"
-          stopOpacity={1}
-        />
-        
-        {/* Transition zone at threshold */}
-        <stop
-          offset={scale(threshold) / svgHeight}
-          stopColor="#FFD700"
-          stopOpacity={0.8}
-        />
-        
-        {/* Red zone - only if we actually go below threshold */}
-        {showRedZone ? (
-          <>
-            <stop
-              offset={scale(threshold) / svgHeight}
-              stopColor="#FF3143"
-              stopOpacity={1}
-            />
-            <stop
-              offset={scale(redZoneStart) / svgHeight}
-              stopColor="#FF3143"
-              stopOpacity={1}
-            />
-            <stop
-              offset={scale(redZoneStart) / svgHeight}
-              stopColor="#E62A3A"
-              stopOpacity={1}
-            />
-            <stop
-              offset={scale(redZoneEnd) / svgHeight}
-              stopColor="#E62A3A"
-              stopOpacity={1}
-            />
-            <stop
-              offset={scale(redZoneEnd) / svgHeight}
-              stopColor="#CC2131"
-              stopOpacity={1}
-            />
-            <stop
-              offset={scale(redZoneEnd) / svgHeight}
-              stopColor="transparent"
-              stopOpacity={0}
-            />
-          </>
-        ) : (
-          /* If no red zone needed, make everything below threshold transparent */
-          <stop
-            offset={scale(threshold) / svgHeight}
-            stopColor="transparent"
-            stopOpacity={0}
-          />
-        )}
-        
-        {/* Fill remaining area with transparent color */}
-        <stop
-          offset="1"
-          stopColor="transparent"
-          stopOpacity={0}
-        />
-      </linearGradient>
-    </defs>
-  );
-};
+import {
+  DashboardHeader,
+  NewsLockoutBanner,
+  ProgressCards,
+  EquityCurveChart,
+  CompliancePanel,
+  TradeHistory
+} from './components';
+import { formatCurrency, formatPercentage, formatTimeAgo } from './utils/formatters';
 
 const Dashboard = () => {
   const { username } = useParams();
@@ -389,38 +267,9 @@ const Dashboard = () => {
     return styles.severityDanger;
   };
 
-  const formatCurrency = (amount, currency = 'USD') => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
 
-  const formatPercentage = (value) => {
-    return `${value.toFixed(2)}%`;
-  };
 
-  const formatTimeAgo = (timestamp) => {
-    const now = new Date();
-    const time = new Date(timestamp);
-    const diffMs = now - time;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return `${diffDays}d ago`;
-  };
-
-  const getComplianceIcon = (compliant, warning = false) => {
-    if (compliant && !warning) return <CheckCircle size={20} className={styles.complianceSuccess} />;
-    if (warning) return <AlertTriangle size={20} className={styles.complianceWarning} />;
-    return <XCircle size={20} className={styles.complianceDanger} />;
-  };
 
   if (loading && !dashboardData) {
     return (
@@ -460,212 +309,27 @@ const Dashboard = () => {
 
   const { accountSummary, dayMetrics, challengeProgress, complianceFlags, equityCurve, tradeHistory, newsLockouts } = dashboardData;
 
+  // Calculate equity range for chart
+  const minEquity = Math.min(...equityCurve.map(item => item.equity));
+  const maxEquity = Math.max(...equityCurve.map(item => item.equity));
+
   return (
     <div className={styles.dashboardPage}>
       <div className={styles.container}>
-        {/* Header Bar */}
-        <Card sx={{ mb: 4 }}>
-          <CardContent>
-            <Grid container spacing={3}>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <Box>
-                  <Typography variant="body2" color="text.secondary">Plan</Typography>
-                  <Typography variant="h4" component="h1">{accountSummary.plan.name}</Typography>
-                  <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-                    {formatCurrency(accountSummary.plan.size, accountSummary.plan.currency)}
-                  </Typography>
-                  <Chip 
-                    label={accountSummary.phase.name} 
-                    color="primary" 
-                    variant="outlined"
-                    sx={{ mt: 1 }}
-                  />
-                </Box>
-              </Grid>
+        <DashboardHeader 
+          accountSummary={accountSummary}
+          lastUpdated={lastUpdated}
+          onRefresh={handleManualRefresh}
+          getStatusIcon={getStatusIcon}
+        />
 
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <Box display="flex" flexDirection="column" alignItems="center">
-                  <Typography variant="body2" color="text.secondary">Status</Typography>
-                  <Chip 
-                    icon={getStatusIcon(accountSummary.status)}
-                    label={accountSummary.status.charAt(0).toUpperCase() + accountSummary.status.slice(1)}
-                    color={
-                      accountSummary.status === 'active' ? 'success' :
-                      accountSummary.status === 'on-hold' ? 'warning' :
-                      accountSummary.status === 'passed' ? 'success' : 'error'
-                    }
-                    sx={{ mt: 1 }}
-                  />
-                  {lastUpdated && (
-                    <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
-                      Last updated: {formatTimeAgo(lastUpdated)}
-                    </Typography>
-                  )}
-                </Box>
-              </Grid>
+        <NewsLockoutBanner nextLockout={newsLockouts.nextLockout} />
 
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <Box display="flex" flexDirection="column" alignItems="flex-end">
-                  <Typography variant="body2" color="text.secondary">Actions</Typography>
-                  <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
-                    <Button 
-                      variant="contained" 
-                      onClick={handleManualRefresh}
-                      startIcon={<RefreshCw size={16} />}
-                    >
-                      Refresh
-                    </Button>
-                    <Button 
-                      variant="outlined" 
-                      href="/rules"
-                      startIcon={<FileText size={16} />}
-                      endIcon={<ExternalLink size={14} />}
-                    >
-                      Rules
-                    </Button>
-                  </Box>
-                </Box>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-
-        {/* News Lockout Banner */}
-        {newsLockouts.nextLockout && (
-          <Card sx={{ mb: 4, bgcolor: 'warning.50', border: '1px solid', borderColor: 'warning.200' }}>
-            <CardContent>
-              <Box display="flex" alignItems="center" gap={2}>
-                <Calendar size={24} color="warning" />
-                <Box flex={1}>
-                  <Typography variant="h6" color="warning.dark">Upcoming Trading Lockout</Typography>
-                  <Typography variant="body1" color="warning.main">
-                    {newsLockouts.nextLockout.eventName} - {newsLockouts.nextLockout.impact} impact
-                  </Typography>
-                  <Typography variant="body2" color="warning.dark" sx={{ mt: 1 }}>
-                    Lockout: {new Date(newsLockouts.nextLockout.windowStart).toLocaleString()} - {new Date(newsLockouts.nextLockout.windowEnd).toLocaleString()}
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Progress & Risk Cards */}
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-            <AnimatedSection delay={100}>
-              <Card>
-                <CardContent>
-                  <Box display="flex" alignItems="flex-start" justifyContent="space-between">
-                    <Box>
-                      <Typography variant="body2" color="text.secondary">Profit Target</Typography>
-                      <Typography variant="h4" component="div">
-                        {formatPercentage(challengeProgress.phaseProfitPercent)}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        of {formatPercentage(accountSummary.profitTargetPercent)} target
-                      </Typography>
-                    </Box>
-                    <Target size={20} color="primary" />
-                  </Box>
-                  <Box sx={{ mt: 2 }}>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={Math.min(100, challengeProgress.phaseProfitPercent)}
-                      sx={{ height: 8, borderRadius: 4 }}
-                    />
-                  </Box>
-                </CardContent>
-              </Card>
-            </AnimatedSection>
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-            <AnimatedSection delay={200}>
-              <Card>
-                <CardContent>
-                  <Box display="flex" alignItems="flex-start" justifyContent="space-between">
-                    <Box>
-                      <Typography variant="body2" color="text.secondary">Daily Loss</Typography>
-                      <Typography variant="h4" component="div" color="error.main">
-                        {formatPercentage(dayMetrics.dailyLossPercent)}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        of {formatPercentage(accountSummary.maxDailyLossPercent)} limit
-                      </Typography>
-                    </Box>
-                    <TrendingDown size={20} color="error" />
-                  </Box>
-                  <Box sx={{ mt: 2 }}>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={Math.min(100, (dayMetrics.dailyLossPercent / accountSummary.maxDailyLossPercent) * 100)}
-                      color={dayMetrics.dailyLossPercent > accountSummary.maxDailyLossPercent * 0.8 ? "error" : "warning"}
-                      sx={{ height: 8, borderRadius: 4 }}
-                    />
-                  </Box>
-                </CardContent>
-              </Card>
-            </AnimatedSection>
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-            <AnimatedSection delay={300}>
-              <Card>
-                <CardContent>
-                  <Box display="flex" alignItems="flex-start" justifyContent="space-between">
-                    <Box>
-                      <Typography variant="body2" color="text.secondary">Overall Drawdown</Typography>
-                      <Typography variant="h4" component="div">
-                        {formatPercentage(((accountSummary.peakEquity - accountSummary.currentEquity) / accountSummary.startBalance) * 100)}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        from peak equity
-                      </Typography>
-                    </Box>
-                    <BarChart3 size={20} color="primary" />
-                  </Box>
-                  <Box sx={{ mt: 2 }}>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={Math.min(100, ((accountSummary.peakEquity - accountSummary.currentEquity) / accountSummary.startBalance) * 100)}
-                      sx={{ height: 8, borderRadius: 4 }}
-                    />
-                  </Box>
-                </CardContent>
-              </Card>
-            </AnimatedSection>
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
-            <AnimatedSection delay={400}>
-              <Card>
-                <CardContent>
-                  <Box display="flex" alignItems="flex-start" justifyContent="space-between">
-                    <Box>
-                      <Typography variant="body2" color="text.secondary">Consistency</Typography>
-                      <Typography variant="h4" component="div" color="success.main">
-                        {formatPercentage(challengeProgress.consistency.profitableDaysPercent)}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {challengeProgress.consistency.profitableDays} of {challengeProgress.consistency.daysTraded} days
-                      </Typography>
-                    </Box>
-                    <TrendingUp size={20} color="success" />
-                  </Box>
-                  <Box sx={{ mt: 2 }}>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={challengeProgress.consistency.profitableDaysPercent}
-                      color={challengeProgress.consistency.profitableDaysPercent >= 70 ? "success" : "warning"}
-                      sx={{ height: 8, borderRadius: 4 }}
-                    />
-                  </Box>
-                </CardContent>
-              </Card>
-            </AnimatedSection>
-          </Grid>
-        </Grid>
+        <ProgressCards 
+          accountSummary={accountSummary}
+          dayMetrics={dayMetrics}
+          challengeProgress={challengeProgress}
+        />
 
         {/* Compliance Overview Chart */}
         <Card sx={{ mb: 4 }}>
@@ -711,215 +375,21 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Equity Curve Panel */}
-        <Card sx={{ mb: 4 }}>
-          <CardContent>
-            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-              <Box>
-                <Typography variant="h5" component="h2">Equity Curve</Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                  Funded Account: {formatCurrency(accountSummary.startBalance, accountSummary.plan.currency)} | 
-                  Current Equity: {formatCurrency(accountSummary.currentEquity, accountSummary.plan.currency)} | 
-                  P&L: {formatCurrency(accountSummary.currentEquity - accountSummary.startBalance, accountSummary.plan.currency)} 
-                  ({formatPercentage(((accountSummary.currentEquity - accountSummary.startBalance) / accountSummary.startBalance) * 100)})
-                </Typography>
-              </Box>
-              <Box display="flex" gap={1}>
-                {['1D', '1W', '1M', 'All'].map(timeframe => (
-                  <Button
-                    key={timeframe}
-                    variant={selectedTimeframe === timeframe ? "contained" : "outlined"}
-                    size="small"
-                    onClick={() => setSelectedTimeframe(timeframe)}
-                  >
-                    {timeframe}
-                  </Button>
-                ))}
-              </Box>
-            </Box>
-            
-            {equityCurve.length > 0 ? (
-              <Box sx={{ height: 360, width: '100%' }}>
-                <LineChart
-                  xAxis={[{ 
-                    data: equityCurve.map(item => new Date(item.time).toLocaleDateString()), 
-                    scaleType: 'point' 
-                  }]}
-                  yAxis={[{ 
-                    min: 24500, // Start from below the lowest equity value
-                    max: 25500, // Show up to the highest equity value
-                    width: 80, // Increased width to prevent label truncation
-                    valueFormatter: (value) => formatCurrency(value)
-                  }]}
-                  series={[{ 
-                    data: equityCurve.map(item => item.equity), 
-                    showMark: true, 
-                    area: true 
-                  }]}
-                  height={320}
-                  margin={{ right: 24, bottom: 20, top: 20 }} // Increased margins for better label visibility
-                  sx={{
-                    [`& .${areaElementClasses.root}`]: {
-                      fill: 'url(#switch-color-id-1)',
-                      filter: 'none',
-                    },
-                    [`& .${areaElementClasses.mark}`]: {
-                      fill: 'none', // Hide marks
-                    },
-                    [`& .${areaElementClasses.line}`]: {
-                      stroke: 'blue', // Set line color to blue
-                    },
-                  }}
-                >
-                  <ColorPalette 
-                    id="switch-color-id-1" 
-                    equityData={equityCurve.map(item => item.equity)}
-                    threshold={25000}
-                  />
-                  <rect x={0} y={0} width={5} height="100%" fill="url(#switch-color-id-1)" /> {/* Vertical color bar */}
-                  
-                                     {/* Value labels above each data point */}
-                   {equityCurve.map((item, index) => {
-                     const x = (index / (equityCurve.length - 1)) * 100; // Calculate x position as percentage
-                     const y = ((25500 - item.equity) / 1000) * 100; // Calculate y position as percentage (inverted for SVG, range 24500 to 25500 = 1000)
-                     return (
-                       <text
-                         key={index}
-                         x={`${x}%`}
-                         y={`${Math.max(y - 8, 15)}%`}
-                         textAnchor="middle"
-                         fontSize="11"
-                         fill="#333"
-                         fontWeight="bold"
-                         dominantBaseline="middle"
-                       >
-                         {formatCurrency(item.equity)}
-                       </text>
-                     );
-                   })}
-                </LineChart>
-              </Box>
-            ) : (
-              <Box 
-                display="flex" 
-                flexDirection="column" 
-                alignItems="center" 
-                justifyContent="center" 
-                sx={{ height: 320, color: 'text.secondary' }}
-              >
-                <BarChart3 size={48} sx={{ mb: 2, opacity: 0.5 }} />
-                <Typography>Make your first trade to see the equity curve</Typography>
-              </Box>
-            )}
-          </CardContent>
-        </Card>
+        <EquityCurveChart 
+          equityCurve={equityCurve}
+          accountSummary={accountSummary}
+          selectedTimeframe={selectedTimeframe}
+          onTimeframeChange={setSelectedTimeframe}
+          minEquity={minEquity}
+        />
 
-        {/* Compliance & Alerts Panel */}
-        <div className={styles.compliancePanel}>
-          <AnimatedSection className={styles.liveCompliance}>
-            <h2>Live Compliance</h2>
-            <div className={styles.complianceGrid}>
-              <div className={styles.complianceItem}>
-                <div className={styles.complianceHeader}>
-                  {getComplianceIcon(complianceFlags.stopLossPlacedWithin10s.compliant)}
-                  <span>Stop Loss ≤ 10s</span>
-                </div>
-                <div className={styles.complianceValue}>
-                  {formatPercentage(complianceFlags.stopLossPlacedWithin10s.ratio * 100)}
-                </div>
-              </div>
-
-              <div className={styles.complianceItem}>
-                <div className={styles.complianceHeader}>
-                  {getComplianceIcon(!complianceFlags.openPositionsLimitExceeded)}
-                  <span>Open Positions ≤ 1</span>
-                </div>
-                <div className={styles.complianceValue}>
-                  {accountSummary.openPositionsCount}/1
-                </div>
-              </div>
-
-              <div className={styles.complianceItem}>
-                <div className={styles.complianceHeader}>
-                  {getComplianceIcon(!complianceFlags.correlationExceeded)}
-                  <span>Correlation ≤ 25%</span>
-                </div>
-                <div className={styles.complianceValue}>
-                  {formatPercentage(accountSummary.correlatedExposurePercent)}
-                </div>
-              </div>
-
-              <div className={styles.complianceItem}>
-                <div className={styles.complianceHeader}>
-                  {getComplianceIcon(!complianceFlags.scalpingUnder10mDetected.detected)}
-                  <span>No Scalping &lt; 10m</span>
-                </div>
-                <div className={styles.complianceValue}>
-                  {complianceFlags.scalpingUnder10mDetected.count} violations
-                </div>
-              </div>
-
-              <div className={styles.complianceItem}>
-                <div className={styles.complianceHeader}>
-                  {getComplianceIcon(!complianceFlags.intradayFrequencyExceeded)}
-                  <span>&le; 4 trades / 5 days</span>
-                </div>
-                <div className={styles.complianceValue}>
-                  {tradeHistory.filter(t => {
-                    const tradeDate = new Date(t.closeTime);
-                    const fiveDaysAgo = new Date();
-                    fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
-                    return tradeDate >= fiveDaysAgo;
-                  }).length}/4
-                </div>
-              </div>
-
-              <div className={styles.complianceItem}>
-                <div className={styles.complianceHeader}>
-                  {getComplianceIcon(!complianceFlags.inactivityRisk.breached, complianceFlags.inactivityRisk.warning)}
-                  <span>48h Activity Rule</span>
-                </div>
-                <div className={styles.complianceValue}>
-                  {complianceFlags.inactivityRisk.hoursSinceLastTrade}h ago
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <AnimatedSection className={styles.breachTimeline}>
-            <h2>Breach Timeline</h2>
-            <div className={styles.breachList}>
-              {complianceFlags.dailyBreached && (
-                <div className={styles.breachItem}>
-                  <div className={styles.breachIcon}>
-                    <XCircle size={16} />
-                  </div>
-                  <div className={styles.breachContent}>
-                    <span className={styles.breachRule}>Daily Loss Limit</span>
-                    <span className={styles.breachTime}>{formatTimeAgo(lastUpdated)}</span>
-                  </div>
-                </div>
-              )}
-              {complianceFlags.scalpingUnder10mDetected.count > 0 && (
-                <div className={styles.breachItem}>
-                  <div className={styles.breachIcon}>
-                    <AlertTriangle size={16} />
-                  </div>
-                  <div className={styles.breachContent}>
-                    <span className={styles.breachRule}>Scalping Detected</span>
-                    <span className={styles.breachTime}>{complianceFlags.scalpingUnder10mDetected.count} violations</span>
-                  </div>
-                </div>
-              )}
-              {!complianceFlags.dailyBreached && complianceFlags.scalpingUnder10mDetected.count === 0 && (
-                <div className={styles.noBreaches}>
-                  <CheckCircle size={20} />
-                  <span>No recent breaches</span>
-                </div>
-              )}
-            </div>
-          </AnimatedSection>
-        </div>
+        <CompliancePanel 
+          complianceFlags={complianceFlags}
+          tradeHistory={tradeHistory}
+          lastUpdated={lastUpdated}
+          accountSummary={accountSummary}
+          dayMetrics={dayMetrics}
+        />
 
                 {/* Phase Checklist */}
         <Card sx={{ mb: 4 }}>
@@ -1025,121 +495,12 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Trade Table & Filters */}
-        <Card sx={{ mb: 4 }}>
-          <CardContent>
-            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-              <Typography variant="h5" component="h2">Trade History</Typography>
-              <Box display="flex" gap={2} flexWrap="wrap">
-                <FormControl size="small" sx={{ minWidth: 120 }}>
-                  <InputLabel>Date Range</InputLabel>
-                  <Select
-                    value={tradeFilters.dateRange}
-                    label="Date Range"
-                    onChange={(e) => setTradeFilters(prev => ({ ...prev, dateRange: e.target.value }))}
-                  >
-                    <MenuItem value="7d">Last 7 days</MenuItem>
-                    <MenuItem value="30d">Last 30 days</MenuItem>
-                    <MenuItem value="90d">Last 90 days</MenuItem>
-                    <MenuItem value="all">All time</MenuItem>
-                  </Select>
-                </FormControl>
-                <TextField
-                  size="small"
-                  placeholder="Symbol filter"
-                  value={tradeFilters.symbol}
-                  onChange={(e) => setTradeFilters(prev => ({ ...prev, symbol: e.target.value }))}
-                  sx={{ minWidth: 120 }}
-                />
-                <FormControl size="small" sx={{ minWidth: 120 }}>
-                  <InputLabel>Result</InputLabel>
-                  <Select
-                    value={tradeFilters.result}
-                    label="Result"
-                    onChange={(e) => setTradeFilters(prev => ({ ...prev, result: e.target.value }))}
-                  >
-                    <MenuItem value="all">All results</MenuItem>
-                    <MenuItem value="win">Wins only</MenuItem>
-                    <MenuItem value="loss">Losses only</MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={tradeFilters.flaggedOnly}
-                      onChange={(e) => setTradeFilters(prev => ({ ...prev, flaggedOnly: e.target.checked }))}
-                    />
-                  }
-                  label="Flagged only"
-                />
-              </Box>
-            </Box>
-
-                      <div className={styles.tradeTable}>
-              {tradeHistory.length > 0 ? (
-                <TableContainer component={Paper} variant="outlined">
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Symbol</TableCell>
-                        <TableCell>Side</TableCell>
-                        <TableCell>Lot</TableCell>
-                        <TableCell>P/L</TableCell>
-                        <TableCell>Open Time</TableCell>
-                        <TableCell>Close Time</TableCell>
-                        <TableCell>Duration</TableCell>
-                        <TableCell>Flags</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {tradeHistory.map(trade => (
-                        <TableRow key={trade.id}>
-                          <TableCell>{trade.symbol}</TableCell>
-                          <TableCell>
-                            <Chip 
-                              label={trade.side.toUpperCase()} 
-                              color={trade.side === 'buy' ? 'success' : 'error'}
-                              size="small"
-                            />
-                          </TableCell>
-                          <TableCell>{trade.lot}</TableCell>
-                          <TableCell>
-                            <Typography 
-                              color={trade.plAmount >= 0 ? 'success.main' : 'error.main'}
-                              fontWeight="bold"
-                            >
-                              {formatCurrency(trade.plAmount)} ({formatPercentage(trade.plPercent)})
-                            </Typography>
-                          </TableCell>
-                          <TableCell>{new Date(trade.openTime).toLocaleString()}</TableCell>
-                          <TableCell>{new Date(trade.closeTime).toLocaleString()}</TableCell>
-                          <TableCell>{Math.floor(trade.durationSec / 60)}m</TableCell>
-                          <TableCell>
-                            {trade.slPlacedAtSec > 10 && <Chip label="SL > 10s" color="error" size="small" sx={{ mr: 0.5 }} />}
-                            {trade.durationSec < 600 && <Chip label="Scalping" color="warning" size="small" />}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              ) : (
-                <Box 
-                  display="flex" 
-                  flexDirection="column" 
-                  alignItems="center" 
-                  justifyContent="center" 
-                  sx={{ py: 6, color: 'text.secondary' }}
-                >
-                  <FileText size={48} sx={{ mb: 2, opacity: 0.5 }} />
-                  <Typography>
-                    No trades yet. First trade due in {48 - complianceFlags.inactivityRisk.hoursSinceLastTrade}h to satisfy 48h rule.
-                  </Typography>
-                </Box>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <TradeHistory 
+          tradeHistory={tradeHistory}
+          tradeFilters={tradeFilters}
+          onTradeFiltersChange={setTradeFilters}
+          complianceFlags={complianceFlags}
+        />
 
         {/* Footer Notes */}
         <Card>
