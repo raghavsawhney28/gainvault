@@ -417,14 +417,17 @@
   min-width: 80px;
   border-radius: calc(var(--spacing-unit) * 1.5);
   white-space: nowrap;
-  background: var(--accent-green);
-  color: rgb(6, 6, 6);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
 }
 
 .authButton:hover {
-  background: #16a34a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
 .authButton svg {
