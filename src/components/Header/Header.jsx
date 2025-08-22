@@ -221,7 +221,8 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
           body: { padding: 0, height: '100%' },
           inner: { padding: 0, height: '100%' },
           root: { height: '100%' },
-          content: { height: '100%' }
+          content: { height: '100%' },
+          overlay: { height: '100%' }
         }}
         classNames={{
           body: styles.drawerBody,
