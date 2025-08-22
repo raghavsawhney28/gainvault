@@ -213,7 +213,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
         opened={opened}
         onClose={close}
         position="left"
-        size={isMobile ? '100%' : 'sm'}
+        size={isMobile ? 280 : 'sm'}
         overlayProps={{ opacity: 0.5, blur: 4 }}
         withCloseButton={false}
         zIndex={1001}
