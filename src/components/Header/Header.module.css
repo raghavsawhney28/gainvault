@@ -925,7 +925,7 @@
   /* Extra Small Mobile Login Button */
   .authButton {
     font-size: 0.7rem;
-    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 1.75);
+    padding: calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.75);
     min-height: 32px;
     min-width: 40px;
     border-radius: calc(var(--spacing-unit) * 1);
