@@ -267,8 +267,8 @@
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
-  min-height: 44px;
-  min-width: 44px;
+  min-height: 38px;
+  min-width: 38px;
 }
 
 .hamburgerButton:hover {
