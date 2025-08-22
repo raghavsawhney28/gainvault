@@ -4,6 +4,7 @@ import { useSpring, animated, config } from '@react-spring/web';
 import { Play } from 'lucide-react';
 import styles from './HeroSection.module.css';
 import Particles from '../magicui/particles';
+import Ripple from '../magicui/ripple';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -54,8 +55,16 @@ const HeroSection = () => {
 
   return (
     <section className={styles.hero}>
-      {/* Particles Background */}
-      <div className={styles.particlesContainer}>
+      {/* Background Effects */}
+      <div className={styles.backgroundEffects}>
+        {/* Ripple Background */}
+        <Ripple 
+          mainCircleSize={300}
+          mainCircleOpacity={0.15}
+          numCircles={6}
+        />
+        
+        {/* Particles Background */}
         <Particles 
           quantity={300}
           staticity={30}
