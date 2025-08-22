@@ -1,7 +1,10 @@
 /* Footer Styles */
 .footer {
-  
+  background: rgba(0, 0, 0, 0.6);
   padding: calc(var(--spacing-unit) * 8) 0 0 0;
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(15px);
 }
 
 .container {
@@ -20,8 +23,9 @@
 .footerBrand p {
   margin-bottom: calc(var(--spacing-unit) * 3);
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: #e5e7eb;
   line-height: 1.6;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .logo {
@@ -30,9 +34,10 @@
   gap: calc(var(--spacing-unit) * 2);
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #ffffff;
   text-decoration: none;
   margin-bottom: calc(var(--spacing-unit) * 3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .logoIcon {
@@ -75,11 +80,12 @@
 }
 
 .contactDetails h4 {
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: calc(var(--spacing-unit) * 2);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .contactItem {
@@ -95,10 +101,11 @@
 }
 
 .contactItem a {
-  color: var(--text-secondary);
+  color: #e5e7eb;
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.3s ease;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .contactItem a:hover {
@@ -107,16 +114,17 @@
 
 .footerLinks {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: calc(var(--spacing-unit) * 4);
 }
 
 .linkColumn h4 {
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: calc(var(--spacing-unit) * 2);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .linkColumn ul {
@@ -128,29 +136,32 @@
 }
 
 .linkColumn a {
-  color: var(--text-secondary);
+  color: #e5e7eb;
   text-decoration: none;
   font-size: 0.875rem;
   transition: color 0.3s ease;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .linkColumn a:hover {
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .newsletter h4 {
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: calc(var(--spacing-unit) * 2);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .newsletter p {
   font-size: 0.875rem;
   margin-bottom: calc(var(--spacing-unit) * 3);
-  color: var(--text-secondary);
+  color: #e5e7eb;
   line-height: 1.6;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .newsletterForm {
@@ -161,15 +172,16 @@
 .newsletterForm input {
   flex: 1;
   padding: calc(var(--spacing-unit) * 2);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: calc(var(--spacing-unit) * 1);
-  background-color: var(--card-bg);
-  color: var(--text-primary);
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
   font-size: 0.875rem;
+  backdrop-filter: blur(10px);
 }
 
 .newsletterForm input::placeholder {
-  color: var(--text-secondary);
+  color: #9ca3af;
 }
 
 .btnPrimary {
@@ -190,7 +202,7 @@
 }
 
 .footerBottom {
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
   padding: calc(var(--spacing-unit) * 3) 0;
 }
 
@@ -199,7 +211,8 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: #e5e7eb;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* Mobile Styles */

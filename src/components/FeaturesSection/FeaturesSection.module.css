@@ -19,14 +19,17 @@
   margin-bottom: calc(var(--spacing-unit) * 2);
   font-weight: 700;
   line-height: 1.2;
+  color: #ffffff;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
 }
 
 .featuresHeader p {
   font-size: 1.25rem;
   max-width: 600px;
   margin: 0 auto;
-  color: var(--text-secondary);
+  color: #e5e7eb;
   line-height: 1.6;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .featuresGrid {
@@ -38,10 +41,10 @@
 }
 
 .featureCard {
-  background-color: var(--card-bg);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: calc(var(--spacing-unit) * 4);
   border-radius: calc(var(--spacing-unit) * 2);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   /* Ensure consistent card dimensions */
   min-height: 280px;
@@ -49,11 +52,14 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  backdrop-filter: blur(10px);
 }
 
 .featureCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .featureIcon {
@@ -62,18 +68,20 @@
 }
 
 .featureCard h3 {
-  color: var(--text-primary);
+  color: #ffffff;
   margin-bottom: calc(var(--spacing-unit) * 2);
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .featureCard p {
-  color: var(--text-secondary);
+  color: #e5e7eb;
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .featuresCta {
@@ -91,14 +99,18 @@
   display: inline-flex;
   align-items: center;
   gap: calc(var(--spacing-unit) * 1);
-  background-color: transparent;
-  color: var(--accent-green);
-  border: 1px solid var(--accent-green);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .btnOutline:hover {
-  background-color: var(--accent-green);
-  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
 /* Mobile Styles */

@@ -53,14 +53,15 @@ const HeroSection = () => {
 
   return (
     <section className={styles.hero}>
-      {/* Phoenix Background Image */}
-      {/* <div className={styles.phoenixBackground}>
-        <img 
-          src="/phoenix.png" 
-          alt="Phoenix - Symbol of Power and Renewal" 
-          className={styles.phoenixImage}
-        />
-      </div> */}
+      {/* Skybox Background */}
+      <div className={styles.skyboxBackground}>
+        <iframe 
+          src="https://skybox.blockadelabs.com/e/235625af3f610e37821acb891b6e1e43?nogesturezoom=true" 
+          frameBorder="0" 
+          allow="fullscreen"
+          className={styles.skyboxIframe}
+        ></iframe>
+      </div>
       
       <div className={styles.container}>
         <animated.div style={heroAnimation} className={styles.heroContent}>

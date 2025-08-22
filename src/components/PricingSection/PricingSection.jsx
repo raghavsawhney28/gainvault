@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, TrendingUp, Clock, Target, AlertTriangle, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, TrendingUp, Clock, Target, AlertTriangle, Zap, ChevronLeft, ChevronRight, Shield, Calendar, UserCheck, XCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AnimatedSection from '../AnimatedSection/AnimatedSection';
 import styles from './PricingSection.module.css';
@@ -13,90 +13,132 @@ const PricingSection = () => {
   const challengePlans = [
     {
       name: "BASE",
-      value: "$5,000",
+      value: "$25,000",
       cost: 69,
       singleStageCost: 124,
       details: {
-        profitTarget: ["10%", "5%"],
-        maxDailyLoss: ["5%", "5%"],
-        maxLoss: ["10%", "8%"],
-        minTradingDays: ["5", "5"],
-        tradingPeriod: ["Unlimited", "Unlimited"],
-        maxLeverage: ["1:5", "1:5"],
+        profitTarget: ["20%", "10%"],
+        maxDailyLoss: ["2%", "2%"],
+        maxLoss: ["8%", "8%"],
+        minTradingDays: ["40", "50"],
+        tradingPeriod: ["8 weeks", "10 weeks"],
+        maxLeverage: ["1:3", "1:3"],
+        maxRiskPerTrade: ["0.8%", "0.8%"],
+        maxPositions: ["1", "1"],
+        correlationLimit: ["25%", "25%"],
+        weekendHolding: ["Prohibited", "Prohibited"],
+        minTradeHold: ["10 min", "10 min"],
+        maxTradesPerWeek: ["4", "4"],
+        activityRequirement: ["48h", "48h"]
       }
     },
     {
       name: "STARTER",
-      value: "$10,000",
+      value: "$50,000",
       tag: "BEST SELLER",
       cost: 129,
       singleStageCost: 232,
       details: {
-        profitTarget: ["10%", "5%"],
-        maxDailyLoss: ["5%", "5%"],
-        maxLoss: ["10%", "8%"],
-        minTradingDays: ["5", "5"],
-        tradingPeriod: ["Unlimited", "Unlimited"],
-        maxLeverage: ["1:5", "1:5"],
+        profitTarget: ["20%", "10%"],
+        maxDailyLoss: ["2%", "2%"],
+        maxLoss: ["8%", "8%"],
+        minTradingDays: ["40", "50"],
+        tradingPeriod: ["8 weeks", "10 weeks"],
+        maxLeverage: ["1:3", "1:3"],
+        maxRiskPerTrade: ["0.8%", "0.8%"],
+        maxPositions: ["1", "1"],
+        correlationLimit: ["25%", "25%"],
+        weekendHolding: ["Prohibited", "Prohibited"],
+        minTradeHold: ["10 min", "10 min"],
+        maxTradesPerWeek: ["4", "4"],
+        activityRequirement: ["48h", "48h"]
       }
     },
     {
       name: "SKILLED",
-      value: "$15,000",
+      value: "$100,000",
       tag: "NEW",
       cost: 179,
       singleStageCost: 322,
       isDefault: true,
       details: {
-        profitTarget: ["10%", "5%"],
-        maxDailyLoss: ["5%", "5%"],
-        maxLoss: ["10%", "8%"],
-        minTradingDays: ["5", "5"],
-        tradingPeriod: ["Unlimited", "Unlimited"],
-        maxLeverage: ["1:5", "1:5"],
+        profitTarget: ["20%", "10%"],
+        maxDailyLoss: ["2%", "2%"],
+        maxLoss: ["8%", "8%"],
+        minTradingDays: ["40", "50"],
+        tradingPeriod: ["8 weeks", "10 weeks"],
+        maxLeverage: ["1:3", "1:3"],
+        maxRiskPerTrade: ["0.8%", "0.8%"],
+        maxPositions: ["1", "1"],
+        correlationLimit: ["25%", "25%"],
+        weekendHolding: ["Prohibited", "Prohibited"],
+        minTradeHold: ["10 min", "10 min"],
+        maxTradesPerWeek: ["4", "4"],
+        activityRequirement: ["48h", "48h"]
       }
     },
     {
       name: "INTERMEDIATE",
-      value: "$25,000",
+      value: "$200,000",
       cost: 269,
       singleStageCost: 484,
       details: {
-        profitTarget: ["10%", "5%"],
-        maxDailyLoss: ["5%", "5%"],
-        maxLoss: ["10%", "8%"],
-        minTradingDays: ["5", "5"],
-        tradingPeriod: ["Unlimited", "Unlimited"],
-        maxLeverage: ["1:5", "1:5"],
+        profitTarget: ["20%", "10%"],
+        maxDailyLoss: ["2%", "2%"],
+        maxLoss: ["8%", "8%"],
+        minTradingDays: ["40", "50"],
+        tradingPeriod: ["8 weeks", "10 weeks"],
+        maxLeverage: ["1:3", "1:3"],
+        maxRiskPerTrade: ["0.8%", "0.8%"],
+        maxPositions: ["1", "1"],
+        correlationLimit: ["25%", "25%"],
+        weekendHolding: ["Prohibited", "Prohibited"],
+        minTradeHold: ["10 min", "10 min"],
+        maxTradesPerWeek: ["4", "4"],
+        activityRequirement: ["48h", "48h"]
       }
     },
     {
       name: "ADVANCED",
-      value: "$50,000",
+      value: "$500,000",
       cost: 549,
       singleStageCost: 988,
       details: {
-        profitTarget: ["10%", "5%"],
-        maxDailyLoss: ["5%", "5%"],
-        maxLoss: ["10%", "8%"],
-        minTradingDays: ["5", "5"],
-        tradingPeriod: ["Unlimited", "Unlimited"],
-        maxLeverage: ["1:5", "1:5"],
+        profitTarget: ["20%", "10%"],
+        maxDailyLoss: ["2%", "2%"],
+        maxLoss: ["8%", "8%"],
+        minTradingDays: ["40", "50"],
+        tradingPeriod: ["8 weeks", "10 weeks"],
+        maxLeverage: ["1:3", "1:3"],
+        maxRiskPerTrade: ["0.8%", "0.8%"],
+        maxPositions: ["1", "1"],
+        correlationLimit: ["25%", "25%"],
+        weekendHolding: ["Prohibited", "Prohibited"],
+        minTradeHold: ["10 min", "10 min"],
+        maxTradesPerWeek: ["4", "4"],
+        activityRequirement: ["48h", "48h"]
       }
     },
     {
       name: "EXPERT",
-      value: "$100,000",
+      value: "$1,000,000",
       tag: "POPULAR",
       cost: 1199,
       singleStageCost: 2158,
       details: {
-        profitTarget: ["10%", "5%"],
-        maxDailyLoss: ["5%", "5%"],
-        maxLoss: ["10%", "8%"],
-        minTradingDays: ["5", "5"],
-        tradingPeriod: ["Unlimited", "Unlimited"],
-        maxLeverage: ["1:5", "1:5"],
+        profitTarget: ["20%", "10%"],
+        maxDailyLoss: ["2%", "2%"],
+        maxLoss: ["8%", "8%"],
+        minTradingDays: ["40", "50"],
+        tradingPeriod: ["8 weeks", "10 weeks"],
+        maxLeverage: ["1:3", "1:3"],
+        maxRiskPerTrade: ["0.8%", "0.8%"],
+        maxPositions: ["1", "1"],
+        correlationLimit: ["25%", "25%"],
+        weekendHolding: ["Prohibited", "Prohibited"],
+        minTradeHold: ["10 min", "10 min"],
+        maxTradesPerWeek: ["4", "4"],
+        activityRequirement: ["48h", "48h"]
       }
     }
   ];
@@ -160,6 +202,49 @@ const PricingSection = () => {
           >
             Single Stage
           </button>
+        </div>
+
+        {/* Key Trading Rules Summary */}
+        <div className={styles.rulesSummary}>
+          <h3>Key Trading Rules & Requirements</h3>
+          <div className={styles.rulesGrid}>
+            <div className={styles.ruleItem}>
+              <div className={styles.ruleIcon}>
+                <Shield size={20} />
+              </div>
+              <div className={styles.ruleContent}>
+                <h4>Risk Management</h4>
+                <p>Max 0.8% risk per trade, 2% daily loss cap, mandatory stop losses</p>
+              </div>
+            </div>
+            <div className={styles.ruleItem}>
+              <div className={styles.ruleIcon}>
+                <TrendingUp size={20} />
+              </div>
+              <div className={styles.ruleContent}>
+                <h4>Position Management</h4>
+                <p>1 position max, no weekend holding, 25% correlation limit</p>
+              </div>
+            </div>
+            <div className={styles.ruleItem}>
+              <div className={styles.ruleIcon}>
+                <Clock size={20} />
+              </div>
+              <div className={styles.ruleContent}>
+                <h4>Trading Frequency</h4>
+                <p>Min 10min holds, max 4 trades/week, activity every 48h required</p>
+              </div>
+            </div>
+            <div className={styles.ruleItem}>
+              <div className={styles.ruleIcon}>
+                <XCircle size={20} />
+              </div>
+              <div className={styles.ruleContent}>
+                <h4>Prohibited</h4>
+                <p>No automation, no news trading, no scalping under 10min</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Mobile Plan Navigation */}
@@ -322,33 +407,6 @@ const PricingSection = () => {
                 <div className={styles.cardIcon}>
                   <Clock size={24} />
                 </div>
-                <h4>Min Trading Days</h4>
-              </div>
-              <div className={styles.cardContent}>
-                {challengeType === 'twoStage' ? (
-                  <div className={styles.stagesContainer}>
-                    <div className={styles.stageItem}>
-                      <div className={styles.stageBadge}>Stage 1</div>
-                      <div className={styles.stageValue}>{selectedPlanData.details.minTradingDays[0]}</div>
-                    </div>
-                    <div className={styles.stageItem}>
-                      <div className={styles.stageBadge}>Stage 2</div>
-                      <div className={styles.stageValue}>{selectedPlanData.details.minTradingDays[1]}</div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={styles.singleValue}>
-                    <div className={styles.valueDisplay}>{selectedPlanData.details.minTradingDays[0]}</div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.objectiveCard}>
-              <div className={styles.cardHeader}>
-                <div className={styles.cardIcon}>
-                  <Clock size={24} />
-                </div>
                 <h4>Trading Period</h4>
               </div>
               <div className={styles.cardContent}>
@@ -393,6 +451,33 @@ const PricingSection = () => {
                 ) : (
                   <div className={styles.singleValue}>
                     <div className={styles.valueDisplay}>{selectedPlanData.details.maxLeverage[0]}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.objectiveCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardIcon}>
+                  <Shield size={24} />
+                </div>
+                <h4>Max Risk Per Trade</h4>
+              </div>
+              <div className={styles.cardContent}>
+                {challengeType === 'twoStage' ? (
+                  <div className={styles.stagesContainer}>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 1</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.maxRiskPerTrade[0]}</div>
+                    </div>
+                    <div className={styles.stageItem}>
+                      <div className={styles.stageBadge}>Stage 2</div>
+                      <div className={styles.stageValue}>{selectedPlanData.details.maxRiskPerTrade[1]}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.singleValue}>
+                    <div className={styles.valueDisplay}>{selectedPlanData.details.maxRiskPerTrade[0]}</div>
                   </div>
                 )}
               </div>
@@ -461,21 +546,6 @@ const PricingSection = () => {
             <div className={styles.tableRow}>
               <div className={styles.labelCell}>
                 <Clock size={16} />
-                <span>Min Trading Days</span>
-              </div>
-              {challengeType === 'twoStage' ? (
-                <>
-                  <div className={styles.valueCell}>{selectedPlanData.details.minTradingDays[0]}</div>
-                  <div className={styles.valueCell}>{selectedPlanData.details.minTradingDays[1]}</div>
-                </>
-              ) : (
-                <div className={styles.valueCell}>{selectedPlanData.details.minTradingDays[0]}</div>
-              )}
-            </div>
-
-            <div className={styles.tableRow}>
-              <div className={styles.labelCell}>
-                <Clock size={16} />
                 <span>Trading Period</span>
               </div>
               {challengeType === 'twoStage' ? (
@@ -502,6 +572,21 @@ const PricingSection = () => {
                 <div className={styles.valueCell}>{selectedPlanData.details.maxLeverage[0]}</div>
               )}
             </div>
+
+            <div className={styles.tableRow}>
+              <div className={styles.labelCell}>
+                <Shield size={16} />
+                <span>Max Risk Per Trade</span>
+              </div>
+              {challengeType === 'twoStage' ? (
+                <>
+                  <div className={styles.valueCell}>{selectedPlanData.details.maxRiskPerTrade[0]}</div>
+                  <div className={styles.valueCell}>{selectedPlanData.details.maxRiskPerTrade[1]}</div>
+                </>
+              ) : (
+                <div className={styles.valueCell}>{selectedPlanData.details.maxRiskPerTrade[0]}</div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -518,6 +603,27 @@ const PricingSection = () => {
             >
               Start Challenge
             </button>
+          </div>
+        </div>
+
+        {/* Important Compliance Notice */}
+        <div className={styles.complianceNotice}>
+          <div className={styles.noticeIcon}>
+            <AlertTriangle size={24} />
+          </div>
+          <div className={styles.noticeContent}>
+            <h4>Important Compliance Notice</h4>
+            <p>
+              This is a <strong>one-lifetime opportunity</strong>. All trading rules are automatically enforced by our evaluation platform. 
+              Violations may result in immediate account termination and permanent ineligibility. 
+              Ensure full compliance with all requirements before starting your challenge.
+            </p>
+            <div className={styles.complianceHighlights}>
+              <span>• Zero tolerance for automation or external tools</span>
+              <span>• Mandatory stop losses within 10 seconds</span>
+              <span>• No weekend position holding</span>
+              <span>• No news event trading (4h before / 2h after)</span>
+            </div>
           </div>
         </div>
       </div>

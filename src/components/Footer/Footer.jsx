@@ -5,15 +5,8 @@ import logo from "../../assets/logo.png";
 
 const Footer = () => {
   const footerLinks = {
-    
-    Company: ["About Us",  "Contact"],
-    
-    Legal: [
-      "Privacy Policy",
-      "Terms of Service",
-      "Risk Disclosure",
-      
-    ],
+    Company: ["About Us", "Contact"],
+    Legal: ["Privacy Policy", "Terms of Service", "Risk Disclosure"],
   };
 
   return (
@@ -48,7 +41,6 @@ const Footer = () => {
                 <a href="https://t.me/gainvaultcapital" target="_blank" rel="noopener noreferrer">t.me/gainvaultcapital</a>
               </div>
             </div>
-
           </div>
 
           <div className={styles.footerLinks}>
@@ -65,6 +57,7 @@ const Footer = () => {
               </div>
             ))}
           </div>
+          
           <div className={styles.newsletter}>
             <h4>Stay Updated</h4>
             <p>
