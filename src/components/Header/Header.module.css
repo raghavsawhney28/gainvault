@@ -757,6 +757,7 @@
   }
 
   .drawerHeader {
+    height: 63px;
     padding: 1rem;
     flex-shrink: 0;
   }
