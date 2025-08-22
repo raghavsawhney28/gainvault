@@ -851,11 +851,12 @@
 
   /* Extra Small Mobile Drawer Styles */
   .drawerContent {
+    margin-top: -15px;
     width: 260px;
     max-width: 260px;
-    height: 90%;
-    min-height: 90%;
-    max-height: 90%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
   }
 
   .drawerHeader {
@@ -879,7 +880,7 @@
   .drawerUserSection,
   .drawerAuthSection {
     padding: 1rem;
-    margin-bottom: 12%;
+    margin-bottom: 16%;
   }
 
   .drawerUserInfo {
