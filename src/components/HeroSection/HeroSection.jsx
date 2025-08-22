@@ -5,6 +5,7 @@ import { Play } from 'lucide-react';
 import styles from './HeroSection.module.css';
 import Particles from '../magicui/particles';
 import Ripple from '../magicui/ripple';
+import TextScramble from '../TextScramble/TextScramble';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -94,8 +95,10 @@ const HeroSection = () => {
             ))}
           </div>
           <h1 className={styles.heroTitle}>
-            Unlock Your<br />
-            <span className={styles.gradientText}>True Potential</span>
+            <TextScramble text="Unlock Your" /><br />
+            <span className={styles.gradientText}>
+              <TextScramble text="True Potential" />
+            </span>
           </h1>
           <p className={styles.heroSubtitle}>
             What if your trading potential wasn't limited by your wallet? With GainVault, it's not. 

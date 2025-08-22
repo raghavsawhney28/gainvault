@@ -1,3 +1,5 @@
+
+
 /* Hero Section Styles */
 .hero {
   padding: calc(var(--spacing-unit) * 20) 0 calc(var(--spacing-unit) * 12) 0;
@@ -6,7 +8,6 @@
   z-index: 1;
   overflow: hidden;
   min-height: 100vh;
-  
 }
 
 /* Background Effects Container */
@@ -63,11 +64,14 @@
 .tagline {
   font-size: 1rem;
   font-weight: 600;
-  color: #ffffff;
+  color: #ffffff !important;
   opacity: 0;
   animation: fadeInUp 0.8s ease-out forwards;
   letter-spacing: 0.5px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 8px var(--shadow-medium);
+  
+  padding: 4px 8px;
+  
 }
 
 @keyframes fadeInUp {
@@ -86,22 +90,29 @@
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
   line-height: 1.2;
-  color: #ffffff;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+  color: #ffffff !important;
+  text-shadow: 0 4px 12px var(--shadow-dark);
+  
+  padding: 20px 30px;
+ 
 }
 
 .gradientText {
-  color: #ffffff;
+  color: var(--text-secondary);
+  text-shadow: 0 0 20px rgba(74, 144, 226, 0.6);
+  font-weight: 800;
 }
 
 .heroSubtitle {
   font-size: 1.25rem;
   max-width: 122rem;
   margin: 0 auto calc(var(--spacing-unit) * 5) auto;
-  color: #e5e7eb;
+  color: #ffffff !important;
   line-height: 1.6;
-  font-weight: 400;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+  text-shadow: 0 2px 8px var(--shadow-dark);
+  padding: 16px 20px;
+  
 }
 
 .heroSubtitle strong {
@@ -176,6 +187,22 @@
   
   .heroContent {
     padding: 0 calc(var(--spacing-unit) * 1);
+  }
+
+  .tagline {
+    padding: 6px 10px;
+    margin: 4px 0;
+  }
+
+  .heroTitle {
+    padding: 16px 20px;
+    
+  }
+
+  .heroSubtitle {
+    padding: 12px 16px;
+    
+    font-size: 1.1rem;
   }
 
   .taglineContainer {

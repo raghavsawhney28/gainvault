@@ -7,6 +7,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global CSS Variables for consistent colors */
+:root {
+  --text-primary: #ffffff;
+  --text-secondary: #4A90E2;
+  --text-accent: #e5e7eb;
+  --bg-overlay: rgba(0, 0, 0, 0.4);
+  --bg-overlay-light: rgba(0, 0, 0, 0.3);
+  --bg-overlay-dark: rgba(0, 0, 0, 0.6);
+  --border-light: rgba(255, 255, 255, 0.15);
+  --shadow-dark: rgba(0, 0, 0, 0.9);
+  --shadow-medium: rgba(0, 0, 0, 0.8);
+}
+
 /* This file is intentionally minimal to avoid conflicts with App.css */
 html, body, #root {
   height: 100%;

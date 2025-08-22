@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
+
+.textBlock {
+  font-family: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  color: #ffffff !important;
+  cursor: pointer;
+  user-select: none;
+  display: inline;
+}
+
+.char {
+  will-change: transform;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  color: #ffffff !important;
+}
+
+.char:hover {
+  color: #4A90E2;
+  transform: scale(1.1);
+}
+
+/* Ensure the scramble effect works with existing styles */
+.textBlock.heroSubtitle {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  text-shadow: inherit;
+}
+
+.textBlock.heroTitle {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  text-shadow: inherit;
+}
+
+.textBlock.tagline {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-shadow: inherit;
+}
