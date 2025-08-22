@@ -203,6 +203,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
         size="sm"
         overlayProps={{ opacity: 0.5, blur: 4 }}
         withCloseButton={false}
+        zIndex={1001}
         styles={{
           body: { padding: 0, height: '100%' },
           inner: { padding: 0, height: '100%' },

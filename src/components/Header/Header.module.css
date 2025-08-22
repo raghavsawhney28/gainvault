@@ -798,6 +798,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  z-index: 1001;
 }
 
 /* Override Mantine default styles */
@@ -805,12 +806,14 @@
   padding: 0 !important;
   height: 100% !important;
   background: transparent !important;
+  z-index: 1001 !important;
 }
 
 .drawerInner {
   padding: 0 !important;
   height: 100% !important;
   background: transparent !important;
+  z-index: 1001 !important;
 }
 
 .drawerHeader {
