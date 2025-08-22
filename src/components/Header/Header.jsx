@@ -2,17 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, LogOut, Settings, Bell, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import { Drawer, Button, Stack, Text, Divider, ActionIcon } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import logo from '../../assets/logo.png';
 import styles from './Header.module.css';
 
 const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showHamburgerDropdown, setShowHamburgerDropdown] = useState(false);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [userInitial, setUserInitial] = useState('');
+  const [opened, { open, close }] = useDisclosure(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const hamburgerDropdownRef = useRef(null);
   const accountDropdownRef = useRef(null);
 
   useEffect(() => {
@@ -27,9 +28,6 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   // Handle dropdown clicks outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (hamburgerDropdownRef.current && !hamburgerDropdownRef.current.contains(event.target)) {
-        setShowHamburgerDropdown(false);
-      }
       if (accountDropdownRef.current && !accountDropdownRef.current.contains(event.target)) {
         setShowAccountDropdown(false);
       }
@@ -48,13 +46,13 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
 
   const handleLogoClick = () => {
     navigate('/');
-    setShowHamburgerDropdown(false);
+    close();
     setShowAccountDropdown(false);
   };
 
   const handleNavClick = (path) => {
     navigate(path);
-    setShowHamburgerDropdown(false);
+    close();
     setShowAccountDropdown(false);
   };
 
@@ -63,13 +61,11 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   };
 
   const handleHamburgerClick = () => {
-    setShowHamburgerDropdown(!showHamburgerDropdown);
-    setShowAccountDropdown(false); // Close account dropdown when opening hamburger
+    open();
   };
 
   const handleAccountClick = () => {
     setShowAccountDropdown(!showAccountDropdown);
-    setShowHamburgerDropdown(false); // Close hamburger dropdown when opening account
   };
 
   const handleProfileAction = (action) => {
@@ -104,12 +100,20 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
     return colors[Math.abs(hash) % colors.length];
   };
 
+  const menuItems = [
+    { path: '/', label: 'Home', icon: '🏠' },
+    { path: '/trading-challenge', label: 'Trading Challenge', icon: '📈' },
+    { path: '/rules', label: 'Rules', icon: '📋' },
+    { path: '/referral', label: 'Referral', icon: '🤝' },
+    ...(isLoggedIn ? [{ path: `/dashboard/${username}`, label: 'Dashboard', icon: '📊' }] : [])
+  ];
+
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.headerContent}>
         {/* Left Side - Hamburger Menu */}
         <div className={styles.leftSection}>
-          <div className={styles.hamburgerContainer} ref={hamburgerDropdownRef}>
+          <div className={styles.hamburgerContainer}>
             <button 
               className={styles.hamburgerButton}
               onClick={handleHamburgerClick}
@@ -117,53 +121,6 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
             >
               <Menu size={24} />
             </button>
-
-            {/* Mega Menu Dropdown */}
-            {showHamburgerDropdown && (
-              <div className={styles.megaMenuDropdown}>
-                
-                
-                <div className={styles.megaMenuContent}>
-                  <div className={styles.megaMenuSection}>
-                    
-                    <div className={styles.megaMenuItems}>
-                      <button 
-                        className={styles.megaMenuItem}
-                        onClick={() => handleNavClick('/')}
-                      >
-                        <span>Home</span>
-                      </button>
-                      <button 
-                        className={styles.megaMenuItem}
-                        onClick={() => handleNavClick('/trading-challenge')}
-                      >
-                        <span>Trading Challenge</span>
-                      </button>
-                      <button 
-                        className={styles.megaMenuItem}
-                        onClick={() => handleNavClick('/rules')}
-                      >
-                        <span>Rules</span>
-                      </button>
-                      <button 
-                        className={styles.megaMenuItem}
-                        onClick={() => handleNavClick('/referral')}
-                      >
-                        <span>Referral</span>
-                      </button>
-                      <button 
-                        className={styles.megaMenuItem}
-                        onClick={() => handleNavClick(`/dashboard/${username}`)}
-                      >
-                        <span>Dashboard</span>
-                      </button>
-                    </div>
-                  </div>
-                  
-
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
@@ -236,9 +193,114 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
             </button>
           )}
         </div>
-
-
       </div>
+
+      {/* Left Side Drawer */}
+      <Drawer
+        opened={opened}
+        onClose={close}
+        position="left"
+        size="sm"
+        overlayProps={{ opacity: 0.5, blur: 4 }}
+        withCloseButton={false}
+        styles={{
+          body: { padding: 0 },
+          inner: { padding: 0 }
+        }}
+      >
+        <div className={styles.drawerContent}>
+          {/* Drawer Header */}
+          <div className={styles.drawerHeader}>
+            <div className={styles.drawerLogo} onClick={handleLogoClick}>
+              <div className={styles.drawerLogoIcon}>
+                <img src={logo} alt="GainVault Logo" className={styles.drawerLogoImage} />
+              </div>
+              <span>GainVault</span>
+            </div>
+            <ActionIcon
+              variant="subtle"
+              size="lg"
+              onClick={close}
+              className={styles.drawerCloseButton}
+            >
+              <X size={20} />
+            </ActionIcon>
+          </div>
+
+          <Divider />
+
+          {/* Navigation Menu */}
+          <Stack gap={0} className={styles.drawerMenu}>
+            {menuItems.map((item) => (
+              <button
+                key={item.path}
+                className={`${styles.drawerMenuItem} ${isActive(item.path) ? styles.active : ''}`}
+                onClick={() => handleNavClick(item.path)}
+              >
+                <span className={styles.menuIcon}>{item.icon}</span>
+                <span className={styles.menuLabel}>{item.label}</span>
+              </button>
+            ))}
+          </Stack>
+
+          {/* User Section (if logged in) */}
+          {isLoggedIn && (
+            <>
+              <Divider />
+              <div className={styles.drawerUserSection}>
+                <div className={styles.drawerUserInfo}>
+                  <div className={styles.drawerUserAvatar}>
+                    <PersonOutlineIcon />
+                  </div>
+                  <div className={styles.drawerUserDetails}>
+                    <Text size="sm" fw={600} c="white">
+                      Welcome back!
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      {username}
+                    </Text>
+                  </div>
+                </div>
+                <Button
+                  variant="subtle"
+                  color="red"
+                  size="sm"
+                  leftSection={<LogOut size={16} />}
+                  onClick={() => {
+                    handleProfileAction('logout');
+                    close();
+                  }}
+                  className={styles.drawerLogoutButton}
+                >
+                  Sign Out
+                </Button>
+              </div>
+            </>
+          )}
+
+          {/* Auth Section (if not logged in) */}
+          {!isLoggedIn && (
+            <>
+              <Divider />
+              <div className={styles.drawerAuthSection}>
+                <Button
+                  fullWidth
+                  variant="filled"
+                  color="green"
+                  leftSection={<PersonOutlineIcon />}
+                  onClick={() => {
+                    onAuthClick();
+                    close();
+                  }}
+                  className={styles.drawerLoginButton}
+                >
+                  Login / Sign Up
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </Drawer>
     </header>
   );
 };
