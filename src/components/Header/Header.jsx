@@ -114,11 +114,11 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   };
 
   const menuItems = [
-    { path: '/', label: 'Home', icon: '🏠' },
-    { path: '/trading-challenge', label: 'Trading Challenge', icon: '📈' },
-    { path: '/rules', label: 'Rules', icon: '📋' },
-    { path: '/referral', label: 'Referral', icon: '🤝' },
-    ...(isLoggedIn ? [{ path: `/dashboard/${username}`, label: 'Dashboard', icon: '📊' }] : [])
+    { path: '/', label: 'Home' },
+    { path: '/trading-challenge', label: 'Trading Challenge' },
+    { path: '/rules', label: 'Rules' },
+    { path: '/referral', label: 'Referral' },
+    ...(isLoggedIn ? [{ path: `/dashboard/${username}`, label: 'Dashboard' }] : [])
   ];
 
   return (
@@ -258,7 +258,6 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
                 className={`${styles.drawerMenuItem} ${isActive(item.path) ? styles.active : ''}`}
                 onClick={() => handleNavClick(item.path)}
               >
-                <span className={styles.menuIcon}>{item.icon}</span>
                 <span className={styles.menuLabel}>{item.label}</span>
               </button>
             ))}
