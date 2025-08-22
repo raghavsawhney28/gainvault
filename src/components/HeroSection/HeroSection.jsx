@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSpring, animated, config } from '@react-spring/web';
 import { Play } from 'lucide-react';
 import styles from './HeroSection.module.css';
+import Particles from '../magicui/particles';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -53,14 +54,9 @@ const HeroSection = () => {
 
   return (
     <section className={styles.hero}>
-      {/* Skybox Background */}
-      <div className={styles.skyboxBackground}>
-        <iframe 
-          src="https://skybox.blockadelabs.com/e/235625af3f610e37821acb891b6e1e43?nogesturezoom=true" 
-          frameBorder="0" 
-          allow="fullscreen"
-          className={styles.skyboxIframe}
-        ></iframe>
+      {/* Particles Background */}
+      <div className={styles.particlesContainer}>
+        <Particles />
       </div>
       
       <div className={styles.container}>

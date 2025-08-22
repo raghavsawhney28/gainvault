@@ -9,6 +9,17 @@
   
 }
 
+/* Particles Background */
+.particlesContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: #000000;
+}
+
 .container {
   max-width: 122rem;
   margin: 0 auto;
@@ -253,72 +264,6 @@
     max-width: 260px;
     padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
     font-size: 0.95rem;
-  }
-}
-
-/* Skybox Background */
-.skyboxBackground {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.skyboxBackground::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.35); /* subtle dark overlay */
-  z-index: 1;
-}
-
-.skyboxIframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  pointer-events: none;
-  position: relative;
-  z-index: 0;
-}
-
-/* Phoenix Background */
-.phoenixBackground {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  pointer-events: none;
-}
-
-.phoenixImage {
-  width: 500px;
-  height: 500px;
-  object-fit: contain;
-  margin-top: calc(var(--spacing-unit) * 4);
-  position: relative;
-  animation: float 6s ease-in-out infinite;
-  transition: all 0.3s ease;
-
-  filter: brightness(0.8);
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-15px) rotate(2deg);
   }
 }
 
