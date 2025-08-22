@@ -748,31 +748,32 @@
   .drawerContent {
     height: 100vh;
     min-height: 100vh;
+    max-height: 100vh;
     width: 280px;
     max-width: 280px;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   .drawerHeader {
     padding: 1rem;
+    flex-shrink: 0;
   }
 
-  .drawerLogo span {
-    font-size: 1.125rem;
-  }
-
-  .drawerLogoImage {
-    width: 36px;
-    height: 36px;
-  }
-
-  .drawerMenuItem {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.95rem;
+  .drawerMenu {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .drawerUserSection,
   .drawerAuthSection {
     padding: 1.25rem;
+    flex-shrink: 0;
   }
 
   .drawerUserInfo {
@@ -855,6 +856,9 @@
   .drawerContent {
     width: 260px;
     max-width: 260px;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
   }
 
   .drawerHeader {
@@ -913,8 +917,9 @@
 /* Landscape mobile orientation */
 @media (max-width: 768px) and (orientation: landscape) {
   .drawerContent {
-    height: 100vh;
-    max-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
     width: 280px;
     max-width: 280px;
   }
@@ -1135,4 +1140,31 @@
   background: #16a34a !important;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+}
+
+/* Mobile viewport height fix */
+@supports (height: 100dvh) {
+  .drawerContent {
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+/* Fallback for browsers that don't support dvh */
+@supports not (height: 100dvh) {
+  .drawerContent {
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+  }
+}
+
+/* Mobile-specific height handling */
+@media (max-width: 768px) {
+  .drawerContent {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
 }
