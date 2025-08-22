@@ -853,9 +853,9 @@
   .drawerContent {
     width: 260px;
     max-width: 260px;
-    height: 100dvh;
-    min-height: 100dvh;
-    max-height: 100dvh;
+    height: 90%;
+    min-height: 90%;
+    max-height: 90%;
   }
 
   .drawerHeader {
