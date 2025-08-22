@@ -52,23 +52,146 @@ import {
   FormControlLabel
 } from '@mui/material';
 import {
-  AreaChart,
-  Area,
   BarChart,
   Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
   PieChart,
   Pie,
   Cell
 } from 'recharts';
+import { LineChart, areaElementClasses } from '@mui/x-charts/LineChart';
+import { useYScale, useDrawingArea } from '@mui/x-charts/hooks';
 import AnimatedSection from '../../components/AnimatedSection/AnimatedSection';
 import styles from './Dashboard.module.css';
+
+// Dynamic ColorPalette component that only shows red where equity actually goes below threshold
+const ColorPalette = ({ id, equityData, threshold }) => {
+  const { top, height, bottom } = useDrawingArea();
+  const svgHeight = top + bottom + height;
+  const scale = useYScale();
+
+  // Find the minimum equity value to determine the actual range
+  const minEquity = Math.min(...equityData);
+  const maxEquity = Math.max(...equityData);
+  
+  // Only show red if we actually go below the threshold
+  const showRedZone = minEquity < threshold;
+  
+  // Calculate the actual red zone range (only if needed)
+  const redZoneStart = showRedZone ? Math.max(minEquity, threshold - 1000) : threshold;
+  const redZoneEnd = showRedZone ? minEquity : threshold;
+
+  return (
+    <defs>
+      <linearGradient
+        id={id}
+        x1="0"
+        x2="0"
+        y1="0"
+        y2={`${svgHeight}px`}
+        gradientUnits="userSpaceOnUse"
+      >
+        {/* Green zone above threshold */}
+        <stop
+          offset={scale(maxEquity) / svgHeight}
+          stopColor="#11B678"
+          stopOpacity={1}
+        />
+        <stop
+          offset={scale(threshold + 1000) / svgHeight}
+          stopColor="#11B678"
+          stopOpacity={1}
+        />
+        <stop
+          offset={scale(threshold + 1000) / svgHeight}
+          stopColor="#10A367"
+          stopOpacity={1}
+        />
+        <stop
+          offset={scale(threshold + 500) / svgHeight}
+          stopColor="#10A367"
+          stopOpacity={1}
+        />
+        <stop
+          offset={scale(threshold + 500) / svgHeight}
+          stopColor="#0F9256"
+          stopOpacity={1}
+        />
+        <stop
+          offset={scale(threshold + 100) / svgHeight}
+          stopColor="#0F9256"
+          stopOpacity={1}
+        />
+        <stop
+          offset={scale(threshold + 100) / svgHeight}
+          stopColor="#0E8145"
+          stopOpacity={1}
+        />
+        <stop
+          offset={scale(threshold) / svgHeight}
+          stopColor="#0E8145"
+          stopOpacity={1}
+        />
+        
+        {/* Transition zone at threshold */}
+        <stop
+          offset={scale(threshold) / svgHeight}
+          stopColor="#FFD700"
+          stopOpacity={0.8}
+        />
+        
+        {/* Red zone - only if we actually go below threshold */}
+        {showRedZone ? (
+          <>
+            <stop
+              offset={scale(threshold) / svgHeight}
+              stopColor="#FF3143"
+              stopOpacity={1}
+            />
+            <stop
+              offset={scale(redZoneStart) / svgHeight}
+              stopColor="#FF3143"
+              stopOpacity={1}
+            />
+            <stop
+              offset={scale(redZoneStart) / svgHeight}
+              stopColor="#E62A3A"
+              stopOpacity={1}
+            />
+            <stop
+              offset={scale(redZoneEnd) / svgHeight}
+              stopColor="#E62A3A"
+              stopOpacity={1}
+            />
+            <stop
+              offset={scale(redZoneEnd) / svgHeight}
+              stopColor="#CC2131"
+              stopOpacity={1}
+            />
+            <stop
+              offset={scale(redZoneEnd) / svgHeight}
+              stopColor="transparent"
+              stopOpacity={0}
+            />
+          </>
+        ) : (
+          /* If no red zone needed, make everything below threshold transparent */
+          <stop
+            offset={scale(threshold) / svgHeight}
+            stopColor="transparent"
+            stopOpacity={0}
+          />
+        )}
+        
+        {/* Fill remaining area with transparent color */}
+        <stop
+          offset="1"
+          stopColor="transparent"
+          stopOpacity={0}
+        />
+      </linearGradient>
+    </defs>
+  );
+};
 
 const Dashboard = () => {
   const { username } = useParams();
@@ -150,14 +273,14 @@ const Dashboard = () => {
       lifetimeAttemptLocked: false
     },
     equityCurve: [
-      { time: '2024-01-15T00:00:00Z', equity: 25000 },
-      { time: '2024-01-16T00:00:00Z', equity: 25100 },
-      { time: '2024-01-17T00:00:00Z', equity: 25050 },
-      { time: '2024-01-18T00:00:00Z', equity: 25200 },
-      { time: '2024-01-19T00:00:00Z', equity: 25150 },
-      { time: '2024-01-20T00:00:00Z', equity: 25300 },
-      { time: '2024-01-21T00:00:00Z', equity: 25250 },
-      { time: '2024-01-22T00:00:00Z', equity: 25250 }
+      { time: '2024-01-15T00:00:00Z', equity: 25000 }, // Start from funded amount
+      { time: '2024-01-16T00:00:00Z', equity: 24800 }, // Small loss
+      { time: '2024-01-17T00:00:00Z', equity: 24900 }, // Small gain
+      { time: '2024-01-18T00:00:00Z', equity: 25200 }, // Profit
+      { time: '2024-01-19T00:00:00Z', equity: 25100 }, // Small profit
+      { time: '2024-01-20T00:00:00Z', equity: 25300 }, // More profit
+      { time: '2024-01-21T00:00:00Z', equity: 25400 }, // Continued profit
+      { time: '2024-01-22T00:00:00Z', equity: 25250 } // Current equity
     ],
     tradeHistory: [
       {
@@ -552,43 +675,36 @@ const Dashboard = () => {
               <Grid size={{ xs: 12, md: 6 }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>Stop Loss Compliance</Typography>
                 <Box sx={{ height: 200 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={[
-                          { name: 'Compliant', value: complianceFlags.stopLossPlacedWithin10s.ratio * 100 },
-                          { name: 'Non-compliant', value: (1 - complianceFlags.stopLossPlacedWithin10s.ratio) * 100 }
-                        ]}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        dataKey="value"
-                      >
-                        <Cell fill="#4caf50" />
-                        <Cell fill="#f44336" />
-                      </Pie>
-                      <Tooltip formatter={(value) => `${value.toFixed(1)}%`} />
-                    </PieChart>
-                  </ResponsiveContainer>
+                  <PieChart width={200} height={200}>
+                    <Pie
+                      data={[
+                        { name: 'Compliant', value: complianceFlags.stopLossPlacedWithin10s.ratio * 100 },
+                        { name: 'Non-compliant', value: (1 - complianceFlags.stopLossPlacedWithin10s.ratio) * 100 }
+                      ]}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      dataKey="value"
+                    >
+                      <Cell fill="#4caf50" />
+                      <Cell fill="#f44336" />
+                    </Pie>
+                  </PieChart>
                 </Box>
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>Daily Performance</Typography>
                 <Box sx={{ height: 200 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={[
-                        { metric: 'Daily Loss', value: dayMetrics.dailyLossPercent, target: accountSummary.maxDailyLossPercent }
-                      ]}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="metric" />
-                      <YAxis />
-                      <Tooltip formatter={(value) => `${value.toFixed(2)}%`} />
-                      <Bar dataKey="value" fill="#f44336" />
-                      <Bar dataKey="target" fill="#9e9e9e" />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <BarChart
+                    width={200}
+                    height={200}
+                    data={[
+                      { metric: 'Daily Loss', value: dayMetrics.dailyLossPercent, target: accountSummary.maxDailyLossPercent }
+                    ]}
+                  >
+                    <Bar dataKey="value" fill="#f44336" />
+                    <Bar dataKey="target" fill="#9e9e9e" />
+                  </BarChart>
                 </Box>
               </Grid>
             </Grid>
@@ -599,7 +715,15 @@ const Dashboard = () => {
         <Card sx={{ mb: 4 }}>
           <CardContent>
             <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
-              <Typography variant="h5" component="h2">Equity Curve</Typography>
+              <Box>
+                <Typography variant="h5" component="h2">Equity Curve</Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                  Funded Account: {formatCurrency(accountSummary.startBalance, accountSummary.plan.currency)} | 
+                  Current Equity: {formatCurrency(accountSummary.currentEquity, accountSummary.plan.currency)} | 
+                  P&L: {formatCurrency(accountSummary.currentEquity - accountSummary.startBalance, accountSummary.plan.currency)} 
+                  ({formatPercentage(((accountSummary.currentEquity - accountSummary.startBalance) / accountSummary.startBalance) * 100)})
+                </Typography>
+              </Box>
               <Box display="flex" gap={1}>
                 {['1D', '1W', '1M', 'All'].map(timeframe => (
                   <Button
@@ -615,30 +739,65 @@ const Dashboard = () => {
             </Box>
             
             {equityCurve.length > 0 ? (
-              <Box sx={{ height: 320 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={equityCurve}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="time" 
-                      tickFormatter={(value) => new Date(value).toLocaleDateString()}
-                    />
-                    <YAxis 
-                      tickFormatter={(value) => formatCurrency(value)}
-                    />
-                    <Tooltip 
-                      formatter={(value) => [formatCurrency(value), 'Equity']}
-                      labelFormatter={(value) => new Date(value).toLocaleString()}
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="equity" 
-                      stroke="#4caf50" 
-                      fill="#4caf50" 
-                      fillOpacity={0.3}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+              <Box sx={{ height: 360, width: '100%' }}>
+                <LineChart
+                  xAxis={[{ 
+                    data: equityCurve.map(item => new Date(item.time).toLocaleDateString()), 
+                    scaleType: 'point' 
+                  }]}
+                  yAxis={[{ 
+                    min: 24500, // Start from below the lowest equity value
+                    max: 25500, // Show up to the highest equity value
+                    width: 80, // Increased width to prevent label truncation
+                    valueFormatter: (value) => formatCurrency(value)
+                  }]}
+                  series={[{ 
+                    data: equityCurve.map(item => item.equity), 
+                    showMark: true, 
+                    area: true 
+                  }]}
+                  height={320}
+                  margin={{ right: 24, bottom: 20, top: 20 }} // Increased margins for better label visibility
+                  sx={{
+                    [`& .${areaElementClasses.root}`]: {
+                      fill: 'url(#switch-color-id-1)',
+                      filter: 'none',
+                    },
+                    [`& .${areaElementClasses.mark}`]: {
+                      fill: 'none', // Hide marks
+                    },
+                    [`& .${areaElementClasses.line}`]: {
+                      stroke: 'blue', // Set line color to blue
+                    },
+                  }}
+                >
+                  <ColorPalette 
+                    id="switch-color-id-1" 
+                    equityData={equityCurve.map(item => item.equity)}
+                    threshold={25000}
+                  />
+                  <rect x={0} y={0} width={5} height="100%" fill="url(#switch-color-id-1)" /> {/* Vertical color bar */}
+                  
+                                     {/* Value labels above each data point */}
+                   {equityCurve.map((item, index) => {
+                     const x = (index / (equityCurve.length - 1)) * 100; // Calculate x position as percentage
+                     const y = ((25500 - item.equity) / 1000) * 100; // Calculate y position as percentage (inverted for SVG, range 24500 to 25500 = 1000)
+                     return (
+                       <text
+                         key={index}
+                         x={`${x}%`}
+                         y={`${Math.max(y - 8, 15)}%`}
+                         textAnchor="middle"
+                         fontSize="11"
+                         fill="#333"
+                         fontWeight="bold"
+                         dominantBaseline="middle"
+                       >
+                         {formatCurrency(item.equity)}
+                       </text>
+                     );
+                   })}
+                </LineChart>
               </Box>
             ) : (
               <Box 
