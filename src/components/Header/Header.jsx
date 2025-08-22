@@ -204,8 +204,15 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
         overlayProps={{ opacity: 0.5, blur: 4 }}
         withCloseButton={false}
         styles={{
-          body: { padding: 0 },
-          inner: { padding: 0 }
+          body: { padding: 0, height: '100%' },
+          inner: { padding: 0, height: '100%' },
+          root: { height: '100%' },
+          content: { height: '100%' }
+        }}
+        classNames={{
+          body: styles.drawerBody,
+          inner: styles.drawerInner,
+          content: styles.drawerContent
         }}
       >
         <div className={styles.drawerContent}>
