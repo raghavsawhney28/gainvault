@@ -1,6 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 
-const Particles = () => {
+const Particles = ({ 
+  className = '',
+  quantity = 200, // Increased from 100 to 200 for more density
+  staticity = 50,
+  ease = 50,
+  size = 0.4,
+  refresh = false,
+  color = '#ffffff',
+  vx = 0,
+  vy = 0
+}) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -21,20 +31,26 @@ const Particles = () => {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.size = Math.random() * 2 + 1;
-        this.opacity = Math.random() * 0.5 + 0.2;
-        this.color = `hsl(${Math.random() * 60 + 180}, 70%, 60%)`;
+        this.vx = (Math.random() - 0.5) * 0.3 + vx; // Reduced base velocity for more static feel
+        this.vy = (Math.random() - 0.5) * 0.3 + vy;
+        this.size = Math.random() * size + 0.5; // Use configurable size
+        this.opacity = Math.random() * 0.6 + 0.3; // Increased opacity for better visibility
+        this.baseColor = color;
+        this.color = color === '#ffffff' ? `hsl(${Math.random() * 60 + 180}, 70%, 60%)` : color;
+        this.staticity = staticity / 100; // Convert to 0-1 range
+        this.ease = ease / 100; // Convert to 0-1 range
       }
 
       update() {
-        this.x += this.vx;
-        this.y += this.vy;
+        // Apply staticity - particles move less when staticity is high
+        if (Math.random() > this.staticity) {
+          this.x += this.vx * this.ease;
+          this.y += this.vy * this.ease;
+        }
 
-        // Bounce off edges
-        if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
-        if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
+        // Bounce off edges with reduced velocity
+        if (this.x <= 0 || this.x >= canvas.width) this.vx *= -0.8;
+        if (this.y <= 0 || this.y >= canvas.height) this.vy *= -0.8;
 
         // Wrap around edges
         if (this.x < 0) this.x = canvas.width;
@@ -56,9 +72,8 @@ const Particles = () => {
 
     // Create particles
     const particles = [];
-    const particleCount = 100;
     
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < quantity; i++) {
       particles.push(new Particle());
     }
 
@@ -72,24 +87,7 @@ const Particles = () => {
         particle.draw();
       });
 
-      // Draw connections between nearby particles
-      particles.forEach((particle, i) => {
-        particles.slice(i + 1).forEach(otherParticle => {
-          const dx = particle.x - otherParticle.x;
-          const dy = particle.y - otherParticle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 150) {
-            const opacity = (150 - distance) / 150 * 0.3;
-            ctx.strokeStyle = `rgba(74, 144, 226, ${opacity})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.stroke();
-          }
-        });
-      });
+      // Connection lines removed - only particles are shown
 
       requestAnimationFrame(animate);
     };
@@ -100,11 +98,12 @@ const Particles = () => {
     return () => {
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, []);
+  }, [quantity, staticity, ease, size, refresh, color, vx, vy]);
 
   return (
     <canvas
       ref={canvasRef}
+      className={className}
       style={{
         position: 'absolute',
         top: 0,

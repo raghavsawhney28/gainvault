@@ -56,7 +56,13 @@ const HeroSection = () => {
     <section className={styles.hero}>
       {/* Particles Background */}
       <div className={styles.particlesContainer}>
-        <Particles />
+        <Particles 
+          quantity={300}
+          staticity={30}
+          ease={40}
+          size={0.6}
+          color="#4A90E2"
+        />
       </div>
       
       <div className={styles.container}>
