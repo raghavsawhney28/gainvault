@@ -51,6 +51,16 @@
 .heroContent {
   max-width: 120rem;
   margin: 0 auto;
+  text-align: left;
+}
+
+/* Name Tag - Top Left */
+.nameTag {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #4A90E2;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  text-align: left;
 }
 
 /* Tagline Container */
@@ -86,15 +96,28 @@
 }
 
 .heroTitle {
-  margin-bottom: calc(var(--spacing-unit) * 3);
+  margin-bottom: calc(var(--spacing-unit) * 2);
   font-size: 75px;
   font-weight: 700;
   line-height: 1.2;
   color: #ffffff !important;
   text-shadow: 0 4px 12px var(--shadow-dark);
-  
-  padding: 20px 30px;
- 
+  padding: 20px 0;
+  text-align: left;
+  transform: translateX(200px);
+}
+
+.enrollTitle {
+  display: block;
+  font-size: 75px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #ffffff !important;
+  text-shadow: 0 4px 12px var(--shadow-dark);
+  padding: 0;
+  text-align: right;
+  margin-top: 10px;
+  transform: translateX(-500px);
 }
 
 .gradientText {

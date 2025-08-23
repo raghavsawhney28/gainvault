@@ -76,10 +76,8 @@ const HeroSection = () => {
       <div className={styles.container}>
         <animated.div style={heroAnimation} className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
-            UNLOCK YOUR POTENTIAL<br />
-            <span className={styles.gradientText}>
-              ENROLL NOW
-            </span>
+            UNLOCK YOUR POTENTIAL
+            <span className={styles.enrollTitle}>ENROLL NOW !</span>
           </h1>
           <p className={styles.heroSubtitle}>
             What if your trading potential wasn't limited by your wallet? With GainVault, it's not. 
