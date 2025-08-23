@@ -48,12 +48,6 @@ const HeroSection = () => {
     navigate('/trading-challenge');
   };
 
-  const taglines = [
-    "GainVault: Altcoins. It's Our Money Now.",
-    "We Provide The Funds. You Provide The Vibes.",
-    "Zero Risk. Just Gains. Mostly."
-  ];
-
   return (
     <section className={styles.hero}>
       {/* Particles Background - Full Page */}
@@ -81,23 +75,10 @@ const HeroSection = () => {
       
       <div className={styles.container}>
         <animated.div style={heroAnimation} className={styles.heroContent}>
-          <div className={styles.taglineContainer}>
-            {taglines.map((tagline, index) => (
-              <div 
-                key={index} 
-                className={styles.tagline} 
-                style={{ 
-                  animationDelay: isMobile ? '0s' : `${index * 0.5}s` // No delay on mobile
-                }}
-              >
-                {tagline}
-              </div>
-            ))}
-          </div>
           <h1 className={styles.heroTitle}>
-            <TextScramble text="Unlock Your" /><br />
+            UNLOCK YOUR POTENTIAL<br />
             <span className={styles.gradientText}>
-              <TextScramble text="True Potential" />
+              ENROLL NOW
             </span>
           </h1>
           <p className={styles.heroSubtitle}>
