@@ -87,7 +87,7 @@
 
 .heroTitle {
   margin-bottom: calc(var(--spacing-unit) * 3);
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: 75px;
   font-weight: 700;
   line-height: 1.2;
   color: #ffffff !important;
