@@ -44,6 +44,22 @@ const HeroSection = () => {
     config: isMobile ? { duration: 100 } : config.gentle, // Faster animation on mobile
   });
 
+  const titleReveal = useSpring({
+    opacity: 1,
+    transform: 'translateX(0px)',
+    from: { opacity: 0, transform: 'translateX(-100px)' },
+    delay: isMobile ? 100 : 400,
+    config: config.gentle,
+  });
+
+  const enrollReveal = useSpring({
+    opacity: 1,
+    transform: 'translateX(0px)',
+    from: { opacity: 0, transform: 'translateX(100px)' },
+    delay: isMobile ? 200 : 600,
+    config: config.gentle,
+  });
+
   const handleStartJourney = () => {
     navigate('/trading-challenge');
   };
@@ -76,8 +92,10 @@ const HeroSection = () => {
       <div className={styles.container}>
         <animated.div style={heroAnimation} className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
-            UNLOCK YOUR POTENTIAL
-            <span className={styles.enrollTitle}>ENROLL NOW !</span>
+            <animated.span style={titleReveal}>UNLOCK YOUR POTENTIAL</animated.span>
+            <span className={styles.enrollTitle}>
+              <animated.span style={enrollReveal}>ENROLL NOW !</animated.span>
+            </span>
           </h1>
           <p className={styles.heroSubtitle}>
             What if your trading potential wasn't limited by your wallet? With GainVault, it's not. 
@@ -91,9 +109,6 @@ const HeroSection = () => {
               onClick={handleStartJourney}
             >
               Get Funded Now →
-            </button>
-            <button className={`${styles.btnSecondary} ${styles.btnLarge}`}>
-              <Play size={16} /> See How It Works
             </button>
           </div>
         </animated.div>
