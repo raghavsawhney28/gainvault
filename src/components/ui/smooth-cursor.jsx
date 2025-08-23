@@ -52,7 +52,7 @@ const DefaultCursorSVG = () => {
 
 export function SmoothCursor({
   cursor = <DefaultCursorSVG />,
-
+  size = "medium", // small, medium, large
   springConfig = {
     damping: 45,
     stiffness: 400,
@@ -79,6 +79,16 @@ export function SmoothCursor({
     stiffness: 500,
     damping: 35,
   });
+
+  // Size-based scaling
+  const getSizeScale = () => {
+    switch (size) {
+      case "small": return 0.6;
+      case "medium": return 0.8;
+      case "large": return 1.2;
+      default: return 0.8;
+    }
+  };
 
   useEffect(() => {
     const updateVelocity = (currentPos) => {
@@ -162,6 +172,7 @@ export function SmoothCursor({
         zIndex: 100,
         pointerEvents: "none",
         willChange: "transform",
+        transform: `scale(${getSizeScale()})`,
       }}
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}

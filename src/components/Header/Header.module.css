@@ -93,7 +93,7 @@
   padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
   border-radius: calc(var(--spacing-unit) * 1);
   transition: all 0.3s ease;
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   position: relative;
 }
 
@@ -236,7 +236,7 @@
   color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 500;
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   transition: all 0.2s ease;
   text-align: left;
   width: 100%;
@@ -264,7 +264,7 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: calc(var(--spacing-unit) * 1.5);
   padding: calc(var(--spacing-unit) * 1.5);
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   min-height: 38px;
@@ -375,7 +375,7 @@
   color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 500;
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   transition: all 0.2s ease;
   text-align: left;
 }
@@ -410,7 +410,7 @@
   border-radius: calc(var(--spacing-unit) * 1);
   font-weight: 600;
   font-size: 0.875rem;
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   transition: all 0.3s ease;
   text-decoration: none;
   min-height: 44px;
@@ -457,7 +457,7 @@
   border-radius: calc(var(--spacing-unit) * 2);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   position: relative;
 }
 
@@ -561,7 +561,7 @@
   color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 500;
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   transition: all 0.2s ease;
   text-align: left;
   width: 100%;
@@ -592,7 +592,7 @@
   background: transparent;
   border: none;
   color: var(--text-primary);
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   padding: calc(var(--spacing-unit) * 1);
   min-height: 44px;
   min-width: 44px;
@@ -1019,7 +1019,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   transition: all 0.3s ease;
 }
 
@@ -1078,7 +1078,7 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 1rem;
   font-weight: 500;
-  cursor: pointer;
+  /* cursor: pointer; - removed for custom cursor */
   transition: all 0.3s ease;
   text-align: left;
   border-left: 3px solid transparent;

@@ -64,7 +64,7 @@ function App() {
 
   return (
     <div className="App cursor-none">
-      <SmoothCursor />
+      <SmoothCursor size="small" />
       <Header 
         isLoggedIn={userData.isLoggedIn}
         username={userData.username}

@@ -28,19 +28,15 @@
 /* Keep text cursor for inputs and interactive elements */
 input,
 textarea,
-select,
-button,
-a,
-[role="button"],
-[tabindex] {
+select {
   cursor: text !important;
 }
 
-/* Special handling for buttons and links */
+/* Special handling for buttons and links - but keep cursor: none for custom cursor */
 button,
 a,
 [role="button"] {
-  cursor: pointer !important;
+  cursor: none !important;
 }
 
 /* This file is intentionally minimal to avoid conflicts with App.css */
