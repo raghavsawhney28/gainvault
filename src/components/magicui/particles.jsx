@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 
 const Particles = ({ 
   className = '',
-  quantity = 8000, // Increased to 800 for extremely dense particles
+  quantity = 15000, // Increased to 15000 for extremely dense particles
   staticity = 50,
   ease = 50,
   size = 0.0, // Decreased from 2.0 to 0.0 for smaller particles
   refresh = false,
-  color = '#ffffff', // Changed to white
+  color = '#00ff00', // Changed to green
   vx = 0,
   vy = 0
 }) => {
@@ -33,10 +33,10 @@ const Particles = ({
         this.y = Math.random() * canvas.height;
         this.vx = (Math.random() - 0.5) * 0.3 + vx; // Reduced base velocity for more static feel
         this.vy = (Math.random() - 0.5) * 0.3 + vy;
-        this.size = Math.random() * size + 0.1; // Decreased base size from 1.5 to 0.5 for smaller particles
+        this.size = Math.random() * size + 0.05; // Decreased base size to 0.05 for even smaller particles
         this.opacity = Math.random() * 0.6 + 0.3; // Increased opacity for better visibility
         this.baseColor = color;
-        this.color = color; // Always use the specified color (white)
+        this.color = color; // Always use the specified color (green)
         this.staticity = staticity / 100; // Convert to 0-1 range
         this.ease = ease / 100; // Convert to 0-1 range
       }
@@ -62,7 +62,7 @@ const Particles = ({
       draw() {
         ctx.save();
         ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = '#00ff00'; // Force green color
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();

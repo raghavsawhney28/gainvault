@@ -49,9 +49,11 @@ const Ripple = ({
         if (this.opacity <= 0) return;
         
         ctx.save();
-        ctx.globalAlpha = this.opacity;
-        ctx.strokeStyle = '#4A90E2';
-        ctx.lineWidth = 3; // Increased from 2 to 3 for better visibility
+        ctx.globalAlpha = this.opacity * 0.7; // Reduce opacity for softer blending
+        ctx.strokeStyle = '#808080';
+        ctx.lineWidth = 2; // Reduce line width for softer appearance
+        ctx.shadowColor = '#808080'; // Add shadow for blending effect
+        ctx.shadowBlur = 5; // Add blur shadow for blending
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.currentSize, 0, Math.PI * 2);
         ctx.stroke();
