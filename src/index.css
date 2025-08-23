@@ -20,8 +20,19 @@
   --shadow-medium: rgba(0, 0, 0, 0.8);
 }
 
-/* Smooth Cursor - Hide default browser cursor */
+/* Enhanced Smooth Cursor - Hide default browser cursor with macOS compatibility */
 * {
+  cursor: none !important;
+}
+
+/* Force cursor hiding on all elements for better macOS support */
+html, body, #root, .App, .main-content, .cursor-none {
+  cursor: none !important;
+}
+
+/* Enhanced cursor hiding for macOS */
+.cursor-hidden,
+.cursor-hidden * {
   cursor: none !important;
 }
 
