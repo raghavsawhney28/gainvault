@@ -16,8 +16,8 @@ export function SmoothCursor() {
     
     // Configuration - optimized for macOS
     const RING_COUNT = 4;
-    const EASING = isMacOS ? 0.35 : 0.2; // Faster easing for macOS
-    const DOT_EASING = isMacOS ? 0.4 : 0.3; // Faster dot movement for macOS
+    const EASING = isMacOS ? 0.6 : 0.2; // Much faster easing for macOS
+    const DOT_EASING = isMacOS ? 0.7 : 0.3; // Much faster dot movement for macOS
     
     // Performance optimization for macOS
     const FRAME_RATE = isMacOS ? 60 : 60; // Maintain 60fps on macOS
