@@ -6,6 +6,8 @@ import styles from './HeroSection.module.css';
 import Particles from '../magicui/particles';
 import Ripple from '../magicui/ripple';
 import TextScramble from '../TextScramble/TextScramble';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -64,6 +66,13 @@ const HeroSection = () => {
     navigate('/trading-challenge');
   };
 
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: false,
+    });
+  }, []);
+
   return (
     <section className={styles.hero}>
       {/* Particles Background - Full Page */}
@@ -92,12 +101,12 @@ const HeroSection = () => {
       <div className={styles.container}>
         <animated.div style={heroAnimation} className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
-            <animated.span style={titleReveal}>UNLOCK YOUR POTENTIAL</animated.span>
+            <animated.span style={titleReveal} data-aos="fade-up" data-aos-duration="1000">UNLOCK YOUR POTENTIAL</animated.span>
             <span className={styles.enrollTitle}>
-              <animated.span style={enrollReveal}>ENROLL NOW !</animated.span>
+              <animated.span style={enrollReveal} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">ENROLL NOW !</animated.span>
             </span>
           </h1>
-          <p className={styles.heroSubtitle}>
+          <p className={styles.heroSubtitle} data-aos="fade-up" data-aos-duration="1200" data-aos-delay="300">
             What if your trading potential wasn't limited by your wallet? With GainVault, it's not. 
             We provide the capital so you can execute the trades you've always dreamed of. 
             Risk-free trading. Massive growth. This is your chance to take control. 
@@ -107,6 +116,7 @@ const HeroSection = () => {
             <button 
               className={`${styles.btnPrimary} ${styles.btnLarge}`}
               onClick={handleStartJourney}
+              data-aos="zoom-in" data-aos-delay="600"
             >
               Get Funded Now →
             </button>
