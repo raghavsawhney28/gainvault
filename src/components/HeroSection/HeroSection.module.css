@@ -103,7 +103,8 @@
   color: #ffffff !important;
   text-shadow: 0 4px 12px var(--shadow-dark);
   padding: 20px 0;
-  text-align: center;
+  text-align: left;
+
 }
 
 .enrollTitle {
@@ -116,7 +117,7 @@
   padding: 0;
   text-align: center;
   margin-top: 10px;
-  transform: translateX(230px);
+  transform: translateX(-660px);
 }
 
 .gradientText {
@@ -126,15 +127,17 @@
 }
 
 .heroSubtitle {
-  font-size: 1.25rem;
-  max-width: 122rem;
+  font-size: 1.5rem;
+  max-width: 60rem;
   margin: 0 auto calc(var(--spacing-unit) * 5) auto;
   color: #ffffff !important;
   line-height: 1.6;
   font-weight: 500;
   text-shadow: 0 2px 8px var(--shadow-dark);
-  padding: 16px 20px;
-  text-align: center;
+  padding: 16px 4px;
+  text-align: left;
+  position: absolute;
+  top: 300px;
 }
 
 .heroSubtitle strong {
@@ -148,6 +151,8 @@
   gap: calc(var(--spacing-unit) * 3);
   justify-content: center;
   flex-wrap: wrap;
+  position: absolute;
+  top: 553px;
 }
 
 .btnPrimary, .btnSecondary {
