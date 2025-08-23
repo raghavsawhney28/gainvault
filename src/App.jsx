@@ -11,6 +11,7 @@ import Referral from './pages/Referral/Referral';
 import Dashboard from './pages/Dashboard/Dashboard';
 import AuthPage from './components/AuthPage/AuthPage';
 import useAuth from './hooks/useAuth';
+import { SmoothCursor } from './components/ui/smooth-cursor';
 import './App.css';
 
 function App() {
@@ -52,35 +53,38 @@ function App() {
 
   // Memoize main content to prevent unnecessary re-renders
   const mainContent = useMemo(() => (
-    <main className="main-content">
-      <HeroSection />
-      <FeaturesSection />
-      <PricingSection />
+    <main className="main-content cursor-none">
+      <HeroSection className="cursor-none" />
+      <FeaturesSection className="cursor-none" />
+      <PricingSection className="cursor-none" />
     </main>
   ), []);
 
   console.log('🔍 App Component Debug:', { isLoggedIn, user, username: user?.username });
 
   return (
-    <div className="App">
+    <div className="App cursor-none">
+      <SmoothCursor />
       <Header 
         isLoggedIn={userData.isLoggedIn}
         username={userData.username}
         onAuthClick={openAuthModal}
         onLogout={handleLogout}
+        className="cursor-none"
       />
       <Routes>
         <Route path="/" element={mainContent} />
-        <Route path="/trading-challenge" element={<TradingChallenge />} />
-        <Route path="/rules" element={<Rules />} />
-        <Route path="/referral" element={<Referral />} />
-        <Route path="/dashboard/:username" element={<Dashboard />} />
+        <Route path="/trading-challenge" element={<TradingChallenge className="cursor-none" />} />
+        <Route path="/rules" element={<Rules className="cursor-none" />} />
+        <Route path="/referral" element={<Referral className="cursor-none" />} />
+        <Route path="/dashboard/:username" element={<Dashboard className="cursor-none" />} />
       </Routes>
-      <Footer />
+      <Footer className="cursor-none" />
       {showAuthModal && (
         <AuthPage 
           onAuthSuccess={handleAuthSuccess}
           onClose={closeAuthModal}
+          className="cursor-none"
         />
       )}
     </div>

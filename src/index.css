@@ -20,6 +20,29 @@
   --shadow-medium: rgba(0, 0, 0, 0.8);
 }
 
+/* Smooth Cursor - Hide default browser cursor */
+* {
+  cursor: none !important;
+}
+
+/* Keep text cursor for inputs and interactive elements */
+input,
+textarea,
+select,
+button,
+a,
+[role="button"],
+[tabindex] {
+  cursor: text !important;
+}
+
+/* Special handling for buttons and links */
+button,
+a,
+[role="button"] {
+  cursor: pointer !important;
+}
+
 /* This file is intentionally minimal to avoid conflicts with App.css */
 html, body, #root {
   height: 100%;
