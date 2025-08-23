@@ -1,187 +1,163 @@
 "use client";
-import { motion, useSpring } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-const DefaultCursorSVG = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={50}
-      height={54}
-      viewBox="0 50 54"
-      fill="none"
-      style={{ scale: 0.5 }}>
-      <g filter="url(#filter0_d_91_7928)">
-        <path
-          d="M42.6817 41.1495L27.5103 6.79925C26.7269 5.02557 24.2082 5.02558 23.3927 6.79925L7.59814 41.1495C6.75833 42.9759 8.52712 44.8902 10.4125 44.1954L24.3757 39.0496C24.8829 38.8627 25.4385 25.9422 39.0496L39.8121 44.1954C41.6849 43.4884 42.6817 41.1495Z"
-          fill="black" />
-        <path
-          d="M43.7146 40.6933L28.5431 6.34306C27.3556 3.65428 23.5772 3.69516 22.3668 6.32755L6.57226 40.6778C5.3134 43.4156 7.97238 46.298 10.803 45.2549L24.7662 40.109C25.0221 40.0147 25.2999 40.0156 25.5494 40.1082L39.4193 45.254C42.2261 46.2953 44.9254 43.4347 43.7146 40.6933Z"
-          stroke="white"
-          strokeWidth={2.25825} />
-      </g>
-      <defs>
-        <filter
-          id="filter0_d_91_7928"
-          x={0.602397}
-          y={0.952444}
-          width={49.0584}
-          height={52.428}
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB">
-          <feFlood floodOpacity={0} result="BackgroundImageFix" />
-          <feColorMatrix in="SourceAlpha" type="matrix" values="0 127" result="hardAlpha" />
-          <feOffset dy={2.25825} />
-          <feGaussianBlur stdDeviation={2.25825} />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix type="matrix" values="0 0.08" />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_91_7928" />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_91_7928"
-            result="shape" />
-        </filter>
-      </defs>
-    </svg>
-  );
-};
-
-export function SmoothCursor({
-  cursor = <DefaultCursorSVG />,
-  size = "medium", // small, medium, large
-  springConfig = {
-    damping: 45,
-    stiffness: 400,
-    mass: 1,
-    restDelta: 0.001,
-  }
-}) {
-  const [isMoving, setIsMoving] = useState(false);
-  const lastMousePos = useRef({ x: 0, y: 0 });
-  const velocity = useRef({ x: 0, y: 0 });
-  const lastUpdateTime = useRef(Date.now());
-  const previousAngle = useRef(0);
-  const accumulatedRotation = useRef(0);
-
-  const cursorX = useSpring(0, springConfig);
-  const cursorY = useSpring(0, springConfig);
-  const rotation = useSpring(0, {
-    ...springConfig,
-    damping: 60,
-    stiffness: 300,
-  });
-  const scale = useSpring(1, {
-    ...springConfig,
-    stiffness: 500,
-    damping: 35,
-  });
-
-  // Size-based scaling
-  const getSizeScale = () => {
-    switch (size) {
-      case "small": return 0.6;
-      case "medium": return 0.8;
-      case "large": return 1.2;
-      default: return 0.8;
-    }
-  };
+export function SmoothCursor() {
+  const containerRef = useRef(null);
+  const cursorsRef = useRef([]);
+  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    const updateVelocity = (currentPos) => {
-      const currentTime = Date.now();
-      const deltaTime = currentTime - lastUpdateTime.current;
+    const container = containerRef.current;
+    if (!container) return;
 
-      if (deltaTime > 0) {
-        velocity.current = {
-          x: (currentPos.x - lastMousePos.current.x) / deltaTime,
-          y: (currentPos.y - lastMousePos.current.y) / deltaTime,
-        };
-      }
+    // Configuration
+    const RING_COUNT = 4;
+    const EASING = 0.2; // Reduced for much smoother movement
+    
+    // Define the sizes and colors for each ring
+    const ringProperties = [
+      { width: 5, colorClass: 'ring-1' }, // Smallest ring
+      { width: 16, colorClass: 'ring-2' }, // Medium ring
+      { width: 24, colorClass: 'ring-3' }, // Large ring
+      { width: 30, colorClass: 'ring-4' }  // Largest ring
+    ];
 
-      lastUpdateTime.current = currentTime;
-      lastMousePos.current = currentPos;
+    // Initialize mouse position
+    mouseRef.current = {
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2
     };
 
-    const smoothMouseMove = (e) => {
-      const currentPos = { x: e.clientX, y: e.clientY };
-      updateVelocity(currentPos);
+    const cursors = [];
 
-      const speed = Math.sqrt(Math.pow(velocity.current.x, 2) + Math.pow(velocity.current.y, 2));
+    // Create the central dot first
+    const dotDiv = document.createElement('div');
+    dotDiv.className = 'floating-dot';
+    dotDiv.style.left = `${mouseRef.current.x}px`;
+    dotDiv.style.top = `${mouseRef.current.y}px`;
+    container.appendChild(dotDiv);
+    cursors.push({ el: dotDiv, x: mouseRef.current.x, y: mouseRef.current.y });
 
-      cursorX.set(currentPos.x);
-      cursorY.set(currentPos.y);
+    // Create the three rings based on our defined properties
+    for (let i = 0; i < RING_COUNT; i++) {
+      const ringDiv = document.createElement('div');
+      ringDiv.className = `floating-ring ${ringProperties[i].colorClass}`;
+      ringDiv.style.width = `${ringProperties[i].width}px`;
+      ringDiv.style.height = `${ringProperties[i].width}px`;
+      ringDiv.style.left = `${mouseRef.current.x}px`;
+      ringDiv.style.top = `${mouseRef.current.y}px`;
+      container.appendChild(ringDiv);
+      
+      cursors.push({
+        el: ringDiv,
+        x: mouseRef.current.x,
+        y: mouseRef.current.y
+      });
+    }
 
-      if (speed > 0.1) {
-        const currentAngle =
-          Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI) +
-          90;
+    cursorsRef.current = cursors;
 
-        let angleDiff = currentAngle - previousAngle.current;
-        if (angleDiff > 180) angleDiff -= 360;
-        if (angleDiff < -180) angleDiff += 360;
-        accumulatedRotation.current += angleDiff;
-        rotation.set(accumulatedRotation.current);
-        previousAngle.current = currentAngle;
-
-        scale.set(0.95);
-        setIsMoving(true);
-
-        const timeout = setTimeout(() => {
-          scale.set(1);
-          setIsMoving(false);
-        }, 150);
-
-        return () => clearTimeout(timeout);
-      }
+    // Event listener for mouse movement
+    const handleMouseMove = (e) => {
+      mouseRef.current.x = e.clientX;
+      mouseRef.current.y = e.clientY;
     };
 
-    let rafId;
-    const throttledMouseMove = (e) => {
-      if (rafId) return;
+    // Animation loop
+    let animationId;
+    const animate = () => {
+      const cursors = cursorsRef.current;
+      if (!cursors.length) return;
 
-      rafId = requestAnimationFrame(() => {
-        smoothMouseMove(e);
-        rafId = 0;
+      // The first element (the dot) follows the mouse with slight smoothing
+      cursors[0].x += (mouseRef.current.x - cursors[0].x) * 0.3;
+      cursors[0].y += (mouseRef.current.y - cursors[0].y) * 0.3;
+
+      // The rings follow the previous element in the array with smooth easing
+      for (let i = 1; i < cursors.length; i++) {
+        const prevCursor = cursors[i - 1];
+        const currentCursor = cursors[i];
+
+        currentCursor.x += (prevCursor.x - currentCursor.x) * EASING;
+        currentCursor.y += (prevCursor.y - currentCursor.y) * EASING;
+
+        // Update the position of the element
+        currentCursor.el.style.left = `${currentCursor.x}px`;
+        currentCursor.el.style.top = `${currentCursor.y}px`;
+      }
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    // Start animation and add event listener
+    animate();
+    document.addEventListener('mousemove', handleMouseMove);
+    document.body.style.cursor = 'none';
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.body.style.cursor = 'auto';
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+      // Remove all cursor elements
+      cursors.forEach(cursor => {
+        if (cursor.el && cursor.el.parentNode) {
+          cursor.el.parentNode.removeChild(cursor.el);
+        }
       });
     };
-
-    document.body.style.cursor = "none";
-    window.addEventListener("mousemove", throttledMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", throttledMouseMove);
-      document.body.style.cursor = "auto";
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-  }, [cursorX, cursorY, rotation, scale]);
+  }, []);
 
   return (
-    <motion.div
+    <div 
+      ref={containerRef}
+      className="effect-container"
       style={{
-        position: "fixed",
-        left: cursorX,
-        top: cursorY,
-        translateX: "-50%",
-        translateY: "-50%",
-        rotate: rotation,
-        scale: scale,
-        zIndex: 100,
-        pointerEvents: "none",
-        willChange: "transform",
-        transform: `scale(${getSizeScale()})`,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        pointerEvents: 'none',
+        zIndex: 9999
       }}
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 400,
-        damping: 30,
-      }}>
-      {cursor}
-    </motion.div>
+    >
+      <style jsx>{`
+        
+        
+        .floating-ring {
+          position: absolute;
+          background-color: transparent;
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        .ring-1 {
+          border: 2px solid #c6c6c6;
+          /* box-shadow: 0 0 5px 2px #ff0088, inset 0 0 5px 2px #ff0088; */
+          z-index: 9997;
+        }
+
+        .ring-2 {
+          border: 2px solid #ff0088;
+          /* box-shadow: 0 0 5px 2px #dd00ee, inset 0 0 5px 2px #dd00ee; */
+          z-index: 9996;
+        }
+
+        .ring-3 {
+          border: 2px solid #dd00ee;
+          /* box-shadow: 0 0 5px 2px #9911ff, inset 0 0 5px 2px #9911ff; */
+          z-index: 9995;
+        }
+
+        .ring-4 {
+          border: 2px solid #9911ff;
+          
+          z-index: 9994;
+        }
+      `}</style>
+    </div>
   );
 }
