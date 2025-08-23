@@ -33,7 +33,7 @@
 .rippleContainer {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 27%;
   width: 100%;
   height: 100%;
   z-index: 2;
@@ -46,12 +46,39 @@
   padding: 0 calc(var(--spacing-unit) * 3);
   position: relative;
   z-index: 2;
+  display: flex;
+  /* align-items: center; */
+  min-height: 100vh;
+}
+
+.leftContent {
+  flex: 1;
+  max-width: 55%;
+  position: relative;
+}
+
+.rightContent {
+  flex: 1;
+  max-width: 45%;
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  top: -150px;
+  left: 0;
+  padding-top: 100px;
+  border-bottom-right-radius: 500px !important;
+  background: rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .heroContent {
-  max-width: 120rem;
-  margin: 0 auto;
-  text-align: center;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+  z-index: 3;
+  position: relative;
 }
 
 /* Name Tag - Top Left */
@@ -91,7 +118,7 @@
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-336px);
   }
 }
 
@@ -117,7 +144,7 @@
   padding: 0;
   text-align: center;
   margin-top: 10px;
-  transform: translateX(-660px);
+  transform: translateX(-240px);
 }
 
 .gradientText {
@@ -202,9 +229,24 @@
 }
 
 /* Mobile Styles */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .container {
+    flex-direction: column;
     padding: 0 calc(var(--spacing-unit) * 2);
+  }
+
+  .leftContent {
+    max-width: 100%;
+    margin-bottom: calc(var(--spacing-unit) * 4);
+  }
+
+  .rightContent {
+    max-width: 100%;
+    height: 400px;
+  }
+
+  .heroContent {
+    text-align: center;
   }
 
   .hero {
@@ -292,7 +334,7 @@
 }
 
 /* Extra small mobile devices */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .hero {
     padding: calc(var(--spacing-unit) * 10) 0 calc(var(--spacing-unit) * 4) 0;
   }
@@ -337,6 +379,38 @@
     max-width: 260px;
     padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
     font-size: 0.95rem;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .hero {
+    padding: calc(var(--spacing-unit) * 8) 0 calc(var(--spacing-unit) * 3) 0;
+  }
+  
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 1);
+  }
+  
+  .heroContent {
+    padding: 0;
+  }
+  
+  .heroTitle {
+    font-size: clamp(1.5rem, 10vw, 1.8rem);
+    margin-bottom: calc(var(--spacing-unit) * 1);
+  }
+  
+  .heroSubtitle {
+    font-size: 0.9rem;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    padding: 0;
+  }
+  
+  .heroActions .btnLarge {
+    max-width: 240px;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+    font-size: 0.9rem;
   }
 }
 

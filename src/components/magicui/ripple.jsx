@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 const Ripple = ({ 
-  mainCircleSize = 210, 
+  mainCircleSize = 150, 
   mainCircleOpacity = 0.24, 
   numCircles = 8 
 }) => {
@@ -79,7 +79,7 @@ const Ripple = ({
       if (ripples.length < numCircles) {
         const x = canvas.width / 2; // Center horizontally
         const y = canvas.height * 0.25; // Start from 35% down (moved higher up)
-        const size = mainCircleSize + Math.random() * 100;
+        const size = mainCircleSize + Math.random() * 30;
         const opacity = mainCircleOpacity + Math.random() * 0.3 + 0.2; // Increased base opacity further
         const speed = 1 + Math.random() * 1; // Reduced speed range from 2-4 to 1-2
         
