@@ -129,9 +129,13 @@ const HeroSection = () => {
         <div className={styles.leftContent}>
           <animated.div style={heroAnimation} className={styles.heroContent}>
             <h1 className={styles.heroTitle}>
-              <animated.span style={titleReveal} data-aos="fade-up" data-aos-duration="1000">UNLOCK YOUR POTENTIAL</animated.span>
+              <animated.span style={titleReveal} data-aos="fade-up" data-aos-duration="1000">
+                <TextScramble text="UNLOCK&nbsp;YOUR&nbsp;POTENTIAL" />
+              </animated.span>
               <span className={styles.enrollTitle}>
-                <animated.span style={enrollReveal} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">ENROLL NOW !</animated.span>
+                <animated.span style={enrollReveal} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                  <TextScramble text="ENROLL&nbsp;NOW&nbsp;!" />
+                </animated.span>
               </span>
             </h1>
             <p className={styles.heroSubtitle} data-aos="fade-up" data-aos-duration="1200" data-aos-delay="300">
