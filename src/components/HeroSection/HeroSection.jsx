@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSpring, animated, config } from '@react-spring/web';
 import { Play } from 'lucide-react';
@@ -13,6 +13,7 @@ import Spline from '@splinetool/react-spline';
 const HeroSection = () => {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
+  const splineRef = useRef(null);
 
   // Detect mobile device - more robust approach
   useEffect(() => {
@@ -72,6 +73,44 @@ const HeroSection = () => {
       duration: 1000,
       once: false,
     });
+
+    // Prevent zoom on Spline component
+    const preventZoom = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    };
+
+    // Add zoom prevention to the Spline container
+    if (splineRef.current) {
+      const splineContainer = splineRef.current;
+      
+      // Prevent wheel zoom
+      splineContainer.addEventListener('wheel', preventZoom, { passive: false, capture: true });
+      
+      // Prevent touch zoom
+      splineContainer.addEventListener('touchstart', preventZoom, { passive: false, capture: true });
+      splineContainer.addEventListener('touchmove', preventZoom, { passive: false, capture: true });
+      splineContainer.addEventListener('touchend', preventZoom, { passive: false, capture: true });
+      
+      // Prevent gesture zoom (iOS)
+      splineContainer.addEventListener('gesturestart', preventZoom, { passive: false, capture: true });
+      splineContainer.addEventListener('gesturechange', preventZoom, { passive: false, capture: true });
+      splineContainer.addEventListener('gestureend', preventZoom, { passive: false, capture: true });
+    }
+
+    return () => {
+      if (splineRef.current) {
+        const splineContainer = splineRef.current;
+        splineContainer.removeEventListener('wheel', preventZoom, { capture: true });
+        splineContainer.removeEventListener('touchstart', preventZoom, { capture: true });
+        splineContainer.removeEventListener('touchmove', preventZoom, { passive: false, capture: true });
+        splineContainer.removeEventListener('touchend', preventZoom, { capture: true });
+        splineContainer.removeEventListener('gesturestart', preventZoom, { capture: true });
+        splineContainer.removeEventListener('gesturechange', preventZoom, { capture: true });
+        splineContainer.removeEventListener('gestureend', preventZoom, { capture: true });
+      }
+    };
   }, []);
 
   return (
@@ -127,9 +166,19 @@ const HeroSection = () => {
         </div>
         
         <div className={styles.rightContent}>
-          <Spline
-            scene="https://prod.spline.design/ULvrhxOiNo1pQrjD/scene.splinecode"
-          />
+          <div className={styles.splineWrapper}>
+            <Spline
+              ref={splineRef}
+              scene="https://prod.spline.design/71arM2G5wGF3KtgI/scene.splinecode"
+              style={{
+                touchAction: 'none',
+                userSelect: 'none',
+                WebkitUserSelect: 'none',
+                MozUserSelect: 'none',
+                msUserSelect: 'none'
+              }}
+            />
+          </div>
         </div>
       </div>
       
