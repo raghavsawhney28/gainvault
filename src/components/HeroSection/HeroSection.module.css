@@ -337,8 +337,7 @@
   }
 
   .rightContent {
-    max-width: 100%;
-    height: 400px;
+    display: none; /* Hide on mobile */
   }
 
   .heroContent {

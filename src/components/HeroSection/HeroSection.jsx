@@ -126,17 +126,19 @@ const HeroSection = () => {
         />
       </div>
       
-      {/* Background Effects Container */}
-      <div className={styles.backgroundEffects}>
-        {/* Ripple Background - HeroSection Only */}
-        <div className={styles.rippleContainer}>
-          <Ripple 
-            mainCircleSize={200}
-            mainCircleOpacity={0.35}
-            numCircles={8}
-          />
+      {/* Background Effects Container - Desktop Only */}
+      {!isMobile && (
+        <div className={styles.backgroundEffects}>
+          {/* Ripple Background - HeroSection Only */}
+          <div className={styles.rippleContainer}>
+            <Ripple 
+              mainCircleSize={150}
+              mainCircleOpacity={0.24}
+              numCircles={8}
+            />
+          </div>
         </div>
-      </div>
+      )}
       
       <div className={styles.container}>
         <div className={styles.leftContent}>
@@ -165,21 +167,24 @@ const HeroSection = () => {
           </animated.div>
         </div>
         
-        <div className={styles.rightContent}>
-          <div className={styles.splineWrapper}>
-            <Spline
-              ref={splineRef}
-              scene="https://prod.spline.design/71arM2G5wGF3KtgI/scene.splinecode"
-              style={{
-                touchAction: 'none',
-                userSelect: 'none',
-                WebkitUserSelect: 'none',
-                MozUserSelect: 'none',
-                msUserSelect: 'none'
-              }}
-            />
+        {/* Spline Design - Desktop Only */}
+        {!isMobile && (
+          <div className={styles.rightContent}>
+            <div className={styles.splineWrapper}>
+              <Spline
+                ref={splineRef}
+                scene="https://prod.spline.design/71arM2G5wGF3KtgI/scene.splinecode"
+                style={{
+                  touchAction: 'none',
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none',
+                  MozUserSelect: 'none',
+                  msUserSelect: 'none'
+                }}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
       
     </section>
