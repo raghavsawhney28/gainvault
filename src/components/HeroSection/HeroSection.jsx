@@ -4,7 +4,6 @@ import { useSpring, animated, config } from '@react-spring/web';
 import { Play } from 'lucide-react';
 import styles from './HeroSection.module.css';
 import Particles from '../magicui/particles';
-import Ripple from '../magicui/ripple';
 import TextScramble from '../TextScramble/TextScramble';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -125,20 +124,6 @@ const HeroSection = () => {
           color="#4A90E2"
         />
       </div>
-      
-      {/* Background Effects Container - Desktop Only */}
-      {!isMobile && (
-        <div className={styles.backgroundEffects}>
-          {/* Ripple Background - HeroSection Only */}
-          <div className={styles.rippleContainer}>
-            <Ripple 
-              mainCircleSize={150}
-              mainCircleOpacity={0.24}
-              numCircles={8}
-            />
-          </div>
-        </div>
-      )}
       
       <div className={styles.container}>
         <div className={styles.leftContent}>
