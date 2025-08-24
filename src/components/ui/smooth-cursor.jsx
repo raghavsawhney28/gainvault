@@ -6,6 +6,9 @@ export function SmoothCursor() {
   const cursorsRef = useRef([]);
   const mouseRef = useRef({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
+  
+  // Global state for cursor visibility
+  const cursorHiddenRef = useRef(false);
 
   useEffect(() => {
     // Detect mobile device
@@ -140,6 +143,98 @@ export function SmoothCursor() {
       mouseRef.current.y = e.clientY;
     };
 
+    // Event listener for mouse leaving the window
+    const handleMouseLeave = () => {
+      forceHideCursor();
+    };
+
+    // Event listener for mouse entering the window
+    const handleMouseEnter = () => {
+      forceShowCursor();
+    };
+
+    // Check if cursor is outside viewport bounds
+    const isCursorOutsideViewport = (x, y) => {
+      // Add a small buffer to prevent edge cases
+      const buffer = 10;
+      return x < -buffer || x > window.innerWidth + buffer || y < -buffer || y > window.innerHeight + buffer;
+    };
+
+    // Force hide cursor elements
+    const forceHideCursor = () => {
+      cursorHiddenRef.current = true;
+      const cursors = cursorsRef.current;
+      
+      cursors.forEach((cursor, index) => {
+        if (cursor.el) {
+          cursor.el.style.opacity = '0';
+          cursor.el.style.visibility = 'hidden';
+          cursor.el.style.display = 'none';
+          cursor.el.style.pointerEvents = 'none';
+          
+          // Also try to hide with CSS classes
+          cursor.el.classList.add('cursor-hidden');
+        }
+      });
+      
+      // Also try to hide all elements with the cursor classes
+      const allCursorElements = document.querySelectorAll('.floating-dot, .floating-ring');
+      allCursorElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.visibility = 'hidden';
+        el.style.display = 'none';
+        el.style.pointerEvents = 'none';
+        el.classList.add('cursor-hidden');
+      });
+      
+      // Add a global CSS rule to hide all cursor elements
+      if (!document.getElementById('cursor-hide-style')) {
+        const style = document.createElement('style');
+        style.id = 'cursor-hide-style';
+        style.textContent = `
+          .floating-dot, .floating-ring {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            display: none !important;
+            pointer-events: none !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    };
+
+    // Force show cursor elements
+    const forceShowCursor = () => {
+      cursorHiddenRef.current = false;
+      const cursors = cursorsRef.current;
+      
+      cursors.forEach((cursor, index) => {
+        if (cursor.el) {
+          cursor.el.style.opacity = '1';
+          cursor.el.style.visibility = 'visible';
+          cursor.el.style.display = 'block';
+          cursor.el.style.pointerEvents = 'none';
+          cursor.el.classList.remove('cursor-hidden');
+        }
+      });
+      
+      // Also try to show all elements with the cursor classes
+      const allCursorElements = document.querySelectorAll('.floating-dot, .floating-ring');
+      allCursorElements.forEach(el => {
+        el.style.opacity = '1';
+        el.style.visibility = 'visible';
+        el.style.display = 'block';
+        el.style.pointerEvents = 'none';
+        el.classList.remove('cursor-hidden');
+      });
+      
+      // Remove the global CSS rule
+      const hideStyle = document.getElementById('cursor-hide-style');
+      if (hideStyle) {
+        hideStyle.remove();
+      }
+    };
+
     // Animation loop with performance optimization
     let animationId;
     const animate = (currentTime) => {
@@ -152,6 +247,22 @@ export function SmoothCursor() {
         return;
       }
       lastFrameTime = currentTime;
+
+      // Check if cursor is outside viewport
+      const isOutside = isCursorOutsideViewport(mouseRef.current.x, mouseRef.current.y);
+      
+      // Update cursor visibility based on position and global state
+      if (isOutside || cursorHiddenRef.current) {
+        forceHideCursor();
+      } else {
+        forceShowCursor();
+      }
+
+      // If cursor is outside viewport or globally hidden, don't animate positions
+      if (isOutside || cursorHiddenRef.current) {
+        animationId = requestAnimationFrame(animate);
+        return;
+      }
 
       // The first element (the dot) follows the mouse with platform-optimized smoothing
       cursors[0].x += (mouseRef.current.x - cursors[0].x) * DOT_EASING;
@@ -176,6 +287,12 @@ export function SmoothCursor() {
     // Start animation and add event listener
     animate();
     document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mouseenter', handleMouseEnter);
+    
+    // Also add listeners to window for better coverage
+    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mouseenter', handleMouseEnter);
     
     // Hide cursor with enhanced method
     hideCursor();
@@ -184,6 +301,10 @@ export function SmoothCursor() {
     return () => {
       window.removeEventListener('resize', checkMobile);
       document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('mouseenter', handleMouseEnter);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('mouseenter', handleMouseEnter);
       
       // Restore cursor
       try {
@@ -191,6 +312,12 @@ export function SmoothCursor() {
         document.documentElement.style.cursor = 'auto';
         document.body.classList.remove('cursor-hidden');
         document.documentElement.classList.remove('cursor-hidden');
+        
+        // Remove global cursor hiding CSS
+        const hideStyle = document.getElementById('cursor-hide-style');
+        if (hideStyle) {
+          hideStyle.remove();
+        }
         
         // Clean up macOS-specific cursor hiding
         if (isMacOS && container._cursorStyle) {
@@ -253,6 +380,7 @@ export function SmoothCursor() {
           border-radius: 50%;
           transform: translate(-50%, -50%);
           pointer-events: none;
+          transition: opacity 0.2s ease-out;
         }
 
         .ring-1 {
@@ -275,6 +403,10 @@ export function SmoothCursor() {
           z-index: 9994;
         }
         
+        .floating-dot {
+          transition: opacity 0.2s ease-out;
+        }
+        
         /* Enhanced cursor hiding for macOS */
         :global(.cursor-hidden) {
           cursor: none !important;
@@ -282,6 +414,23 @@ export function SmoothCursor() {
         
         :global(.cursor-hidden *) {
           cursor: none !important;
+        }
+        
+        /* Force hide cursor elements when hidden */
+        .floating-dot.cursor-hidden,
+        .floating-ring.cursor-hidden {
+          opacity: 0 !important;
+          visibility: hidden !important;
+          display: none !important;
+          pointer-events: none !important;
+        }
+        
+        /* Ensure cursor elements are visible when not hidden */
+        .floating-dot:not(.cursor-hidden),
+        .floating-ring:not(.cursor-hidden) {
+          opacity: 1 !important;
+          visibility: visible !important;
+          display: block !important;
         }
       `}</style>
     </div>
