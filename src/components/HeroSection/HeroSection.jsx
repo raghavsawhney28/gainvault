@@ -173,7 +173,7 @@ const HeroSection = () => {
             <div className={styles.splineWrapper}>
               <Spline
                 ref={splineRef}
-                scene="https://prod.spline.design/71arM2G5wGF3KtgI/scene.splinecode"
+                scene="https://prod.spline.design/ULvrhxOiNo1pQrjD/scene.splinecode"
                 style={{
                   touchAction: 'none',
                   userSelect: 'none',
