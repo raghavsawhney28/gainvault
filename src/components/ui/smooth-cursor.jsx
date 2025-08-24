@@ -1,12 +1,30 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function SmoothCursor() {
   const containerRef = useRef(null);
   const cursorsRef = useRef([]);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Detect mobile device
+    const checkMobile = () => {
+      const width = window.innerWidth;
+      setIsMobile(width <= 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+    
+    // If mobile, don't initialize smooth cursor
+    if (isMobile) {
+      return;
+    }
+
     const container = containerRef.current;
     if (!container) return;
 
@@ -164,6 +182,7 @@ export function SmoothCursor() {
 
     // Cleanup
     return () => {
+      window.removeEventListener('resize', checkMobile);
       document.removeEventListener('mousemove', handleMouseMove);
       
       // Restore cursor
@@ -195,7 +214,12 @@ export function SmoothCursor() {
         }
       });
     };
-  }, []);
+  }, [isMobile]); // Add isMobile to dependency array
+
+  // Don't render on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div 
