@@ -41,24 +41,35 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* Horizontal Cards Container */
+.cardsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  min-height: 80vh;
+  flex-wrap: wrap;
+}
+
 /* Individual Animated Cards */
 .animatedCard {
-  height: 100vh;
-  width: 100%;
+  height: 400px;
+  width: 350px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
   position: relative;
   overflow: hidden;
   background: transparent;
+  flex-shrink: 0;
 }
 
 .cardContent {
   text-align: center;
-  width: 90vw;
-  max-width: 1200px;
-  height: 80vh;
+  width: 100%;
+  height: 100%;
   padding: 0;
   border-radius: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -70,6 +81,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.15s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .cardOverlay {
@@ -85,6 +97,58 @@
   align-items: center;
   padding: 3rem;
   z-index: 2;
+}
+
+/* 3D Card Face Styles */
+.cardFace {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cardFaceBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  transform: rotateY(180deg);
+}
+
+/* Fallback for browsers without 3D transform support */
+@supports not (transform-style: preserve-3d) {
+  .cardContent {
+    transform-style: flat;
+  }
+  
+  .cardFace {
+    backface-visibility: visible;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .cardFaceBack {
+    transform: none;
+    opacity: 0;
+  }
+  
+  .cardContent.flipped .cardFace {
+    opacity: 0;
+  }
+  
+  .cardContent.flipped .cardFaceBack {
+    opacity: 1;
+  }
 }
 
 .cardTitle {
@@ -141,6 +205,18 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .cardsContainer {
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .animatedCard {
+    height: 350px;
+    width: 300px;
+  }
+}
+
 @media (max-width: 768px) {
   .headerSection {
     padding: 1rem;
@@ -154,13 +230,19 @@
     font-size: clamp(1rem, 4vw, 1.2rem);
   }
   
-  .animatedCard {
+  .cardsContainer {
+    flex-direction: column;
+    gap: 1rem;
     padding: 1rem;
   }
   
+  .animatedCard {
+    height: 300px;
+    width: 90vw;
+    max-width: 400px;
+  }
+  
   .cardContent {
-    width: 95vw;
-    height: 75vh;
     border-radius: 1.5rem;
   }
   

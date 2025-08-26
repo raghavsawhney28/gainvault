@@ -1,5 +1,4 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useEffect, useState } from 'react';
 import styles from './FeaturesSection.module.css';
 
 const FeaturesSection = () => {
@@ -7,17 +6,20 @@ const FeaturesSection = () => {
     {
       backgroundImage: '/src/assets/card1.png',
       title: 'Advanced Trading Technology',
-      description: 'Cutting-edge algorithms and real-time market data for optimal trading decisions.'
+      description: 'Cutting-edge algorithms and real-time market data for optimal trading decisions.',
+      backContent: 'Our platform leverages the latest in AI and machine learning to provide you with real-time market insights, advanced charting tools, and lightning-fast execution speeds that give you the competitive edge.'
     },
     {
       backgroundImage: '/src/assets/card2.png',
       title: 'Risk Management',
-      description: 'Sophisticated risk controls and portfolio protection strategies.'
+      description: 'Sophisticated risk controls and portfolio protection strategies.',
+      backContent: 'Built-in risk management tools automatically monitor your positions, set stop-losses, and protect your capital with advanced portfolio analytics and real-time risk assessment.'
     },
     {
       backgroundImage: '/src/assets/card3.png',
       title: 'Performance Analytics',
-      description: 'Comprehensive reporting and performance tracking tools.'
+      description: 'Comprehensive reporting and performance tracking tools.',
+      backContent: 'Track your trading performance with detailed analytics, performance metrics, and comprehensive reporting tools that help you identify strengths and areas for improvement.'
     }
   ];
 
@@ -34,10 +36,12 @@ const FeaturesSection = () => {
         </p>
       </div>
 
-      {/* Individual Animated Cards */}
-      {features.map((feature, index) => (
-        <AnimatedCard key={index} feature={feature} index={index} />
-      ))}
+      {/* Horizontal Cards Container */}
+      <div className={styles.cardsContainer}>
+        {features.map((feature, index) => (
+          <FlipCard key={index} feature={feature} index={index} />
+        ))}
+      </div>
       
       {/* Get Started Button Section */}
       <div className={styles.buttonSection}>
@@ -49,49 +53,107 @@ const FeaturesSection = () => {
   );
 };
 
-// Individual Animated Card Component
-const AnimatedCard = ({ feature, index }) => {
+// 3D Flip Card Component
+const FlipCard = ({ feature, index }) => {
   const cardRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"]
-  });
+  const [isScrolling, setIsScrolling] = useState(false);
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [45, 0, -45]);
+  const handleScroll = () => {
+    if (!isScrolling) {
+      setIsScrolling(true);
+      requestAnimationFrame(() => {
+        updateCard();
+        setIsScrolling(false);
+      });
+    }
+  };
+
+  const updateCard = () => {
+    if (!cardRef.current) return;
+    
+    const card = cardRef.current;
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    
+    const cardRect = card.getBoundingClientRect();
+    const cardTop = cardRect.top + scrollY;
+    const cardHeight = cardRect.height;
+    
+    // Cards start at 0 degrees (original state) when fully visible
+    // Only start flipping when cards are above 80% of their height from viewport top
+    let rotationY = 0;
+    
+    // Calculate when card is above 80% of its height from viewport top
+    // This means cards will flip much later, when they're higher up
+    const flipStartPoint = scrollY + (windowHeight * 0.8); // Start flipping when card is above 80% of viewport height
+    
+    if (cardTop < flipStartPoint) {
+      // Calculate how much the card has moved past the flip start point
+      const scrollProgress = Math.max(0, (flipStartPoint - cardTop) / (windowHeight + cardHeight));
+      
+      // Map scroll progress to rotation: 0 to 180 degrees with smooth easing
+      // Use cubic easing for smoother animation
+      const easedProgress = scrollProgress * scrollProgress * (3 - 2 * scrollProgress); // Smoothstep easing
+      rotationY = Math.min(180, easedProgress * 180); // Increased from 90 to 180 for faster flipping
+    }
+    
+    // Apply transform with smooth easing
+    card.style.transform = `rotateY(${rotationY}deg)`;
+    
+    // Add flipped class for fallback browsers
+    if (rotationY > 90) {
+      card.classList.add('flipped');
+    } else {
+      card.classList.remove('flipped');
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    updateCard(); // Initial check
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <motion.div
-      ref={cardRef}
-      className={styles.animatedCard}
-      style={{
-        y,
-        opacity,
-        scale,
-        rotateX,
-      }}
-    >
+    <div className={styles.animatedCard}>
       <div 
+        ref={cardRef}
         className={styles.cardContent}
-        style={{
+        data-card={index + 1}
+      >
+        {/* Front Face */}
+        <div className={styles.cardFace} style={{
           backgroundImage: `url(${feature.backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
-        }}
-      >
-        <div className={styles.cardOverlay}>
-          <h2 className={styles.cardTitle}>
-            {feature.title}
-          </h2>
-          <p className={styles.cardDescription}>
-            {feature.description}
-          </p>
+        }}>
+          <div className={styles.cardOverlay}>
+            <h2 className={styles.cardTitle}>
+              {feature.title}
+            </h2>
+            <p className={styles.cardDescription}>
+              {feature.description}
+            </p>
+          </div>
+        </div>
+        
+        {/* Back Face */}
+        <div className={styles.cardFaceBack}>
+          <div className={styles.cardOverlay}>
+            <h2 className={styles.cardTitle}>
+              {feature.title}
+            </h2>
+            <p className={styles.cardDescription}>
+              {feature.backContent}
+            </p>
+          </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -1,3 +1,10 @@
+/* CSS Variables */
+:root {
+  --spacing-unit: 8px;
+  --shadow-dark: rgba(0, 0, 0, 0.8);
+  --shadow-medium: rgba(0, 0, 0, 0.5);
+}
+
 /* Prevent zoom effects only on Spline 3D scene */
 .rightContent,
 .rightContent * {
@@ -493,3 +500,4 @@
   position: relative;
   z-index: 2;
 }
+
