@@ -69,51 +69,61 @@ const FlipCard = ({ feature, index }) => {
     }
   };
 
+  // Debounced scroll handler for better performance
+  const debouncedScroll = useRef(null);
+  const handleScrollOptimized = () => {
+    if (debouncedScroll.current) {
+      clearTimeout(debouncedScroll.current);
+    }
+    debouncedScroll.current = setTimeout(() => {
+      handleScroll();
+    }, 16); // ~60fps
+  };
+
   const updateCard = () => {
     if (!cardRef.current) return;
     
     const card = cardRef.current;
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
-    const isMobile = window.innerWidth <= 768;
     
+    // Cache DOM queries and calculations
     const cardRect = card.getBoundingClientRect();
     const cardTop = cardRect.top + scrollY;
-    const cardHeight = cardRect.height;
     
-    // Cards start at 0 degrees (original state) when fully visible
-    // Only start flipping when cards are above 80% of their height from viewport top
+    // Only calculate if card is in viewport or near it
+    if (cardTop > scrollY + windowHeight + 200 || cardTop < scrollY - 200) {
+      return; // Skip if card is far from viewport
+    }
+    
+    const isMobile = window.innerWidth <= 768;
+    const flipStartPoint = scrollY + (windowHeight * 0.7); // Start flipping earlier
+    
     let rotationY = 0;
     
-    // Calculate when card is above 80% of its height from viewport top
-    // This means cards will flip much later, when they're higher up
-    const flipStartPoint = scrollY + (windowHeight * 0.8); // Start flipping when card is above 80% of viewport height
-    
     if (cardTop < flipStartPoint) {
-      // Calculate how much the card has moved past the flip start point
-      const scrollProgress = Math.max(0, (flipStartPoint - cardTop) / (windowHeight + cardHeight));
+      // Improved calculation for smoother flipping
+      const scrollProgress = Math.max(0, (flipStartPoint - cardTop) / (windowHeight * 0.6));
       
-      // Map scroll progress to rotation: 0 to 360 degrees with ultra-smooth easing
-      // Use multiple easing functions for buttery smooth animation
+      // Use a more natural easing curve for better visual appeal
       const easedProgress = scrollProgress < 0.5 
-        ? 2 * scrollProgress * scrollProgress * scrollProgress * scrollProgress
-        : 1 - Math.pow(-2 * scrollProgress + 2, 4) / 2; // Smooth quartic easing
+        ? 2 * scrollProgress * scrollProgress 
+        : 1 - Math.pow(-2 * scrollProgress + 2, 2) / 2;
       
-      // Reduce rotation on mobile to prevent flickering
       const maxRotation = isMobile ? 180 : 360;
       rotationY = Math.min(maxRotation, easedProgress * maxRotation);
       
-      // Add flipping class to prevent flickering
       card.classList.add('flipping');
     } else {
-      // Remove flipping class when not flipping
       card.classList.remove('flipping');
     }
     
-    // Apply transform with smooth easing
-    card.style.transform = `rotateY(${rotationY}deg)`;
+    // Use transform3d for hardware acceleration with better precision
+    // Add subtle scale effect during flipping for more dynamic feel
+    const scale = 1 + (Math.sin(rotationY * Math.PI / 180) * 0.05);
+    card.style.transform = `rotate3d(0, 1, 0, ${rotationY.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
     
-    // Add flipped class for fallback browsers
+    // Improved class management for smoother transitions
     if (rotationY > (isMobile ? 90 : 180)) {
       card.classList.add('flipped');
     } else {
@@ -136,11 +146,14 @@ const FlipCard = ({ feature, index }) => {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScrollOptimized, { passive: true });
     updateCard(); // Initial check
     
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollOptimized);
+      if (debouncedScroll.current) {
+        clearTimeout(debouncedScroll.current);
+      }
     };
   }, []);
 
