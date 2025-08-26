@@ -389,7 +389,7 @@ export function SmoothCursor() {
         zIndex: 9999
       }}
     >
-      <style jsx>{`
+      <style>{`
         .floating-dot {
           position: absolute;
           width: 4px;
@@ -435,11 +435,11 @@ export function SmoothCursor() {
         }
         
         /* Enhanced cursor hiding for macOS */
-        :global(.cursor-hidden) {
+        .cursor-hidden {
           cursor: none !important;
         }
         
-        :global(.cursor-hidden *) {
+        .cursor-hidden * {
           cursor: none !important;
         }
         
