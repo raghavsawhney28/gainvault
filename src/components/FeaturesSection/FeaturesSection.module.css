@@ -82,6 +82,9 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.15s cubic-bezier(0.4, 0.0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .cardOverlay {
@@ -90,7 +93,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -122,7 +125,9 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  background: rgba(74, 144, 226, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   transform: rotateY(180deg);
 }
 
@@ -152,19 +157,19 @@
 }
 
 .cardTitle {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 700;
   color: white;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
   text-align: center;
 }
 
 .cardDescription {
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   color: rgba(255, 255, 255, 0.95);
-  line-height: 1.7;
-  max-width: 700px;
+  line-height: 1.6;
+  max-width: 600px;
   margin: 0 auto;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   text-align: center;
@@ -251,12 +256,12 @@
   }
   
   .cardTitle {
-    font-size: clamp(1.8rem, 7vw, 3rem);
-    margin-bottom: 1.5rem;
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    margin-bottom: 1.2rem;
   }
   
   .cardDescription {
-    font-size: clamp(1rem, 4vw, 1.3rem);
+    font-size: clamp(0.9rem, 3.5vw, 1.2rem);
   }
   
   .getStartedButton {
@@ -277,12 +282,12 @@
   }
   
   .cardTitle {
-    font-size: clamp(1.5rem, 8vw, 2.5rem);
-    margin-bottom: 1rem;
+    font-size: clamp(1.3rem, 6vw, 2rem);
+    margin-bottom: 0.8rem;
   }
   
   .cardDescription {
-    font-size: clamp(0.9rem, 4vw, 1.1rem);
+    font-size: clamp(0.8rem, 3vw, 1rem);
   }
   
   .getStartedButton {

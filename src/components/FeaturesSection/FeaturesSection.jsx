@@ -5,19 +5,19 @@ const FeaturesSection = () => {
   const features = [
     {
       backgroundImage: '/src/assets/card1.png',
-      title: 'Advanced Trading Technology',
+      title: '🚀 Advanced Trading Technology',
       description: 'Cutting-edge algorithms and real-time market data for optimal trading decisions.',
       backContent: 'Our platform leverages the latest in AI and machine learning to provide you with real-time market insights, advanced charting tools, and lightning-fast execution speeds that give you the competitive edge.'
     },
     {
       backgroundImage: '/src/assets/card2.png',
-      title: 'Risk Management',
+      title: '🛡️ Risk Management',
       description: 'Sophisticated risk controls and portfolio protection strategies.',
       backContent: 'Built-in risk management tools automatically monitor your positions, set stop-losses, and protect your capital with advanced portfolio analytics and real-time risk assessment.'
     },
     {
       backgroundImage: '/src/assets/card3.png',
-      title: 'Performance Analytics',
+      title: '📊 Performance Analytics',
       description: 'Comprehensive reporting and performance tracking tools.',
       backContent: 'Track your trading performance with detailed analytics, performance metrics, and comprehensive reporting tools that help you identify strengths and areas for improvement.'
     }
@@ -91,17 +91,17 @@ const FlipCard = ({ feature, index }) => {
       // Calculate how much the card has moved past the flip start point
       const scrollProgress = Math.max(0, (flipStartPoint - cardTop) / (windowHeight + cardHeight));
       
-      // Map scroll progress to rotation: 0 to 180 degrees with smooth easing
+      // Map scroll progress to rotation: 0 to 360 degrees with smooth easing
       // Use cubic easing for smoother animation
       const easedProgress = scrollProgress * scrollProgress * (3 - 2 * scrollProgress); // Smoothstep easing
-      rotationY = Math.min(180, easedProgress * 180); // Increased from 90 to 180 for faster flipping
+      rotationY = Math.min(360, easedProgress * 360); // Full 360 degree rotation
     }
     
     // Apply transform with smooth easing
     card.style.transform = `rotateY(${rotationY}deg)`;
     
     // Add flipped class for fallback browsers
-    if (rotationY > 90) {
+    if (rotationY > 180) {
       card.classList.add('flipped');
     } else {
       card.classList.remove('flipped');
@@ -125,12 +125,7 @@ const FlipCard = ({ feature, index }) => {
         data-card={index + 1}
       >
         {/* Front Face */}
-        <div className={styles.cardFace} style={{
-          backgroundImage: `url(${feature.backgroundImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}>
+        <div className={styles.cardFace}>
           <div className={styles.cardOverlay}>
             <h2 className={styles.cardTitle}>
               {feature.title}
