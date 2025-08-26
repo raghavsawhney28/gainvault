@@ -8,7 +8,6 @@ import logo from '../../assets/logo.png';
 import styles from './Header.module.css';
 
 const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [showAccountDropdown, setShowAccountDropdown] = useState(false);
   const [userInitial, setUserInitial] = useState('');
   const [opened, { open, close }] = useDisclosure(false);
@@ -18,22 +17,16 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   const accountDropdownRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
-    
     // Set initial mobile state
     handleResize();
     
+    window.addEventListener('resize', handleResize);
+    
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
@@ -122,7 +115,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
   ];
 
   return (
-    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
+    <header className={styles.header}>
       <div className={styles.headerContent}>
         {/* Left Side - Hamburger Menu */}
         <div className={styles.leftSection}>
