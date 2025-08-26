@@ -4,20 +4,20 @@ import styles from './FeaturesSection.module.css';
 const FeaturesSection = () => {
   const features = [
     {
-      backgroundImage: '/src/assets/card1.png',
-      title: '🚀 Advanced Trading Technology',
+      icon: '⚡',
+      title: 'Advanced Trading Technology',
       description: 'Cutting-edge algorithms and real-time market data for optimal trading decisions.',
       backContent: 'Our platform leverages the latest in AI and machine learning to provide you with real-time market insights, advanced charting tools, and lightning-fast execution speeds that give you the competitive edge.'
     },
     {
-      backgroundImage: '/src/assets/card2.png',
-      title: '🛡️ Risk Management',
+      icon: '🛡️',
+      title: 'Risk Management',
       description: 'Sophisticated risk controls and portfolio protection strategies.',
       backContent: 'Built-in risk management tools automatically monitor your positions, set stop-losses, and protect your capital with advanced portfolio analytics and real-time risk assessment.'
     },
     {
-      backgroundImage: '/src/assets/card3.png',
-      title: '📊 Performance Analytics',
+      icon: '📊',
+      title: 'Performance Analytics',
       description: 'Comprehensive reporting and performance tracking tools.',
       backContent: 'Track your trading performance with detailed analytics, performance metrics, and comprehensive reporting tools that help you identify strengths and areas for improvement.'
     }
@@ -149,29 +149,35 @@ const FlipCard = ({ feature, index }) => {
         onClick={handleCardClick}
         style={{ cursor: 'pointer' }}
       >
-        {/* Front Face */}
-        <div className={styles.cardFace}>
-          <div className={styles.cardOverlay}>
-            <h2 className={styles.cardTitle}>
-              {feature.title}
-            </h2>
-            <p className={styles.cardDescription}>
-              {feature.description}
-            </p>
-          </div>
-        </div>
-        
-        {/* Back Face */}
-        <div className={styles.cardFaceBack}>
-          <div className={styles.cardOverlay}>
-            <h2 className={styles.cardTitle}>
-              {feature.title}
-            </h2>
-            <p className={styles.cardDescription}>
-              {feature.backContent}
-            </p>
-          </div>
-        </div>
+                 {/* Front Face */}
+         <div className={styles.cardFace}>
+           <div className={styles.cardOverlay}>
+             <div className={styles.cardIcon}>
+               {feature.icon}
+             </div>
+             <h2 className={styles.cardTitle}>
+               {feature.title}
+             </h2>
+             <p className={styles.cardDescription}>
+               {feature.description}
+             </p>
+           </div>
+         </div>
+         
+         {/* Back Face */}
+         <div className={styles.cardFaceBack}>
+           <div className={styles.cardOverlay}>
+             <div className={styles.cardIcon}>
+               {feature.icon}
+             </div>
+             <h2 className={styles.cardTitle}>
+               {feature.title}
+             </h2>
+             <p className={styles.cardDescription}>
+               {feature.backContent}
+             </p>
+           </div>
+         </div>
       </div>
     </div>
   );
