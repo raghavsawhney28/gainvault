@@ -75,6 +75,7 @@ const FlipCard = ({ feature, index }) => {
     const card = cardRef.current;
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
+    const isMobile = window.innerWidth <= 768;
     
     const cardRect = card.getBoundingClientRect();
     const cardTop = cardRect.top + scrollY;
@@ -97,7 +98,10 @@ const FlipCard = ({ feature, index }) => {
       const easedProgress = scrollProgress < 0.5 
         ? 2 * scrollProgress * scrollProgress * scrollProgress * scrollProgress
         : 1 - Math.pow(-2 * scrollProgress + 2, 4) / 2; // Smooth quartic easing
-      rotationY = Math.min(360, easedProgress * 360); // Full 360 degree rotation
+      
+      // Reduce rotation on mobile to prevent flickering
+      const maxRotation = isMobile ? 180 : 360;
+      rotationY = Math.min(maxRotation, easedProgress * maxRotation);
       
       // Add flipping class to prevent flickering
       card.classList.add('flipping');
@@ -110,7 +114,7 @@ const FlipCard = ({ feature, index }) => {
     card.style.transform = `rotateY(${rotationY}deg)`;
     
     // Add flipped class for fallback browsers
-    if (rotationY > 180) {
+    if (rotationY > (isMobile ? 90 : 180)) {
       card.classList.add('flipped');
     } else {
       card.classList.remove('flipped');

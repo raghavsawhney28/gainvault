@@ -366,10 +366,12 @@
     height: 320px;
     width: 85vw;
     max-width: 400px;
+    animation: float 8s ease-in-out infinite;
   }
   
   .cardContent {
     border-radius: 1.5rem;
+    animation: pulseGlow 4s ease-in-out infinite;
   }
   
   .cardOverlay {
@@ -403,10 +405,16 @@
     height: 280px;
     width: 85vw;
     max-width: 320px;
+    animation: none;
   }
   
   .cardContent {
     border-radius: 1.5rem;
+    animation: none;
+    transition: transform 0.2s ease, 
+                border-color 0.2s ease, 
+                box-shadow 0.2s ease, 
+                background 0.2s ease;
   }
   
   .cardOverlay {
