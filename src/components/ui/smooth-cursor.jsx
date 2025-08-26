@@ -335,7 +335,7 @@ export function SmoothCursor() {
       
       // Restore cursor
       try {
-        document.body.style.cursor = 'auto';
+        document.body.style.cursor = 'auto';.
         document.documentElement.style.cursor = 'auto';
         document.body.classList.remove('cursor-hidden');
         document.documentElement.classList.remove('cursor-hidden');
