@@ -38,9 +38,9 @@ const FeaturesSection = () => {
 
       {/* Horizontal Cards Container */}
       <div className={styles.cardsContainer}>
-        {features.map((feature, index) => (
+      {features.map((feature, index) => (
           <FlipCard key={index} feature={feature} index={index} />
-        ))}
+      ))}
       </div>
       
       {/* Get Started Button Section */}
@@ -90,6 +90,7 @@ const FlipCard = ({ feature, index }) => {
     // Cache DOM queries and calculations
     const cardRect = card.getBoundingClientRect();
     const cardTop = cardRect.top + scrollY;
+    const cardHeight = cardRect.height;
     
     // Only calculate if card is in viewport or near it
     if (cardTop > scrollY + windowHeight + 200 || cardTop < scrollY - 200) {
@@ -99,32 +100,39 @@ const FlipCard = ({ feature, index }) => {
     const isMobile = window.innerWidth <= 768;
     
     if (isMobile) {
-      // Mobile: Smooth slide-up reveal effect with scale
-      const revealStartPoint = scrollY + (windowHeight * 0.2);
-      const revealEndPoint = scrollY + (windowHeight * 0.6);
+      // Mobile: Simple slide-up reveal on scroll
+      const cardBottom = cardTop + cardHeight;
+      const viewportTop = scrollY;
+      const viewportBottom = scrollY + windowHeight;
+      
+      // Calculate how much of the card is visible
+      const visibleTop = Math.max(cardTop, viewportTop);
+      const visibleBottom = Math.min(cardBottom, viewportBottom);
+      const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+      const visibilityRatio = visibleHeight / cardHeight;
       
       let translateY = 0;
       let scale = 1;
       let opacity = 0.3;
       
-      if (cardTop < revealStartPoint) {
-        // Card is above reveal start - hidden state
-        translateY = 50;
-        scale = 0.8;
-        opacity = 0.3;
+      if (visibilityRatio <= 0) {
+        // Card is completely outside viewport
+        translateY = 60;
+        scale = 0.7;
+        opacity = 0.2;
         card.classList.remove('revealing');
-      } else if (cardTop > revealEndPoint) {
-        // Card is past reveal end - fully revealed
+      } else if (visibilityRatio >= 1) {
+        // Card is completely visible
         translateY = 0;
         scale = 1;
         opacity = 1;
         card.classList.remove('revealing');
       } else {
-        // Card is in reveal zone - animate reveal
-        const revealProgress = (cardTop - revealStartPoint) / (revealEndPoint - revealStartPoint);
-        translateY = 50 * (1 - revealProgress);
-        scale = 0.8 + (0.2 * revealProgress);
-        opacity = 0.3 + (0.7 * revealProgress);
+        // Card is partially visible - animate based on visibility
+        const progress = visibilityRatio;
+        translateY = 60 * (1 - progress);
+        scale = 0.7 + (0.3 * progress);
+        opacity = 0.2 + (0.8 * progress);
         card.classList.add('revealing');
       }
       
@@ -133,46 +141,18 @@ const FlipCard = ({ feature, index }) => {
       card.style.opacity = opacity.toFixed(3);
       
       // Add/remove mobile reveal classes
-      if (translateY < 25) {
+      if (visibilityRatio > 0.5) {
         card.classList.add('revealed');
       } else {
         card.classList.remove('revealed');
       }
       
     } else {
-      // Desktop: 3D flip effect
-      const flipStartPoint = scrollY + (windowHeight * 0.3);
-      const flipEndPoint = scrollY + (windowHeight * 0.7);
-      
-      let rotationY = 0;
-      
-      if (cardTop < flipStartPoint) {
-        // Card is above flip start - no rotation
-        rotationY = 0;
-        card.classList.remove('flipping');
-      } else if (cardTop > flipEndPoint) {
-        // Card is past flip end - full rotation
-        rotationY = 360;
-        card.classList.remove('flipping');
-      } else {
-        // Card is in flip zone - calculate rotation
-        const flipProgress = (cardTop - flipStartPoint) / (flipEndPoint - flipStartPoint);
-        rotationY = flipProgress * 360;
-        card.classList.add('flipping');
-      }
-      
-      // Use transform3d for hardware acceleration with better precision
-      // Add subtle scale effect during flipping for more dynamic feel
-      const scale = 1 + (Math.sin(rotationY * Math.PI / 180) * 0.05);
-      card.style.transform = `rotate3d(0, 1, 0, ${rotationY.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-      card.style.opacity = '1'; // Reset opacity for desktop
-      
-      // Perfect flip threshold: exactly at 180 degrees
-      if (rotationY > 180) {
-        card.classList.add('flipped');
-      } else {
-        card.classList.remove('flipped');
-      }
+      // Desktop: No scroll effects, just reset to default state
+      card.style.transform = 'rotate3d(0, 1, 0, 0deg) scale(1) translateX(0px)';
+      card.style.opacity = '1';
+      card.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.4)';
+      card.classList.remove('flipping', 'glowing', 'flipped');
     }
   };
 
@@ -190,6 +170,22 @@ const FlipCard = ({ feature, index }) => {
     }
   };
 
+  const handleCardHover = () => {
+    if (!isMobile && cardRef.current) {
+      // Desktop: Flip card on hover
+      cardRef.current.style.transform = 'rotate3d(0, 1, 0, 180deg) scale(1)';
+      cardRef.current.classList.add('flipped', 'hovering');
+    }
+  };
+
+  const handleCardLeave = () => {
+    if (!isMobile && cardRef.current) {
+      // Desktop: Return card to normal state on hover leave
+      cardRef.current.style.transform = 'rotate3d(0, 1, 0, 0deg) scale(1)';
+      cardRef.current.classList.remove('flipped', 'hovering');
+    }
+  };
+
   useEffect(() => {
     window.addEventListener('scroll', handleScrollOptimized, { passive: true });
     updateCard(); // Initial check
@@ -204,27 +200,29 @@ const FlipCard = ({ feature, index }) => {
 
   return (
     <div className={styles.animatedCard}>
-      <div 
+            <div 
         ref={cardRef}
         className={styles.cardContent}
         data-card={index + 1}
         onClick={handleCardClick}
+        onMouseEnter={handleCardHover}
+        onMouseLeave={handleCardLeave}
         style={{ cursor: 'pointer' }}
       >
                  {/* Front Face */}
          <div className={styles.cardFace}>
-           <div className={styles.cardOverlay}>
+        <div className={styles.cardOverlay}>
              <div className={styles.cardIcon}>
                {feature.icon}
              </div>
-             <h2 className={styles.cardTitle}>
-               {feature.title}
-             </h2>
-             <p className={styles.cardDescription}>
-               {feature.description}
-             </p>
-           </div>
-         </div>
+          <h2 className={styles.cardTitle}>
+            {feature.title}
+          </h2>
+          <p className={styles.cardDescription}>
+            {feature.description}
+          </p>
+        </div>
+      </div>
          
          {/* Back Face */}
          <div className={styles.cardFaceBack}>

@@ -86,17 +86,9 @@
   overflow: hidden;
   background: transparent;
   flex-shrink: 0;
-  /* Reduced floating animation for better performance */
-  animation: float 8s ease-in-out infinite;
+  /* Enhanced floating animation with subtle rotation */
+  animation: enhancedFloat 8s ease-in-out infinite;
   will-change: transform;
-}
-
-.animatedCard:nth-child(2) {
-  animation-delay: -3s;
-}
-
-.animatedCard:nth-child(3) {
-  animation-delay: -6s;
 }
 
 @keyframes float {
@@ -106,6 +98,37 @@
   50% {
     transform: translateY(-8px);
   }
+}
+
+/* Enhanced floating with subtle rotation */
+@keyframes enhancedFloat {
+  0%, 100% {
+    transform: translateY(0px) rotateZ(0deg);
+  }
+  25% {
+    transform: translateY(-6px) rotateZ(0.5deg);
+  }
+  50% {
+    transform: translateY(-8px) rotateZ(0deg);
+  }
+  75% {
+    transform: translateY(-4px) rotateZ(-0.5deg);
+  }
+}
+
+/* Staggered floating animation for cards */
+.animatedCard:nth-child(1) {
+  animation: enhancedFloat 8s ease-in-out infinite;
+}
+
+.animatedCard:nth-child(2) {
+  animation: enhancedFloat 8s ease-in-out infinite;
+  animation-delay: -2.5s;
+}
+
+.animatedCard:nth-child(3) {
+  animation: enhancedFloat 8s ease-in-out infinite;
+  animation-delay: -5s;
 }
 
 .cardContent {
@@ -169,6 +192,36 @@
 
 .cardContent.revealed {
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Enhanced glow effect during flip */
+.cardContent.glowing {
+  animation: none;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-color: rgba(97, 255, 201, 0.8);
+}
+
+.cardContent.glowing:hover {
+  transform: none;
+  border-color: rgba(97, 255, 201, 1);
+}
+
+/* Hover flip effect */
+.cardContent.hovering {
+  animation: none;
+  transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-color: rgba(97, 255, 201, 0.8);
+  box-shadow: 0 25px 50px rgba(97, 255, 201, 0.2), 0 0 30px rgba(97, 255, 201, 0.1);
+}
+
+.cardContent.hovering .cardTitle {
+  color: #61ffc9;
+  text-shadow: 0 4px 20px rgba(97, 255, 201, 0.6);
+}
+
+.cardContent.hovering .cardDescription {
+  color: rgba(255, 255, 255, 1);
+  opacity: 1;
 }
 
 .cardContent:active {
