@@ -363,9 +363,9 @@
   }
   
   .animatedCard {
-    height: 300px;
-    width: 90vw;
-    max-width: 480px;
+    height: 320px;
+    width: 85vw;
+    max-width: 400px;
   }
   
   .cardContent {
@@ -399,30 +399,35 @@
 }
 
 @media (max-width: 480px) {
+  .animatedCard {
+    height: 280px;
+    width: 85vw;
+    max-width: 320px;
+  }
+  
   .cardContent {
-    width: 98vw;
-    height: 70vh;
-    border-radius: 1rem;
+    border-radius: 1.5rem;
   }
   
   .cardOverlay {
-    padding: 1.5rem 1rem;
+    padding: 2rem 1.5rem;
   }
   
   .cardTitle {
-    font-size: clamp(1.1rem, 5vw, 1.4rem);
-    margin-bottom: 0.6rem;
+    font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+    margin-bottom: 0.8rem;
     font-weight: 600;
   }
   
   .cardDescription {
-    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
     font-weight: 400;
+    max-width: 250px;
   }
   
   .cardIcon {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-    margin-bottom: 0.8rem;
+    font-size: clamp(2.2rem, 5vw, 2.8rem);
+    margin-bottom: 1rem;
   }
   
   .getStartedButton {
