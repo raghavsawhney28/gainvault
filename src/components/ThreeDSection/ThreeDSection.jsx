@@ -6,9 +6,29 @@ export default function ThreeDSection() {
   const [isVisible, setIsVisible] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [hasError, setHasError] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
   const sectionRef = React.useRef(null);
 
   React.useEffect(() => {
+    // Check if device is mobile
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  React.useEffect(() => {
+    // Don't set up observer if mobile
+    if (isMobile) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -26,7 +46,7 @@ export default function ThreeDSection() {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isMobile]);
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -38,6 +58,11 @@ export default function ThreeDSection() {
     setHasError(true);
     console.error('Spline error:', error);
   };
+
+  // Don't render on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <section ref={sectionRef} className={styles.threeDSection}>
