@@ -33,7 +33,9 @@ export default function ThreeDSection() {
       ([entry]) => {
         if (entry.isIntersecting) {
           // Add a small delay to prevent immediate loading
-          setTimeout(() => setIsVisible(true), 100);
+          setTimeout(() => {
+            setIsVisible(true);
+          }, 100);
         } else {
           setIsVisible(false);
         }
@@ -50,44 +52,64 @@ export default function ThreeDSection() {
 
   const handleLoad = () => {
     setIsLoading(false);
-    console.log('Spline loaded successfully');
   };
 
   const handleError = (error) => {
     setIsLoading(false);
     setHasError(true);
-    console.error('Spline error:', error);
   };
 
-  // Don't render on mobile devices
+  // Don't render on mobile
   if (isMobile) {
     return null;
   }
-
+  
   return (
     <section ref={sectionRef} className={styles.threeDSection}>
+      
       <div className={styles.container}>
-        <div className={styles.splineContainer}>
-          {isVisible && !hasError && (
-            <Spline 
-              scene="https://prod.spline.design/wzqlWtA3QBzpvd4B/scene.splinecode"
-              onLoad={handleLoad}
-              onError={handleError}
-            />
-          )}
-          {isLoading && (
-            <div className={styles.loadingIndicator}>
-              <div className={styles.spinner}></div>
-            </div>
-          )}
-          {hasError && (
-            <div className={styles.errorMessage}>
-              <p>3D content failed to load</p>
-              <button onClick={() => setHasError(false)}>Retry</button>
-            </div>
-          )}
+        {/* Left Side - 3D Content */}
+        <div className={styles.leftSection}>
+          <div className={styles.splineContainer}>
+            {isVisible && !hasError && (
+              <Spline 
+                scene="https://prod.spline.design/wzqlWtA3QBzpvd4B/scene.splinecode"
+                onLoad={handleLoad}
+                onError={handleError}
+              />
+            )}
+            {isLoading && (
+              <div className={styles.loadingIndicator}>
+                <div className={styles.spinner}></div>
+              </div>
+            )}
+            {hasError && (
+              <div className={styles.errorMessage}>
+                <p>3D content failed to load</p>
+                <button onClick={() => setHasError(false)}>Retry</button>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+        {/* Right Side - Text Content */}
+        <div className={styles.rightSection}>
+          <div className={styles.textContent}>
+            <h1 className={styles.mainTitle}>
+              MONEY TALKS
+            </h1>
+            <h2 className={styles.subTitle}>
+              WE TRANSLATE
+            </h2>
+            <p className={styles.description}>
+              Experience the future of trading where every decision speaks volumes. 
+              Our platform translates market opportunities into profitable realities.
+            </p>
+          </div>
         </div>
       </div>
+      
     </section>
   );
 }
