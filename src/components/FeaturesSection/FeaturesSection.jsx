@@ -98,38 +98,81 @@ const FlipCard = ({ feature, index }) => {
     
     const isMobile = window.innerWidth <= 768;
     
-    // Simple and effective flip timing for both desktop and mobile
-    // Start flipping when card is 30% into the viewport
-    const flipStartPoint = scrollY + (windowHeight * 0.3);
-    const flipEndPoint = scrollY + (windowHeight * 0.7);
-    
-    let rotationY = 0;
-    
-    if (cardTop < flipStartPoint) {
-      // Card is above flip start - no rotation
-      rotationY = 0;
-      card.classList.remove('flipping');
-    } else if (cardTop > flipEndPoint) {
-      // Card is past flip end - full rotation
-      rotationY = 360;
-      card.classList.remove('flipping');
+    if (isMobile) {
+      // Mobile: Smooth slide-up reveal effect with scale
+      const revealStartPoint = scrollY + (windowHeight * 0.2);
+      const revealEndPoint = scrollY + (windowHeight * 0.6);
+      
+      let translateY = 0;
+      let scale = 1;
+      let opacity = 0.3;
+      
+      if (cardTop < revealStartPoint) {
+        // Card is above reveal start - hidden state
+        translateY = 50;
+        scale = 0.8;
+        opacity = 0.3;
+        card.classList.remove('revealing');
+      } else if (cardTop > revealEndPoint) {
+        // Card is past reveal end - fully revealed
+        translateY = 0;
+        scale = 1;
+        opacity = 1;
+        card.classList.remove('revealing');
+      } else {
+        // Card is in reveal zone - animate reveal
+        const revealProgress = (cardTop - revealStartPoint) / (revealEndPoint - revealStartPoint);
+        translateY = 50 * (1 - revealProgress);
+        scale = 0.8 + (0.2 * revealProgress);
+        opacity = 0.3 + (0.7 * revealProgress);
+        card.classList.add('revealing');
+      }
+      
+      // Apply mobile-specific transform
+      card.style.transform = `translateY(${translateY.toFixed(2)}px) scale(${scale.toFixed(3)})`;
+      card.style.opacity = opacity.toFixed(3);
+      
+      // Add/remove mobile reveal classes
+      if (translateY < 25) {
+        card.classList.add('revealed');
+      } else {
+        card.classList.remove('revealed');
+      }
+      
     } else {
-      // Card is in flip zone - calculate rotation
-      const flipProgress = (cardTop - flipStartPoint) / (flipEndPoint - flipStartPoint);
-      rotationY = flipProgress * 360;
-      card.classList.add('flipping');
-    }
-    
-    // Use transform3d for hardware acceleration with better precision
-    // Add subtle scale effect during flipping for more dynamic feel
-    const scale = 1 + (Math.sin(rotationY * Math.PI / 180) * 0.05);
-    card.style.transform = `rotate3d(0, 1, 0, ${rotationY.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-    
-    // Perfect flip threshold: exactly at 180 degrees
-    if (rotationY > 180) {
-      card.classList.add('flipped');
-    } else {
-      card.classList.remove('flipped');
+      // Desktop: 3D flip effect
+      const flipStartPoint = scrollY + (windowHeight * 0.3);
+      const flipEndPoint = scrollY + (windowHeight * 0.7);
+      
+      let rotationY = 0;
+      
+      if (cardTop < flipStartPoint) {
+        // Card is above flip start - no rotation
+        rotationY = 0;
+        card.classList.remove('flipping');
+      } else if (cardTop > flipEndPoint) {
+        // Card is past flip end - full rotation
+        rotationY = 360;
+        card.classList.remove('flipping');
+      } else {
+        // Card is in flip zone - calculate rotation
+        const flipProgress = (cardTop - flipStartPoint) / (flipEndPoint - flipStartPoint);
+        rotationY = flipProgress * 360;
+        card.classList.add('flipping');
+      }
+      
+      // Use transform3d for hardware acceleration with better precision
+      // Add subtle scale effect during flipping for more dynamic feel
+      const scale = 1 + (Math.sin(rotationY * Math.PI / 180) * 0.05);
+      card.style.transform = `rotate3d(0, 1, 0, ${rotationY.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+      card.style.opacity = '1'; // Reset opacity for desktop
+      
+      // Perfect flip threshold: exactly at 180 degrees
+      if (rotationY > 180) {
+        card.classList.add('flipped');
+      } else {
+        card.classList.remove('flipped');
+      }
     }
   };
 
