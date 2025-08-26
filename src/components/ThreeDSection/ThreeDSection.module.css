@@ -32,12 +32,74 @@
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   transition: none;
+  /* Performance optimizations */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
 
 .splineContainer:hover {
   border-color: transparent;
   box-shadow: none;
   transform: none;
+}
+
+/* Loading and Error States */
+.loadingIndicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #61ffc9;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errorMessage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  z-index: 10;
+}
+
+.errorMessage p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.errorMessage button {
+  background: #61ffc9;
+  color: #000;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.errorMessage button:hover {
+  background: #00ff88;
+  transform: translateY(-2px);
 }
 
 /* Responsive design removed - full-screen transparent 3D content */
