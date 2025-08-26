@@ -57,6 +57,7 @@ const FeaturesSection = () => {
 const FlipCard = ({ feature, index }) => {
   const cardRef = useRef(null);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   const handleScroll = () => {
     if (!isScrolling) {
@@ -97,6 +98,12 @@ const FlipCard = ({ feature, index }) => {
         ? 2 * scrollProgress * scrollProgress * scrollProgress * scrollProgress
         : 1 - Math.pow(-2 * scrollProgress + 2, 4) / 2; // Smooth quartic easing
       rotationY = Math.min(360, easedProgress * 360); // Full 360 degree rotation
+      
+      // Add flipping class to prevent flickering
+      card.classList.add('flipping');
+    } else {
+      // Remove flipping class when not flipping
+      card.classList.remove('flipping');
     }
     
     // Apply transform with smooth easing
@@ -107,6 +114,20 @@ const FlipCard = ({ feature, index }) => {
       card.classList.add('flipped');
     } else {
       card.classList.remove('flipped');
+    }
+  };
+
+  const handleCardClick = () => {
+    setIsClicked(true);
+    // Add a temporary click effect
+    if (cardRef.current) {
+      cardRef.current.style.transform += ' scale(0.95)';
+      setTimeout(() => {
+        if (cardRef.current) {
+          cardRef.current.style.transform = cardRef.current.style.transform.replace(' scale(0.95)', '');
+        }
+        setIsClicked(false);
+      }, 150);
     }
   };
 
@@ -125,6 +146,8 @@ const FlipCard = ({ feature, index }) => {
         ref={cardRef}
         className={styles.cardContent}
         data-card={index + 1}
+        onClick={handleCardClick}
+        style={{ cursor: 'pointer' }}
       >
         {/* Front Face */}
         <div className={styles.cardFace}>
