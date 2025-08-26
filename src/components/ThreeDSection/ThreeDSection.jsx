@@ -102,10 +102,7 @@ export default function ThreeDSection() {
             <h2 className={styles.subTitle}>
               WE TRANSLATE
             </h2>
-            <p className={styles.description}>
-              Experience the future of trading where every decision speaks volumes. 
-              Our platform translates market opportunities into profitable realities.
-            </p>
+            
           </div>
         </div>
       </div>
