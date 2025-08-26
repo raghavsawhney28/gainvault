@@ -2,20 +2,35 @@
 .featuresSection {
   position: relative;
   z-index: 1;
-  min-height: 80vh;
-  margin-top: -20vh;
+  min-height: 70vh;
+  margin-top: -30vh;
   background: rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile-specific features section adjustments */
+@media (max-width: 768px) {
+  .featuresSection {
+    margin-top: -25vh;
+    min-height: 70vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .featuresSection {
+    margin-top: -30vh;
+    min-height: 60vh;
+  }
 }
 
 /* Header Section */
 .headerSection {
-  height: 50vh;
+  height: 30vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 1.5rem;
+  padding: 0.5rem;
   background: #000000d6;
   color: white;
 }
@@ -55,8 +70,8 @@
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  padding: 0.25rem;
-  min-height: 40vh;
+  padding: 0.05rem;
+  min-height: 20vh;
   flex-wrap: wrap;
 }
 
@@ -297,12 +312,12 @@
 
 /* Button Section */
 .buttonSection {
-  height: 60vh;
+  height: 20vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
-  padding: 2rem;
+  padding: 0.5rem;
 }
 
 .getStartedButton {
@@ -334,8 +349,8 @@
 @media (max-width: 1024px) {
   .cardsContainer {
     gap: 1.5rem;
-    padding: 0.25rem;
-    min-height: 35vh;
+    padding: 0.05rem;
+    min-height: 15vh;
   }
   
   .animatedCard {
@@ -346,12 +361,14 @@
 
 @media (max-width: 768px) {
   .headerSection {
-    padding: 1rem;
+    padding: 0.25rem;
+    height: 25vh;
   }
   
   .mainTitle {
     font-size: clamp(2rem, 7vw, 3rem);
     font-weight: 700;
+    margin-bottom: 0.8rem;
   }
   
   .subtitle {
@@ -361,13 +378,13 @@
   
   .cardsContainer {
     flex-direction: column;
-    gap: 1rem;
-    padding: 0.25rem;
-    min-height: 35vh;
+    gap: 0.25rem;
+    padding: 0.05rem;
+    min-height: 15vh;
   }
   
   .animatedCard {
-    height: 320px;
+    height: 300px;
     width: 85vw;
     max-width: 400px;
     animation: float 8s ease-in-out infinite;
@@ -379,12 +396,12 @@
   }
   
   .cardOverlay {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1rem;
   }
   
   .cardTitle {
     font-size: clamp(1.2rem, 4vw, 1.6rem);
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.6rem;
     font-weight: 600;
   }
   
@@ -395,20 +412,39 @@
   
   .cardIcon {
     font-size: clamp(2rem, 4.5vw, 3rem);
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
   }
   
   .getStartedButton {
-    padding: 1.2rem 2.5rem;
-    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 480px) {
+  .headerSection {
+    height: 20vh;
+    padding: 0.1rem;
+  }
+  
+  .mainTitle {
+    margin-bottom: 0.6rem;
+  }
+  
+  .subtitle {
+    margin-bottom: 0.8rem;
+  }
+  
+  .cardsContainer {
+    min-height: 10vh;
+    gap: 0.1rem;
+    padding: 0.02rem;
+  }
+  
   .animatedCard {
-    height: 280px;
-    width: 85vw;
-    max-width: 320px;
+    height: 260px;
+    width: 90vw;
+    max-width: 300px;
     animation: none;
   }
   
@@ -422,28 +458,28 @@
   }
   
   .cardOverlay {
-    padding: 2rem 1.5rem;
+    padding: 1.2rem 0.8rem;
   }
   
   .cardTitle {
-    font-size: clamp(1.2rem, 4.5vw, 1.5rem);
-    margin-bottom: 0.8rem;
+    font-size: clamp(1.1rem, 4.5vw, 1.4rem);
+    margin-bottom: 0.5rem;
     font-weight: 600;
   }
   
   .cardDescription {
-    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    font-size: clamp(0.85rem, 3vw, 1rem);
     font-weight: 400;
-    max-width: 250px;
+    max-width: 220px;
   }
   
   .cardIcon {
-    font-size: clamp(2.2rem, 5vw, 2.8rem);
-    margin-bottom: 1rem;
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    margin-bottom: 0.6rem;
   }
   
   .getStartedButton {
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
   }
 }
