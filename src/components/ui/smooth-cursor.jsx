@@ -53,10 +53,10 @@ export function SmoothCursor() {
       { width: 30, colorClass: 'ring-4' }  // Largest ring
     ];
 
-    // Initialize mouse position
+    // Initialize mouse position as undefined to hide cursor initially
     mouseRef.current = {
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2
+      x: undefined,
+      y: undefined
     };
 
     const cursors = [];
@@ -64,10 +64,10 @@ export function SmoothCursor() {
     // Create the central dot first
     const dotDiv = document.createElement('div');
     dotDiv.className = 'floating-dot';
-    dotDiv.style.left = `${mouseRef.current.x}px`;
-    dotDiv.style.top = `${mouseRef.current.y}px`;
+    dotDiv.style.opacity = '0';
+    dotDiv.style.visibility = 'hidden';
     container.appendChild(dotDiv);
-    cursors.push({ el: dotDiv, x: mouseRef.current.x, y: mouseRef.current.y });
+    cursors.push({ el: dotDiv, x: undefined, y: undefined });
 
     // Create the three rings based on our defined properties
     for (let i = 0; i < RING_COUNT; i++) {
@@ -75,14 +75,14 @@ export function SmoothCursor() {
       ringDiv.className = `floating-ring ${ringProperties[i].colorClass}`;
       ringDiv.style.width = `${ringProperties[i].width}px`;
       ringDiv.style.height = `${ringProperties[i].width}px`;
-      ringDiv.style.left = `${mouseRef.current.x}px`;
-      ringDiv.style.top = `${mouseRef.current.y}px`;
+      ringDiv.style.opacity = '0';
+      ringDiv.style.visibility = 'hidden';
       container.appendChild(ringDiv);
       
       cursors.push({
         el: ringDiv,
-        x: mouseRef.current.x,
-        y: mouseRef.current.y
+        x: undefined,
+        y: undefined
       });
     }
 
@@ -139,8 +139,21 @@ export function SmoothCursor() {
 
     // Event listener for mouse movement
     const handleMouseMove = (e) => {
-      mouseRef.current.x = e.clientX;
-      mouseRef.current.y = e.clientY;
+      // Only show cursor after first mouse movement
+      if (mouseRef.current.x === undefined) {
+        mouseRef.current.x = e.clientX;
+        mouseRef.current.y = e.clientY;
+        // Show cursor elements
+        cursors.forEach(cursor => {
+          if (cursor.el) {
+            cursor.el.style.opacity = '1';
+            cursor.el.style.visibility = 'visible';
+          }
+        });
+      } else {
+        mouseRef.current.x = e.clientX;
+        mouseRef.current.y = e.clientY;
+      }
     };
 
     // Event listener for mouse leaving the window
@@ -248,6 +261,12 @@ export function SmoothCursor() {
       }
       lastFrameTime = currentTime;
 
+      // Check if cursor is initialized and visible
+      if (mouseRef.current.x === undefined || mouseRef.current.y === undefined) {
+        animationId = requestAnimationFrame(animate);
+        return;
+      }
+      
       // Check if cursor is outside viewport
       const isOutside = isCursorOutsideViewport(mouseRef.current.x, mouseRef.current.y);
       
@@ -262,6 +281,14 @@ export function SmoothCursor() {
       if (isOutside || cursorHiddenRef.current) {
         animationId = requestAnimationFrame(animate);
         return;
+      }
+
+      // Initialize cursor positions if they haven't been set
+      if (cursors[0].x === undefined) {
+        cursors.forEach(cursor => {
+          cursor.x = mouseRef.current.x;
+          cursor.y = mouseRef.current.y;
+        });
       }
 
       // The first element (the dot) follows the mouse with platform-optimized smoothing
