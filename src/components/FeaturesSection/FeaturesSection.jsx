@@ -97,25 +97,27 @@ const FlipCard = ({ feature, index }) => {
     }
     
     const isMobile = window.innerWidth <= 768;
-    const flipStartPoint = scrollY + (windowHeight * 0.7); // Start flipping earlier
+    
+    // Simple and effective flip timing for both desktop and mobile
+    // Start flipping when card is 30% into the viewport
+    const flipStartPoint = scrollY + (windowHeight * 0.3);
+    const flipEndPoint = scrollY + (windowHeight * 0.7);
     
     let rotationY = 0;
     
     if (cardTop < flipStartPoint) {
-      // Improved calculation for smoother flipping
-      const scrollProgress = Math.max(0, (flipStartPoint - cardTop) / (windowHeight * 0.6));
-      
-      // Use a more natural easing curve for better visual appeal
-      const easedProgress = scrollProgress < 0.5 
-        ? 2 * scrollProgress * scrollProgress 
-        : 1 - Math.pow(-2 * scrollProgress + 2, 2) / 2;
-      
-      const maxRotation = isMobile ? 180 : 360;
-      rotationY = Math.min(maxRotation, easedProgress * maxRotation);
-      
-      card.classList.add('flipping');
-    } else {
+      // Card is above flip start - no rotation
+      rotationY = 0;
       card.classList.remove('flipping');
+    } else if (cardTop > flipEndPoint) {
+      // Card is past flip end - full rotation
+      rotationY = 360;
+      card.classList.remove('flipping');
+    } else {
+      // Card is in flip zone - calculate rotation
+      const flipProgress = (cardTop - flipStartPoint) / (flipEndPoint - flipStartPoint);
+      rotationY = flipProgress * 360;
+      card.classList.add('flipping');
     }
     
     // Use transform3d for hardware acceleration with better precision
@@ -123,8 +125,8 @@ const FlipCard = ({ feature, index }) => {
     const scale = 1 + (Math.sin(rotationY * Math.PI / 180) * 0.05);
     card.style.transform = `rotate3d(0, 1, 0, ${rotationY.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
     
-    // Improved class management for smoother transitions
-    if (rotationY > (isMobile ? 90 : 180)) {
+    // Perfect flip threshold: exactly at 180 degrees
+    if (rotationY > 180) {
       card.classList.add('flipped');
     } else {
       card.classList.remove('flipped');

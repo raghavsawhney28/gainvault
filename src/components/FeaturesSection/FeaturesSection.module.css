@@ -466,9 +466,9 @@
                 border-color 0.2s ease, 
                 box-shadow 0.2s ease, 
                 background 0.2s ease;
-    /* Disable 3D transforms on mobile for better performance */
-    transform-style: flat;
-    perspective: none;
+    /* Keep 3D transforms on mobile for proper flipping */
+    transform-style: preserve-3d;
+    perspective: 1000px;
   }
   
   .cardOverlay {
