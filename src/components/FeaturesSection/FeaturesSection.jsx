@@ -91,9 +91,11 @@ const FlipCard = ({ feature, index }) => {
       // Calculate how much the card has moved past the flip start point
       const scrollProgress = Math.max(0, (flipStartPoint - cardTop) / (windowHeight + cardHeight));
       
-      // Map scroll progress to rotation: 0 to 360 degrees with smooth easing
-      // Use cubic easing for smoother animation
-      const easedProgress = scrollProgress * scrollProgress * (3 - 2 * scrollProgress); // Smoothstep easing
+      // Map scroll progress to rotation: 0 to 360 degrees with ultra-smooth easing
+      // Use multiple easing functions for buttery smooth animation
+      const easedProgress = scrollProgress < 0.5 
+        ? 2 * scrollProgress * scrollProgress * scrollProgress * scrollProgress
+        : 1 - Math.pow(-2 * scrollProgress + 2, 4) / 2; // Smooth quartic easing
       rotationY = Math.min(360, easedProgress * 360); // Full 360 degree rotation
     }
     
