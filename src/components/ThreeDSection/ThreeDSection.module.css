@@ -31,15 +31,16 @@
   min-height: 100vh;
   background: transparent;
   padding: 0;
+ 
   width: 55%;
 }
 
 .splineContainer {
-  width: 1800px !important;
+  width: 1850px !important;
   height: 930px !important;
-  max-width: 1800px !important;
+  max-width: 1850px !important;
   max-height: 930px !important;
-  min-width: 1800px !important;
+  min-width: 1850px !important;
   min-height: 930px !important;
   border-radius: 0;
   overflow: visible;
