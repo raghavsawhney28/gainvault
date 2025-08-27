@@ -37,11 +37,11 @@
 
 .splineContainer {
   width: 1850px !important;
-  height: 930px !important;
+  height: 980px !important;
   max-width: 1850px !important;
-  max-height: 930px !important;
+  max-height: 980px !important;
   min-width: 1850px !important;
-  min-height: 930px !important;
+  min-height: 980px !important;
   border-radius: 0;
   overflow: visible;
   box-shadow: none;
