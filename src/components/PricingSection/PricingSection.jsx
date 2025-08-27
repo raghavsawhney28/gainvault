@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Star, TrendingUp, Clock, Target, AlertTriangle, Zap, ChevronLeft, ChevronRight, Shield, Calendar, UserCheck, XCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AnimatedSection from '../AnimatedSection/AnimatedSection';
@@ -8,7 +8,9 @@ const PricingSection = () => {
   const [selectedPlan, setSelectedPlan] = useState('SKILLED');
   const [challengeType, setChallengeType] = useState('twoStage');
   const [currentPlanIndex, setCurrentPlanIndex] = useState(2); // SKILLED is default
+  const [isInViewport, setIsInViewport] = useState(false);
   const navigate = useNavigate();
+  const sectionRef = useRef(null);
 
   const challengePlans = [
     {
@@ -143,45 +145,64 @@ const PricingSection = () => {
     }
   ];
 
-  const selectedPlanData = challengePlans.find(plan => plan.name === selectedPlan);
+  const selectedPlanData = useMemo(() => 
+    challengePlans.find(plan => plan.name === selectedPlan), 
+    [selectedPlan]
+  );
 
-  const handlePlanSelect = (planName) => {
+  const handlePlanSelect = useCallback((planName) => {
     setSelectedPlan(planName);
     const index = challengePlans.findIndex(plan => plan.name === planName);
     setCurrentPlanIndex(index);
-  };
+  }, []);
 
-  const handleChallengeTypeChange = (type) => {
+  const handleChallengeTypeChange = useCallback((type) => {
     setChallengeType(type);
-  };
+  }, []);
 
-  const handleStartChallenge = () => {
+  const handleStartChallenge = useCallback(() => {
     navigate('/trading-challenge', { 
       state: { 
         selectedPlan, 
         challengeType 
       } 
     });
-  };
+  }, [navigate, selectedPlan, challengeType]);
 
-  const getCurrentPrice = () => {
+  const getCurrentPrice = useCallback(() => {
     return challengeType === 'twoStage' ? selectedPlanData.cost : selectedPlanData.singleStageCost;
-  };
+  }, [challengeType, selectedPlanData]);
 
-  const nextPlan = () => {
+  const nextPlan = useCallback(() => {
     const nextIndex = (currentPlanIndex + 1) % challengePlans.length;
     setCurrentPlanIndex(nextIndex);
     setSelectedPlan(challengePlans[nextIndex].name);
-  };
+  }, [currentPlanIndex]);
 
-  const prevPlan = () => {
+  const prevPlan = useCallback(() => {
     const prevIndex = currentPlanIndex === 0 ? challengePlans.length - 1 : currentPlanIndex - 1;
     setCurrentPlanIndex(prevIndex);
     setSelectedPlan(challengePlans[prevIndex].name);
-  };
+  }, [currentPlanIndex]);
+
+  // Performance optimization: Only render heavy content when in viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInViewport(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section className={styles.pricingSection} id="pricing">
+    <section ref={sectionRef} className={styles.pricingSection} id="pricing">
       <div className={styles.container}>
         <AnimatedSection className={styles.pricingHeader}>
           <h2>CHALLENGE PLANS</h2>
@@ -192,60 +213,62 @@ const PricingSection = () => {
         <div className={styles.challengeTypeToggle}>
           <button
             className={`${styles.toggleButton} ${challengeType === 'twoStage' ? styles.active : ''}`}
-            onClick={() => handleChallengeTypeChange('twoStage')}
+            onClick={useCallback(() => handleChallengeTypeChange('twoStage'), [handleChallengeTypeChange])}
           >
             Two Stages
           </button>
           <button
             className={`${styles.toggleButton} ${challengeType === 'singleStage' ? styles.active : ''}`}
-            onClick={() => handleChallengeTypeChange('singleStage')}
+            onClick={useCallback(() => handleChallengeTypeChange('singleStage'), [handleChallengeTypeChange])}
           >
             Single Stage
           </button>
         </div>
 
         {/* Key Trading Rules Summary */}
-        <div className={styles.rulesSummary}>
-          <h3>Key Trading Rules & Requirements</h3>
-          <div className={styles.rulesGrid}>
-            <div className={styles.ruleItem}>
-              <div className={styles.ruleIcon}>
-                <Shield size={20} />
+        {isInViewport && (
+          <div className={styles.rulesSummary}>
+            <h3>Key Trading Rules & Requirements</h3>
+            <div className={styles.rulesGrid}>
+              <div className={styles.ruleItem}>
+                <div className={styles.ruleIcon}>
+                  <Shield size={20} />
+                </div>
+                <div className={styles.ruleContent}>
+                  <h4>Risk Management</h4>
+                  <p>Max 0.8% risk per trade, 2% daily loss cap, mandatory stop losses</p>
+                </div>
               </div>
-              <div className={styles.ruleContent}>
-                <h4>Risk Management</h4>
-                <p>Max 0.8% risk per trade, 2% daily loss cap, mandatory stop losses</p>
+              <div className={styles.ruleItem}>
+                <div className={styles.ruleIcon}>
+                  <TrendingUp size={20} />
+                </div>
+                <div className={styles.ruleContent}>
+                  <h4>Position Management</h4>
+                  <p>1 position max, no weekend holding, 25% correlation limit</p>
+                </div>
               </div>
-            </div>
-            <div className={styles.ruleItem}>
-              <div className={styles.ruleIcon}>
-                <TrendingUp size={20} />
+              <div className={styles.ruleItem}>
+                <div className={styles.ruleIcon}>
+                  <Clock size={20} />
+                </div>
+                <div className={styles.ruleContent}>
+                  <h4>Trading Frequency</h4>
+                  <p>Min 10min holds, max 4 trades/week, activity every 48h required</p>
+                </div>
               </div>
-              <div className={styles.ruleContent}>
-                <h4>Position Management</h4>
-                <p>1 position max, no weekend holding, 25% correlation limit</p>
-              </div>
-            </div>
-            <div className={styles.ruleItem}>
-              <div className={styles.ruleIcon}>
-                <Clock size={20} />
-              </div>
-              <div className={styles.ruleContent}>
-                <h4>Trading Frequency</h4>
-                <p>Min 10min holds, max 4 trades/week, activity every 48h required</p>
-              </div>
-            </div>
-            <div className={styles.ruleItem}>
-              <div className={styles.ruleIcon}>
-                <XCircle size={20} />
-              </div>
-              <div className={styles.ruleContent}>
-                <h4>Prohibited</h4>
-                <p>No automation, no news trading, no scalping under 10min</p>
+              <div className={styles.ruleItem}>
+                <div className={styles.ruleIcon}>
+                  <XCircle size={20} />
+                </div>
+                <div className={styles.ruleContent}>
+                  <h4>Prohibited</h4>
+                  <p>No automation, no news trading, no scalping under 10min</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Mobile Plan Navigation */}
         <div className={styles.mobilePlanNav}>
@@ -285,7 +308,7 @@ const PricingSection = () => {
             <button
               key={plan.name}
               className={`${styles.planButton} ${selectedPlan === plan.name ? styles.selected : ''}`}
-              onClick={() => handlePlanSelect(plan.name)}
+              onClick={useCallback(() => handlePlanSelect(plan.name), [handlePlanSelect, plan.name])}
             >
               <div className={styles.planName}>{plan.name}</div>
               <div className={styles.planValue}>{plan.value}</div>
@@ -307,17 +330,18 @@ const PricingSection = () => {
             <div 
               key={index}
               className={`${styles.progressDot} ${index === currentPlanIndex ? styles.active : ''}`}
-              onClick={() => {
+              onClick={useCallback(() => {
                 setCurrentPlanIndex(index);
                 setSelectedPlan(challengePlans[index].name);
-              }}
+              }, [index])}
             />
           ))}
         </div>
 
         {/* Objective Section */}
-        <div className={styles.objectiveSection}>
-          <h3>Challenge Objectives</h3>
+        {isInViewport && (
+          <div className={styles.objectiveSection}>
+            <h3>Challenge Objectives</h3>
           
           {/* Mobile-friendly objective display */}
           <div className={styles.objectiveGrid}>
@@ -589,6 +613,7 @@ const PricingSection = () => {
             </div>
           </div>
         </div>
+        )}
 
         {/* Action Section */}
         <div className={styles.actionSection}>

@@ -4,6 +4,10 @@
   background: transparent;
   position: relative;
   z-index: 1;
+  /* Performance optimizations */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .container {
@@ -77,6 +81,10 @@
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+  /* Performance optimizations */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .ruleItem:hover {
@@ -232,6 +240,10 @@
   box-shadow: var(--shadow-md);
   color: #ffffff;
   backdrop-filter: blur(10px);
+  /* Performance optimizations */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .planButton:hover {
@@ -343,6 +355,10 @@
   transition: all 0.3s ease;
   box-shadow: var(--shadow-sm);
   backdrop-filter: blur(10px);
+  /* Performance optimizations */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .objectiveCard:hover {
@@ -622,6 +638,23 @@
   border: 1px solid rgba(239, 68, 68, 0.2);
   text-align: center;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Performance optimizations for all elements */
+.rulesSummary,
+.objectiveSection,
+.complianceNotice,
+.planButton,
+.ruleItem,
+.objectiveCard {
+  /* Hardware acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  /* Reduce repaints */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* Optimize animations */
+  will-change: transform;
 }
 
 /* Responsive Design */
