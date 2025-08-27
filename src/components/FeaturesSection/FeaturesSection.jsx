@@ -58,6 +58,7 @@ const FlipCard = ({ feature, index }) => {
   const cardRef = useRef(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleScroll = () => {
     if (!isScrolling) {
@@ -96,8 +97,6 @@ const FlipCard = ({ feature, index }) => {
     if (cardTop > scrollY + windowHeight + 200 || cardTop < scrollY - 200) {
       return; // Skip if card is far from viewport
     }
-    
-    const isMobile = window.innerWidth <= 768;
     
     if (isMobile) {
       // Mobile: Simple slide-up reveal on scroll
@@ -187,11 +186,22 @@ const FlipCard = ({ feature, index }) => {
   };
 
   useEffect(() => {
+    // Check initial mobile state
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    
+    // Add event listeners
     window.addEventListener('scroll', handleScrollOptimized, { passive: true });
+    window.addEventListener('resize', checkMobile);
+    
     updateCard(); // Initial check
     
     return () => {
       window.removeEventListener('scroll', handleScrollOptimized);
+      window.removeEventListener('resize', checkMobile);
       if (debouncedScroll.current) {
         clearTimeout(debouncedScroll.current);
       }

@@ -55,7 +55,7 @@ body {
 /* Smooth scrolling - disabled on mobile for better performance */
 @media (min-width: 768px) {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto; /* Changed from 'smooth' to 'auto' */
   }
 }
 

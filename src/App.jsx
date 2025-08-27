@@ -4,7 +4,7 @@ import Header from './components/Header/Header';
 import HeroSection from './components/HeroSection/HeroSection';
 import FeaturesSection from './components/FeaturesSection/FeaturesSection';
 import PricingSection from './components/PricingSection/PricingSection';
-import ThreeDSection from './components/ThreeDSection/ThreeDSection';
+import NewSection from './components/NewSection/NewSection';
 import Footer from './components/Footer/Footer';
 import TradingChallenge from './pages/TradingChallenge/TradingChallenge';
 import Rules from './pages/Rules/Rules';
@@ -58,7 +58,7 @@ function App() {
       <HeroSection className="cursor-none" />
       <FeaturesSection className="cursor-none" />
       <PricingSection className="cursor-none" />
-      <ThreeDSection className="cursor-none" />
+      <NewSection className="cursor-none" />
     </main>
   ), []);
 
@@ -78,9 +78,10 @@ function App() {
         <Route path="/" element={mainContent} />
         <Route path="/trading-challenge" element={<TradingChallenge className="cursor-none" />} />
         <Route path="/rules" element={<Rules className="cursor-none" />} />
-        <Route path="/referral" element={<Referral className="cursor-none" />} />
+        <Route path="/referral" element={<Referral />} />
         <Route path="/dashboard/:username" element={<Dashboard className="cursor-none" />} />
       </Routes>
+      {/* <BlankSection className="cursor-none" /> */}
       <Footer className="cursor-none" />
       {showAuthModal && (
         <AuthPage 
