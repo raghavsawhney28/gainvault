@@ -1,35 +1,36 @@
 /* New Section Styles */
 .newSection {
   width: 100%;
-  background-color: #000000;
-  padding: 4rem 0;
+  background-color: transparent;
+  padding: 0 0;
+  margin-top: -20rem;
   position: relative;
   z-index: 1;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
 }
 
 .contentWrapper {
   display: flex;
   align-items: center;
-  gap: 3rem;
+  justify-content: space-between;
+  gap: 0;
 }
 
 /* Left Column - Media */
 .leftColumn {
-  flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
 .mediaContainer {
-  width: 350px;
-  height: 350px;
+  width: 1000px;
+  height: 1000px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,13 +46,13 @@
 
 /* Right Column - Text */
 .rightColumn {
-  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .textContent {
-  text-align: left;
+  text-align: right;
 }
 
 .mainTitle {
@@ -101,8 +102,8 @@
   }
   
   .mediaContainer {
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
   }
   
   .textContent {
@@ -126,8 +127,8 @@
   }
   
   .mediaContainer {
-    width: 320px;
-    height: 320px;
+    width: 700px;
+    height: 700px;
   }
   
   .mainTitle,
@@ -144,7 +145,7 @@
   }
   
   .mediaContainer {
-    width: 400px;
-    height: 400px;
+    width: 1200px;
+    height: 1200px;
   }
 }

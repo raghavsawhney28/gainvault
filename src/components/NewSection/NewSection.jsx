@@ -7,32 +7,34 @@ export default function NewSection() {
   return (
     <section style={{
       width: '100%',
-      backgroundColor: '#000000',
-      padding: '4rem 0',
+      backgroundColor: 'transparent',
+      padding: '0 0',
+      marginTop: '-15rem',
       minHeight: '300px',
       position: 'relative',
       zIndex: 9999
     }}>
       <div style={{
-        maxWidth: '1200px',
+        maxWidth: '100%',
         margin: '0 auto',
-        padding: '0 1.5rem'
+        padding: '0 2rem'
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '3rem'
+          justifyContent: 'space-between',
+          gap: '0'
         }}>
-          {/* Left Column - GIF/Video */}
+          {/* Left Column - Image fully left */}
           <div style={{
-            flex: 1,
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            marginLeft: '-2rem'
           }}>
             <div style={{
-              width: '350px',
-              height: '350px',
+              width: '1000px',
+              height: '1000px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -45,20 +47,20 @@ export default function NewSection() {
                   height: '100%',
                   objectFit: 'contain',
                   borderRadius: '12px',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                  
                 }}
               />
             </div>
           </div>
 
-          {/* Right Column - Text */}
+          {/* Right Column - Text fully right */}
           <div style={{
-            flex: 1,
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent: 'flex-end'
           }}>
             <div style={{
-              textAlign: 'left'
+              textAlign: 'right'
             }}>
               <h2 style={{
                 fontSize: '4rem',
