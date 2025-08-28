@@ -142,9 +142,13 @@
   .contentWrapper {
     gap: 1.5rem;
   }
+
+  .media {
+    height: 80%;
+  }
   
   .mediaContainer {
-    width: 250px;
+    width: 329px;
     height: 250px;
   }
   
