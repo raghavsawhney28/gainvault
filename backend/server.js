@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   'http://localhost:5173',
+  'https://gainvault.fund',
   'https://raghavsawhney28.github.io',
   'https://gainvault-capital.onrender.com',
   'https://gainvault.onrender.com',
