@@ -142,44 +142,6 @@ const HeroSection = () => {
       duration: 1000,
       once: false,
     });
-
-    // Prevent zoom on Spline component
-    const preventZoom = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    };
-
-    // Add zoom prevention to the Spline container
-    if (splineRef.current) {
-      const splineContainer = splineRef.current;
-      
-      // Prevent wheel zoom
-      splineContainer.addEventListener('wheel', preventZoom, { passive: false, capture: true });
-      
-      // Prevent touch zoom
-      splineContainer.addEventListener('touchstart', preventZoom, { passive: false, capture: true });
-      splineContainer.addEventListener('touchmove', preventZoom, { passive: false, capture: true });
-      splineContainer.addEventListener('touchend', preventZoom, { passive: false, capture: true });
-      
-      // Prevent gesture zoom (iOS)
-      splineContainer.addEventListener('gesturestart', preventZoom, { passive: false, capture: true });
-      splineContainer.addEventListener('gesturechange', preventZoom, { passive: false, capture: true });
-      splineContainer.addEventListener('gestureend', preventZoom, { passive: false, capture: true });
-    }
-
-    return () => {
-      if (splineRef.current) {
-        const splineContainer = splineRef.current;
-        splineContainer.removeEventListener('wheel', preventZoom, { capture: true });
-        splineContainer.removeEventListener('touchstart', preventZoom, { capture: true });
-        splineContainer.removeEventListener('touchmove', preventZoom, { passive: false, capture: true });
-        splineContainer.removeEventListener('touchend', preventZoom, { capture: true });
-        splineContainer.removeEventListener('gesturestart', preventZoom, { capture: true });
-        splineContainer.removeEventListener('gesturechange', preventZoom, { capture: true });
-        splineContainer.removeEventListener('gestureend', preventZoom, { capture: true });
-      }
-    };
   }, []);
 
   return (
@@ -234,11 +196,11 @@ const HeroSection = () => {
                 ref={splineRef}
                 scene="https://prod.spline.design/ULvrhxOiNo1pQrjD/scene.splinecode"
                 style={{
-                  touchAction: 'none',
-                  userSelect: 'none',
-                  WebkitUserSelect: 'none',
-                  MozUserSelect: 'none',
-                  msUserSelect: 'none'
+                  touchAction: 'auto',
+                  userSelect: 'auto',
+                  WebkitUserSelect: 'auto',
+                  MozUserSelect: 'auto',
+                  msUserSelect: 'auto'
                 }}
               />
             </div>

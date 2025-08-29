@@ -8,14 +8,14 @@
 /* Prevent zoom effects only on Spline 3D scene */
 .rightContent,
 .rightContent * {
-  touch-action: none !important;
+  /* touch-action: none !important;
   -webkit-touch-callout: none !important;
   -webkit-user-select: none !important;
   -khtml-user-select: none !important;
   -moz-user-select: none !important;
   -ms-user-select: none !important;
   user-select: none !important;
-  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: transparent !important; */
 }
 
 /* Spline wrapper with aggressive zoom prevention */
@@ -24,7 +24,7 @@
   height: 100%;
   position: relative;
   overflow: hidden;
-  touch-action: none !important;
+  /* touch-action: none !important;
   -webkit-touch-callout: none !important;
   -webkit-user-select: none !important;
   -khtml-user-select: none !important;
@@ -32,7 +32,7 @@
   -ms-user-select: none !important;
   user-select: none !important;
   transform: none !important;
-  scale: 1 !important;
+  scale: 1 !important; */
 }
 
 /* Aggressive zoom prevention for Spline */
@@ -40,7 +40,7 @@
 .splineWrapper > div > div,
 .splineWrapper > div > div > iframe,
 .splineWrapper > div > div > canvas {
-  touch-action: none !important;
+  /* touch-action: none !important;
   -webkit-touch-callout: none !important;
   -webkit-user-select: none !important;
   -khtml-user-select: none !important;
@@ -54,7 +54,7 @@
   zoom: 1 !important;
   -webkit-transform: none !important;
   -moz-transform: none !important;
-  -ms-transform: none !important;
+  -ms-transform: none !important; */
 }
 
 /* Target Spline canvas and iframe specifically */
@@ -66,7 +66,7 @@
 .splineWrapper iframe,
 .splineWrapper div[data-spline],
 .splineWrapper div[data-spline] * {
-  touch-action: none !important;
+  /* touch-action: none !important;
   -webkit-touch-callout: none !important;
   -webkit-user-select: none !important;
   -khtml-user-select: none !important;
@@ -76,19 +76,19 @@
   -webkit-tap-highlight-color: transparent !important;
   pointer-events: auto !important;
   transform: none !important;
-  scale: 1 !important;
+  scale: 1 !important; */
 }
 
 /* Prevent zoom on Spline container */
 .rightContent > div,
 .splineWrapper > div {
-  touch-action: none !important;
+  /* touch-action: none !important;
   -webkit-touch-callout: none !important;
   -webkit-user-select: none !important;
   -khtml-user-select: none !important;
   -moz-user-select: none !important;
   -ms-user-select: none !important;
-  user-select: none !important;
+  user-select: none !important; */
 }
 
 /* Hero Section Styles */
@@ -151,11 +151,11 @@
   border-bottom-right-radius: 500px !important;
   background: rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  touch-action: none;
+  /* touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
+  -ms-user-select: none; */
 }
 
 .heroContent {
