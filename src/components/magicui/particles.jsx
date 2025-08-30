@@ -5,7 +5,7 @@ const Particles = ({
   quantity = 10, // Increased to 15000 for extremely dense particles
   staticity = 50,
   ease = 50,
-  size = 0.0, // Decreased from 2.0 to 0.0 for smaller particles
+  size = 2.0, // Decreased from 2.0 to 0.0 for smaller particles
   refresh = false,
   color = '#00ff00', // Changed to green
   vx = 0,
@@ -26,19 +26,34 @@ const Particles = ({
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
+    // Mobile detection and optimization
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+    
+    // Debug logging
+    console.log('🎯 Particles Debug:', {
+      isMobile,
+      screenWidth: window.innerWidth,
+      userAgent: navigator.userAgent
+    });
+    
+    // Adjust parameters for mobile
+    const mobileQuantity = isMobile ? Math.max(8, Math.floor(quantity * 0.7)) : quantity;
+    const mobileSize = isMobile ? Math.max(1.0, size * 1.8) : size;
+    const mobileStaticity = isMobile ? Math.min(70, staticity + 10) : staticity;
+
     // Particle class
     class Particle {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.3 + vx; // Reduced base velocity for more static feel
-        this.vy = (Math.random() - 0.5) * 0.3 + vy;
-        this.size = Math.random() * size + 0.05; // Decreased base size to 0.05 for even smaller particles
-        this.opacity = Math.random() * 0.8 + 0.6; // Increased opacity significantly for better visibility
+        this.vx = (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3) + vx;
+        this.vy = (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3) + vy;
+        this.size = Math.random() * mobileSize + (isMobile ? 0.1 : 0.05);
+        this.opacity = Math.random() * 0.8 + 0.6;
         this.baseColor = color;
-        this.color = color; // Always use the specified color (green)
-        this.staticity = staticity / 100; // Convert to 0-1 range
-        this.ease = ease / 100; // Convert to 0-1 range
+        this.color = color;
+        this.staticity = mobileStaticity / 100;
+        this.ease = ease / 100;
       }
 
       update() {
@@ -73,9 +88,16 @@ const Particles = ({
     // Create particles
     const particles = [];
     
-    for (let i = 0; i < quantity; i++) {
+    for (let i = 0; i < mobileQuantity; i++) {
       particles.push(new Particle());
     }
+
+    console.log('🚀 Created particles:', particles.length, 'Mobile:', isMobile, 'Size:', mobileSize);
+
+    // Test canvas rendering
+    ctx.fillStyle = '#ff0000';
+    ctx.fillRect(10, 10, 20, 20);
+    console.log('🎨 Canvas test - red square should be visible');
 
     // Animation loop
     const animate = () => {

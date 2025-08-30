@@ -92,10 +92,10 @@ function App() {
         <SmoothCursor size="small" />
         {/* Particles background covering the entire body */}
         <Particles 
-          quantity={400}
-          staticity={70}
-          ease={40}
-          size={0.6}
+          quantity={150}
+          staticity={60}
+          ease={50}
+          size={1.2}
           color="#00ff88"
           className="particles-background"
         />
