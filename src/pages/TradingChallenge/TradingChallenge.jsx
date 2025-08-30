@@ -446,8 +446,8 @@ const TradingChallenge = () => {
               {accountSizes.map(size => (
                 <Card
                   key={size.value}
-                  padding="xl"
-                  radius="lg"
+                                    padding="sm"
+                  radius="md"
                   withBorder
                   className={`${styles.accountSizeCard} ${
                     formData.accountSize === size.value ? styles.selected : ''
@@ -456,46 +456,48 @@ const TradingChallenge = () => {
                   style={{
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
-                                         borderColor: formData.accountSize === size.value 
-                       ? '#16a34a' 
-                       : '#16a34a',
-                     borderWidth: formData.accountSize === size.value ? '3px' : '2px',
-                     backgroundColor: formData.accountSize === size.value 
-                       ? 'rgba(22, 163, 74, 0.15)' 
-                       : 'rgba(26, 26, 26, 0.8)',
-                     backdropFilter: 'blur(15px)',
-                     boxShadow: formData.accountSize === size.value 
-                       ? '0 12px 40px rgba(22, 163, 74, 0.3)' 
-                       : '0 8px 25px rgba(0, 0, 0, 0.3)',
+                    borderColor: formData.accountSize === size.value 
+                      ? '#16a34a' 
+                      : '#16a34a',
+                    borderWidth: formData.accountSize === size.value ? '2px' : '1px',
+                    backgroundColor: formData.accountSize === size.value 
+                      ? 'rgba(22, 163, 74, 0.15)' 
+                      : 'rgba(26, 26, 26, 0.8)',
+                    backdropFilter: 'blur(15px)',
+                    boxShadow: formData.accountSize === size.value 
+                      ? '0 8px 25px rgba(22, 163, 74, 0.3)' 
+                      : '0 4px 15px rgba(0, 0, 0, 0.3)',
+                    maxWidth: '220px',
+                    minHeight: '160px'
                   }}
                 >
-                  <Stack gap="md" ta="center">
-                    <Text fw={800} size="xl" c="#FFFFFF" style={{ letterSpacing: '1px' }}>
+                                    <Stack gap="xs" ta="center">
+                    <Text fw={600} size="md" c="#FFFFFF" style={{ letterSpacing: '0.3px' }}>
                       {size.label}
                     </Text>
-                                         <Title order={2} c="#16a34a" fw={900} style={{ 
-                       textShadow: '0 0 20px rgba(22, 163, 74, 0.5)',
-                       fontSize: '2.5rem'
-                     }}>
-                       ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
-                     </Title>
+                    <Title order={4} c="#16a34a" fw={800} style={{ 
+                      textShadow: '0 0 15px rgba(22, 163, 74, 0.5)',
+                      fontSize: '1.5rem'
+                    }}>
+                      ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
+                    </Title>
                     <Badge 
                       variant="light" 
                       color="green" 
-                      size="lg"
-                      radius="md"
+                      size="sm"
+                      radius="sm"
                       styles={{
-                                                 root: {
-                           backgroundColor: 'transparent',
-                           color: '#16a34a',
-                           borderColor: '#16a34a',
-                           borderWidth: '2px',
-                           textTransform: 'uppercase',
-                           fontWeight: 700,
-                           fontSize: '0.9rem',
-                           padding: '8px 16px',
-                           letterSpacing: '1px'
-                         },
+                        root: {
+                          backgroundColor: 'transparent',
+                          color: '#16a34a',
+                          borderColor: '#16a34a',
+                          borderWidth: '1px',
+                          textTransform: 'uppercase',
+                          fontWeight: 500,
+                          fontSize: '0.7rem',
+                          padding: '4px 8px',
+                          letterSpacing: '0.3px'
+                        },
                       }}
                     >
                       {challengeType === 'twoStage' ? 'TWO STAGES' : 'SINGLE STAGE'}
