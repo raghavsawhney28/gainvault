@@ -515,5 +515,8 @@
   .contentWrapper {
     justify-content: center;
   }
+  .rightContent {
+    height: 112vh;
+  }
   
 }
