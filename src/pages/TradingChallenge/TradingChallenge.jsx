@@ -3,6 +3,8 @@ import { ChevronLeft, ChevronRight, Check, ExternalLink, Loader2, AlertCircle, C
 import usePhantomWallet from '../../hooks/usePhantomWallet';
 import usePhantomPayment from '../../hooks/usePhantomPayment';
 import styles from './TradingChallenge.module.css';
+import { useMantineTheme } from '@mantine/core';
+import { Paper, Stack, Text, Group, Button, Select, Card, Badge, Title } from '@mantine/core';
 
 const TradingChallenge = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -42,18 +44,7 @@ const TradingChallenge = () => {
     { value: '100k', label: '$100,000', price: 1199, singleStagePrice: 2158 },
   ];
 
-  const countries = [
-    'United States', 'Canada','India', 'United Kingdom', 'Germany', 'France', 
-    'Australia', 'Japan', 'Singapore', 'Switzerland', 'Netherlands'
-  ];
-
-  const accountTypes = [
-    '2 Step  --------10% Phase 1, 5% Phase 2'
-  ];
-
-  const profitTargets = [
-     '10% Phase 1, 5% Phase 2'
-  ];
+ 
 
   const platforms = [
       'GainVault'
@@ -191,210 +182,625 @@ const TradingChallenge = () => {
     );
   };
 
-  const renderAccountSetup = () => (
-    <div className={styles.stepContent}>
-      <h2>Account Setup</h2>
-      
-      {/* Challenge Type Toggle */}
-      <div className={styles.challengeTypeToggle}>
-        <button
-          className={`${styles.toggleButton} ${challengeType === 'twoStage' ? styles.active : ''}`}
-          onClick={() => handleChallengeTypeChange('twoStage')}
+  const renderAccountSetup = () => {
+    const theme = useMantineTheme();
+    
+    return (
+      <div className={styles.stepContent}>
+        <Text 
+          fw={700} 
+          size="2.5rem" 
+          c="#FFFFFF" 
+          ta="center" 
+          mb="xl"
+                     style={{ 
+             textShadow: '0 0 20px rgba(22, 163, 74, 0.3)',
+             letterSpacing: '1px'
+           }}
         >
-          Two Stages
-        </button>
-        <button
-          className={`${styles.toggleButton} ${challengeType === 'singleStage' ? styles.active : ''}`}
-          onClick={() => handleChallengeTypeChange('singleStage')}
-        >
-          Single Stage
-        </button>
-      </div>
-      
-      <div className={styles.formGrid}>
-        {/* <div className={styles.formGroup}>
-          <label>Country</label>
-          <select 
-            value={formData.country} 
-            onChange={(e) => handleInputChange('country', e.target.value)}
-          >
-            <option value="">Select Country</option>
-            {countries.map(country => (
-              <option key={country} value={country}>{country}</option>
-            ))}
-          </select>
-        </div> */}
-
-        {/* <div className={styles.formGroup}>
-          <label>Account Type</label>
-          <select 
-            value={formData.accountType} 
-            onChange={(e) => handleInputChange('accountType', e.target.value)}
-          >
-            <option value="">Select Account Type</option>
-            {accountTypes.map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
-        </div> */}
-
-        {/* <div className={styles.formGroup}>
-          <label>Profit Target</label>
-          <select 
-            value={formData.profitTarget} 
-            onChange={(e) => handleInputChange('profitTarget', e.target.value)}
-          >
-            <option value="">Select Profit Target</option>
-            {profitTargets.map(target => (
-              <option key={target} value={target}>{target}</option>
-            ))}
-          </select>
-        </div> */}
-
-        <div className={styles.formGroup}>
-          <label>Platform</label>
-          <select 
-            value={formData.platform} 
-            onChange={(e) => handleInputChange('platform', e.target.value)}
-          >
-            <option value="">Select Platform</option>
-            {platforms.map(platform => (
-              <option key={platform} value={platform}>{platform}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className={styles.accountSizeSection}>
-        <label>Account Size</label>
-        <div className={styles.accountSizeGrid}>
-          {accountSizes.map(size => (
-            <button
-              key={size.value}
-              className={`${styles.accountSizeCard} ${
-                formData.accountSize === size.value ? styles.selected : ''
-              }`}
-              onClick={() => handleInputChange('accountSize', size.value)}
-            >
-              <div className={styles.accountSizeLabel}>{size.label}</div>
-              <div className={styles.accountSizePrice}>
-                ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
-              </div>
-              <div className={styles.challengeTypeLabel}>
-                {challengeType === 'twoStage' ? 'Two Stages' : 'Single Stage'}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.stepNavigation}>
-        <button 
-          className={styles.btnPrimary}
-          onClick={handleNext}
-          disabled={  !formData.accountSize || !formData.platform }
-        >
-          Next <ChevronRight size={16} />
-        </button>
-      </div>
-    </div>
-  );
-
-  const renderOrderSummary = () => (
-    <div className={styles.stepContent}>
-      <h2>Order Summary</h2>
-      
-      <div className={styles.summaryCard}>
-        <div className={styles.summaryHeader}>
-          <h3>Challenge Details</h3>
-        </div>
+          Account Setup
+        </Text>
         
-        <div className={styles.summaryDetails}>
-          <div className={styles.summaryRow}>
-            <span>Challenge Type:</span>
-            <span>{formData.accountType}</span>
-          </div>
-          <div className={styles.summaryRow}>
-            <span>Platform:</span>
-            <span>{formData.platform}</span>
-          </div>
-          <div className={styles.summaryRow}>
-            <span>Account Size:</span>
-            <span>{accountSizes.find(size => size.value === formData.accountSize)?.label}</span>
-          </div>
-          {/* <div className={styles.summaryRow}>
-            <span>Profit Target:</span>
-            <span>{formData.profitTarget}</span>
-          </div>
-          <div className={styles.summaryRow}>
-            <span>Country:</span>
-            <span>{formData.country}</span>
-          </div> */}
-        </div>
-
-        <div className={styles.summaryTotal}>
-          <div className={styles.totalRow}>
-            <span>Total Cost:</span>
-            <span className={styles.totalPrice}>${getSelectedAccountPrice()}</span>
-          </div>
-          {connected && formData.accountSize && (
-            <div className={styles.solConversion}>
-              <span>SOL Amount:</span>
-              <span className={styles.solAmount}>
-                ◎{calculateSOLAmount(formData.accountSize).toFixed(4)} SOL
-              </span>
-              <span className={styles.solRate}>@ ${SOL_RATE}/SOL</span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {!connected && (
-        <div className={styles.walletPrompt}>
-          <AlertCircle size={20} />
-          <span>Connect your Phantom wallet to proceed with payment</span>
-          <button className={styles.btnSecondary} onClick={connectWallet}>
-            Connect Wallet
-          </button>
-        </div>
-      )}
-
-      {renderPaymentStatus()}
-
-      <div className={styles.termsSection}>
-        <label className={styles.checkboxLabel}>
-          <input
-            type="checkbox"
-            checked={formData.agreeToTerms}
-            onChange={(e) => handleInputChange('agreeToTerms', e.target.checked)}
-          />
-          <span className={styles.checkmark}></span>
-          I have read and agree to the Rules and Conditions
-        </label>
-      </div>
-
-      <div className={styles.stepNavigation}>
-        <button className={styles.btnSecondary} onClick={handleBack}>
-          <ChevronLeft size={16} /> Back
-        </button>
-        <button 
-          className={styles.btnSuccess}
-          onClick={handleConfirmOrder}
-          disabled={!formData.agreeToTerms || !connected || isProcessing}
+        {/* Challenge Type Toggle */}
+        <Paper 
+          p="xl" 
+          radius="lg" 
+          withBorder 
+          style={{ 
+                         backgroundColor: 'rgba(26, 26, 26, 0.6)',
+             borderColor: '#16a34a',
+             backdropFilter: 'blur(15px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
+            marginBottom: '2rem'
+          }}
         >
-          {isProcessing ? (
-            <>
-              <Loader2 size={17} className={styles.spinning} /> Processing...
-            </>
-          ) : (
-            <>
-              <Check size={17} /> {connected ? 'Pay with SOL' : 'Connect Wallet First'}
-            </>
-          )}
-        </button>
+          <Stack gap="lg">
+                         <Text 
+               fw={700} 
+               size="lg" 
+               tt="uppercase" 
+               c="#15803d" 
+               ta="center" 
+               style={{ 
+                 backgroundColor: '#1A3A1A', 
+                 padding: '12px 24px', 
+                 borderRadius: '8px', 
+                 margin: '0 auto',
+                 border: '1px solid #15803d',
+                 boxShadow: '0 4px 12px rgba(21, 128, 61, 0.2)',
+                 letterSpacing: '2px'
+               }}
+             >
+               CHALLENGE TYPE
+             </Text>
+            <Group justify="center" gap="lg">
+              <Button
+                variant={challengeType === 'twoStage' ? 'filled' : 'outline'}
+                color="green"
+                size="xl"
+                radius="lg"
+                onClick={() => handleChallengeTypeChange('twoStage')}
+                leftSection={challengeType === 'twoStage' && <ChevronRight size={20} />}
+                styles={{
+                  root: {
+                                         backgroundColor: challengeType === 'twoStage' ? '#16a34a' : 'transparent',
+                     borderColor: challengeType === 'twoStage' ? '#16a34a' : '#16a34a',
+                     borderWidth: '2px',
+                     color: challengeType === 'twoStage' ? '#000000' : '#16a34a',
+                     fontWeight: 700,
+                     fontSize: '1.1rem',
+                     padding: '16px 32px',
+                     transition: 'all 0.3s ease',
+                     boxShadow: challengeType === 'twoStage' 
+                       ? '0 8px 25px rgba(22, 163, 74, 0.4)' 
+                       : '0 4px 15px rgba(22, 163, 74, 0.2)',
+                     '&:hover': {
+                       backgroundColor: challengeType === 'twoStage' ? '#15803d' : 'rgba(22, 163, 74, 0.1)',
+                       borderColor: challengeType === 'twoStage' ? '#15803d' : '#15803d',
+                       transform: 'translateY(-2px)',
+                       boxShadow: challengeType === 'twoStage' 
+                         ? '0 12px 35px rgba(22, 163, 74, 0.5)' 
+                         : '0 8px 25px rgba(22, 163, 74, 0.3)',
+                     },
+                  },
+                }}
+              >
+                Two Stages
+              </Button>
+              <Button
+                variant={challengeType === 'singleStage' ? 'filled' : 'outline'}
+                color="green"
+                size="xl"
+                radius="lg"
+                onClick={() => handleChallengeTypeChange('singleStage')}
+                leftSection={challengeType === 'singleStage' && <ChevronRight size={20} />}
+                styles={{
+                  root: {
+                                         backgroundColor: challengeType === 'singleStage' ? '#16a34a' : 'transparent',
+                     borderColor: challengeType === 'singleStage' ? '#16a34a' : '#16a34a',
+                     borderWidth: '2px',
+                     color: challengeType === 'singleStage' ? '#000000' : '#16a34a',
+                     fontWeight: 700,
+                     fontSize: '1.1rem',
+                     padding: '16px 32px',
+                     transition: 'all 0.3s ease',
+                     boxShadow: challengeType === 'singleStage' 
+                       ? '0 8px 25px rgba(22, 163, 74, 0.4)' 
+                       : '0 4px 15px rgba(22, 163, 74, 0.2)',
+                     '&:hover': {
+                       backgroundColor: challengeType === 'singleStage' ? '#15803d' : 'rgba(22, 163, 74, 0.1)',
+                       borderColor: challengeType === 'singleStage' ? '#15803d' : '#15803d',
+                       transform: 'translateY(-2px)',
+                       boxShadow: challengeType === 'singleStage' 
+                         ? '0 12px 35px rgba(22, 163, 74, 0.5)' 
+                         : '0 8px 25px rgba(22, 163, 74, 0.3)',
+                     },
+                  },
+                }}
+              >
+                Single Stage
+              </Button>
+            </Group>
+          </Stack>
+        </Paper>
+
+                 {/* Platform Selection */}
+         <Paper 
+           p="xl" 
+           radius="lg" 
+           withBorder 
+           style={{ 
+             backgroundColor: 'rgba(26, 26, 26, 0.6)',
+             borderColor: '#16a34a',
+             backdropFilter: 'blur(15px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
+             marginBottom: '2rem'
+           }}
+         >
+          <Stack gap="lg">
+                         <Text 
+               fw={700} 
+               size="lg" 
+               tt="uppercase" 
+               c="#16a34a" 
+               style={{ 
+                 backgroundColor: '#1A3A1A', 
+                 padding: '12px 24px', 
+                 borderRadius: '8px',
+                 border: '1px solid #16a34a',
+                 boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)',
+                 letterSpacing: '2px',
+                 display: 'inline-block'
+               }}
+             >
+               TRADING PLATFORM
+             </Text>
+            <Select
+              placeholder="Select your preferred platform"
+              data={platforms.map(platform => ({ value: platform, label: platform }))}
+              value={formData.platform}
+              onChange={(value) => handleInputChange('platform', value)}
+              size="xl"
+              radius="lg"
+                             styles={{
+                                   input: {
+                    backgroundColor: 'rgba(26, 26, 26, 0.8)',
+                    borderColor: '#16a34a',
+                    borderWidth: '2px',
+                    color: '#FFFFFF !important',
+                    fontSize: '1.1rem',
+                    padding: '16px 20px',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 15px rgba(22, 163, 74, 0.2)',
+                    '&:focus': {
+                      borderColor: '#16a34a',
+                      backgroundColor: 'rgba(26, 26, 26, 0.9)',
+                      boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
+                      transform: 'translateY(-1px)',
+                      color: '#FFFFFF !important',
+                    },
+                    '&:hover': {
+                      borderColor: '#15803d',
+                      boxShadow: '0 6px 20px rgba(22, 163, 74, 0.25)',
+                      color: '#FFFFFF !important',
+                    },
+                  },
+                 item: {
+                   backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                   color: '#FFFFFF',
+                   fontSize: '1rem',
+                   padding: '12px 20px',
+                   '&[data-selected]': {
+                     backgroundColor: '#16a34a',
+                     color: '#000000',
+                     fontWeight: 700,
+                   },
+                   '&[data-selected]:hover': {
+                     backgroundColor: '#15803d',
+                     color: '#000000',
+                     fontWeight: 700,
+                   },
+                   '&:hover': {
+                     backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                     color: '#16a34a',
+                   },
+                 },
+                 dropdown: {
+                   backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                   borderColor: '#16a34a',
+                   borderWidth: '2px',
+                   boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+                 },
+                                   value: {
+                    color: '#FFFFFF !important',
+                    fontWeight: 600,
+                    fontSize: '1.1rem',
+                    backgroundColor: 'transparent',
+                  },
+                 placeholder: {
+                   color: '#CCCCCC',
+                   fontWeight: 400,
+                 },
+               }}
+            />
+          </Stack>
+        </Paper>
+
+                 {/* Account Size Selection */}
+         <Paper 
+           p="xl" 
+           radius="lg" 
+           withBorder 
+           style={{ 
+             backgroundColor: 'rgba(26, 26, 26, 0.6)',
+             borderColor: '#16a34a',
+             backdropFilter: 'blur(15px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
+             marginBottom: '2rem'
+           }}
+         >
+          <Stack gap="xl">
+                         <Text 
+               fw={700} 
+               size="lg" 
+               tt="uppercase" 
+               c="#22c55e" 
+               ta="center" 
+               style={{ 
+                 backgroundColor: '#1A3A1A', 
+                 padding: '12px 24px', 
+                 borderRadius: '8px', 
+                 margin: '0 auto',
+                 border: '1px solid #22c55e',
+                 boxShadow: '0 4px 12px rgba(34, 197, 94, 0.2)',
+                 letterSpacing: '2px'
+               }}
+             >
+               ACCOUNT SIZE
+             </Text>
+            <div className={styles.accountSizeGrid}>
+              {accountSizes.map(size => (
+                <Card
+                  key={size.value}
+                  padding="xl"
+                  radius="lg"
+                  withBorder
+                  className={`${styles.accountSizeCard} ${
+                    formData.accountSize === size.value ? styles.selected : ''
+                  }`}
+                  onClick={() => handleInputChange('accountSize', size.value)}
+                  style={{
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                                         borderColor: formData.accountSize === size.value 
+                       ? '#16a34a' 
+                       : '#16a34a',
+                     borderWidth: formData.accountSize === size.value ? '3px' : '2px',
+                     backgroundColor: formData.accountSize === size.value 
+                       ? 'rgba(22, 163, 74, 0.15)' 
+                       : 'rgba(26, 26, 26, 0.8)',
+                     backdropFilter: 'blur(15px)',
+                     boxShadow: formData.accountSize === size.value 
+                       ? '0 12px 40px rgba(22, 163, 74, 0.3)' 
+                       : '0 8px 25px rgba(0, 0, 0, 0.3)',
+                  }}
+                >
+                  <Stack gap="md" ta="center">
+                    <Text fw={800} size="xl" c="#FFFFFF" style={{ letterSpacing: '1px' }}>
+                      {size.label}
+                    </Text>
+                                         <Title order={2} c="#16a34a" fw={900} style={{ 
+                       textShadow: '0 0 20px rgba(22, 163, 74, 0.5)',
+                       fontSize: '2.5rem'
+                     }}>
+                       ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
+                     </Title>
+                    <Badge 
+                      variant="light" 
+                      color="green" 
+                      size="lg"
+                      radius="md"
+                      styles={{
+                                                 root: {
+                           backgroundColor: 'transparent',
+                           color: '#16a34a',
+                           borderColor: '#16a34a',
+                           borderWidth: '2px',
+                           textTransform: 'uppercase',
+                           fontWeight: 700,
+                           fontSize: '0.9rem',
+                           padding: '8px 16px',
+                           letterSpacing: '1px'
+                         },
+                      }}
+                    >
+                      {challengeType === 'twoStage' ? 'TWO STAGES' : 'SINGLE STAGE'}
+                    </Badge>
+                  </Stack>
+                </Card>
+              ))}
+            </div>
+          </Stack>
+        </Paper>
+
+                 {/* Navigation */}
+         <Paper 
+           p="xl" 
+           radius="lg" 
+           withBorder 
+           style={{ 
+             backgroundColor: 'rgba(26, 26, 26, 0.6)',
+             borderColor: '#16a34a',
+             backdropFilter: 'blur(15px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)'
+           }}
+         >
+          <Group justify="flex-end">
+            <Button
+              size="xl"
+              radius="lg"
+              onClick={handleNext}
+              disabled={!formData.accountSize || !formData.platform}
+              rightSection={<ChevronRight size={20} />}
+              styles={{
+                root: {
+                  backgroundColor: '#166534',
+                  color: '#FFFFFF',
+                                     border: '2px solid #16a34a',
+                   fontWeight: 700,
+                   fontSize: '1.1rem',
+                   padding: '16px 32px',
+                   transition: 'all 0.3s ease',
+                   boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
+                   '&:hover': {
+                     backgroundColor: '#15803d',
+                     transform: 'translateY(-2px)',
+                     boxShadow: '0 12px 35px rgba(22, 163, 74, 0.4)',
+                   },
+                  '&:disabled': {
+                    backgroundColor: '#666666',
+                    color: '#CCCCCC',
+                    cursor: 'not-allowed',
+                    transform: 'none',
+                    borderColor: '#666666',
+                    boxShadow: 'none',
+                  },
+                },
+              }}
+            >
+              Continue to Order Summary
+            </Button>
+          </Group>
+        </Paper>
       </div>
-    </div>
-  );
+    );
+  };
+
+     const renderOrderSummary = () => (
+     <div className={styles.stepContent}>
+       <Text 
+         fw={700} 
+         size="2.5rem" 
+         c="#FFFFFF" 
+         ta="center" 
+         mb="xl"
+         style={{ 
+           textShadow: '0 0 20px rgba(34, 197, 94, 0.3)',
+           letterSpacing: '1px'
+         }}
+       >
+         Order Summary
+       </Text>
+       
+       {/* Challenge Details Card */}
+       <Paper 
+         p="xl" 
+         radius="lg" 
+         withBorder 
+         style={{ 
+           backgroundColor: 'rgba(26, 26, 26, 0.6)',
+           borderColor: '#22c55e',
+           backdropFilter: 'blur(15px)',
+           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 197, 94, 0.1)',
+           marginBottom: '2rem'
+         }}
+       >
+         <Stack gap="lg">
+           <Text 
+             fw={700} 
+             size="lg" 
+             tt="uppercase" 
+                            c="#16a34a" 
+               ta="center" 
+               style={{ 
+                 backgroundColor: '#1A3A1A', 
+                 padding: '12px 24px', 
+                 borderRadius: '8px',
+                 border: '1px solid #16a34a',
+                 boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)',
+                 letterSpacing: '2px',
+                 display: 'inline-block',
+                 margin: '0 auto'
+               }}
+           >
+             CHALLENGE DETAILS
+           </Text>
+           
+           <div className={styles.summaryDetails}>
+             <div className={styles.summaryRow}>
+               <Text fw={600} c="#CCCCCC">Challenge Type:</Text>
+               <Text fw={700} c="#FFFFFF">{challengeType === 'twoStage' ? 'Two Stages' : 'Single Stage'}</Text>
+             </div>
+             <div className={styles.summaryRow}>
+               <Text fw={600} c="#CCCCCC">Platform:</Text>
+               <Text fw={700} c="#FFFFFF">{formData.platform}</Text>
+             </div>
+             <div className={styles.summaryRow}>
+               <Text fw={600} c="#CCCCCC">Account Size:</Text>
+               <Text fw={700} c="#FFFFFF">{accountSizes.find(size => size.value === formData.accountSize)?.label}</Text>
+             </div>
+           </div>
+
+           <div className={styles.summaryTotal}>
+             <div className={styles.totalRow}>
+               <Text fw={700} size="lg" c="#16a34a">Total Cost:</Text>
+               <Text fw={900} size="2rem" c="#FFFFFF" style={{ textShadow: '0 0 20px rgba(22, 163, 74, 0.5)' }}>
+                 ${getSelectedAccountPrice()}
+               </Text>
+             </div>
+             {connected && formData.accountSize && (
+               <div className={styles.solConversion}>
+                 <Text fw={600} c="#CCCCCC">SOL Amount:</Text>
+                 <Text fw={700} c="#FFFFFF">
+                   ◎{calculateSOLAmount(formData.accountSize).toFixed(4)} SOL
+                 </Text>
+                 <Text fw={500} size="sm" c="#888888">@ ${SOL_RATE}/SOL</Text>
+               </div>
+             )}
+           </div>
+         </Stack>
+       </Paper>
+
+       {/* Wallet Connection Prompt */}
+       {!connected && (
+         <Paper 
+           p="xl" 
+           radius="lg" 
+           withBorder 
+           style={{ 
+             backgroundColor: 'rgba(26, 26, 26, 0.6)',
+             borderColor: '#16a34a',
+             backdropFilter: 'blur(15px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
+             marginBottom: '2rem'
+           }}
+         >
+           <Group gap="md" align="center" justify="center">
+             <AlertCircle size={24} color="#16a34a" />
+             <Text fw={600} c="#FFFFFF" size="lg">
+               Connect your Phantom wallet to proceed with payment
+             </Text>
+             <Button
+               size="lg"
+               radius="lg"
+               onClick={connectWallet}
+               styles={{
+                 root: {
+                   backgroundColor: '#16a34a',
+                   color: '#000000',
+                   border: '2px solid #16a34a',
+                   fontWeight: 700,
+                   fontSize: '1rem',
+                   padding: '12px 24px',
+                   transition: 'all 0.3s ease',
+                   boxShadow: '0 4px 15px rgba(22, 163, 74, 0.3)',
+                   '&:hover': {
+                     backgroundColor: '#15803d',
+                     borderColor: '#15803d',
+                     transform: 'translateY(-2px)',
+                     boxShadow: '0 8px 25px rgba(22, 163, 74, 0.4)',
+                   },
+                 },
+               }}
+             >
+               Connect Wallet
+             </Button>
+           </Group>
+         </Paper>
+       )}
+
+       {/* Payment Status */}
+       {renderPaymentStatus()}
+
+       {/* Terms and Conditions */}
+       <Paper 
+         p="xl" 
+         radius="lg" 
+         withBorder 
+         style={{ 
+           backgroundColor: 'rgba(26, 26, 26, 0.6)',
+           borderColor: '#22c55e',
+           backdropFilter: 'blur(15px)',
+           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 197, 94, 0.1)',
+           marginBottom: '2rem'
+         }}
+       >
+         <Group gap="md" align="center">
+           <input
+             type="checkbox"
+             checked={formData.agreeToTerms}
+             onChange={(e) => handleInputChange('agreeToTerms', e.target.checked)}
+             style={{
+               width: '20px',
+               height: '20px',
+               accentColor: '#16a34a',
+               cursor: 'pointer'
+             }}
+           />
+           <Text fw={600} c="#FFFFFF" size="lg">
+             I have read and agree to the Rules and Conditions
+           </Text>
+         </Group>
+       </Paper>
+
+       {/* Navigation Buttons */}
+       <Paper 
+         p="xl" 
+         radius="lg" 
+         withBorder 
+         style={{ 
+           backgroundColor: 'rgba(26, 26, 26, 0.6)',
+           borderColor: '#22c55e',
+           backdropFilter: 'blur(15px)',
+           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 197, 94, 0.1)'
+         }}
+       >
+         <Group justify="space-between">
+           <Button
+             size="xl"
+             radius="lg"
+             onClick={handleBack}
+             leftSection={<ChevronLeft size={20} />}
+             styles={{
+               root: {
+                 backgroundColor: 'transparent',
+                                    color: '#16a34a',
+                   border: '2px solid #16a34a',
+                   fontWeight: 700,
+                   fontSize: '1.1rem',
+                   padding: '16px 32px',
+                   transition: 'all 0.3s ease',
+                   boxShadow: '0 4px 15px rgba(22, 163, 74, 0.2)',
+                   '&:hover': {
+                     backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                     transform: 'translateY(-2px)',
+                     boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
+                   },
+               },
+             }}
+           >
+             Back
+           </Button>
+           
+           <Button
+             size="xl"
+             radius="lg"
+             onClick={handleConfirmOrder}
+             disabled={!formData.agreeToTerms || !connected || isProcessing}
+             rightSection={isProcessing ? <Loader2 size={20} className={styles.spinning} /> : <Check size={20} />}
+             styles={{
+               root: {
+                                    backgroundColor: '#16a34a',
+                   color: '#000000',
+                   border: '2px solid #16a34a',
+                   fontWeight: 700,
+                   fontSize: '1.1rem',
+                   padding: '16px 32px',
+                   transition: 'all 0.3s ease',
+                   boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
+                   '&:hover': {
+                     backgroundColor: '#15803d',
+                     borderColor: '#15803d',
+                     transform: 'translateY(-2px)',
+                     boxShadow: '0 12px 35px rgba(22, 163, 74, 0.4)',
+                   },
+                 '&:disabled': {
+                   backgroundColor: '#666666',
+                   color: '#CCCCCC',
+                   cursor: 'not-allowed',
+                   transform: 'none',
+                   borderColor: '#666666',
+                   boxShadow: 'none',
+                 },
+               },
+             }}
+           >
+             {isProcessing ? 'Processing...' : (connected ? 'Pay with SOL' : 'Connect Wallet First')}
+           </Button>
+         </Group>
+       </Paper>
+     </div>
+   );
 
   return (
     <div className={styles.tradingChallenge}>

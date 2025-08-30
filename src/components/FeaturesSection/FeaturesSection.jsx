@@ -45,7 +45,10 @@ const FeaturesSection = () => {
       
       {/* Get Started Button Section */}
       <div className={styles.buttonSection}>
-        <button className={styles.getStartedButton}>
+        <button 
+          className={styles.getStartedButton}
+          onClick={() => window.location.href = '/trading-challenge'}
+        >
           Get Started
         </button>
       </div>

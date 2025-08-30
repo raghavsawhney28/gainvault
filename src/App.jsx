@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { MantineProvider, createTheme } from '@mantine/core';
+import '@mantine/core/styles.css';
 import Header from './components/Header/Header';
 import HeroSection from './components/HeroSection/HeroSection';
 import FeaturesSection from './components/FeaturesSection/FeaturesSection';
@@ -15,6 +17,25 @@ import useAuth from './hooks/useAuth';
 import { SmoothCursor } from './components/ui/smooth-cursor';
 import Particles from './components/magicui/particles';
 import './App.css';
+
+// Create a dark theme
+const darkTheme = createTheme({
+  colorScheme: 'dark',
+  colors: {
+    dark: [
+      '#C1C2C5',
+      '#A6A7AB',
+      '#909296',
+      '#5C5F66',
+      '#373A40',
+      '#2C2E33',
+      '#25262B',
+      '#1A1B1E',
+      '#141517',
+      '#101113',
+    ],
+  },
+});
 
 function App() {
   const { isLoggedIn, user, logout, checkAuthStatus, forceRefreshAuth } = useAuth();
@@ -66,41 +87,43 @@ function App() {
   console.log('🔍 App Component Debug:', { isLoggedIn, user, username: user?.username });
 
   return (
-    <div className="App cursor-none">
-      <SmoothCursor size="small" />
-      {/* Particles background covering the entire body */}
-      <Particles 
-        quantity={400}
-        staticity={70}
-        ease={40}
-        size={0.6}
-        color="#00ff88"
-        className="particles-background"
-      />
-      <Header 
-        isLoggedIn={userData.isLoggedIn}
-        username={userData.username}
-        onAuthClick={openAuthModal}
-        onLogout={handleLogout}
-        className="cursor-none"
-      />
-      <Routes>
-        <Route path="/" element={mainContent} />
-        <Route path="/trading-challenge" element={<TradingChallenge className="cursor-none" />} />
-        <Route path="/rules" element={<Rules className="cursor-none" />} />
-        <Route path="/referral" element={<Referral />} />
-        <Route path="/dashboard/:username" element={<Dashboard className="cursor-none" />} />
-      </Routes>
-      {/* <BlankSection className="cursor-none" /> */}
-      <Footer className="cursor-none" />
-      {showAuthModal && (
-        <AuthPage 
-          onAuthSuccess={handleAuthSuccess}
-          onClose={closeAuthModal}
+    <MantineProvider theme={darkTheme} defaultColorScheme="dark">
+      <div className="App cursor-none">
+        <SmoothCursor size="small" />
+        {/* Particles background covering the entire body */}
+        <Particles 
+          quantity={400}
+          staticity={70}
+          ease={40}
+          size={0.6}
+          color="#00ff88"
+          className="particles-background"
+        />
+        <Header 
+          isLoggedIn={userData.isLoggedIn}
+          username={userData.username}
+          onAuthClick={openAuthModal}
+          onLogout={handleLogout}
           className="cursor-none"
         />
-      )}
-    </div>
+        <Routes>
+          <Route path="/" element={mainContent} />
+          <Route path="/trading-challenge" element={<TradingChallenge className="cursor-none" />} />
+          <Route path="/rules" element={<Rules className="cursor-none" />} />
+          <Route path="/referral" element={<Referral />} />
+          <Route path="/dashboard/:username" element={<Dashboard className="cursor-none" />} />
+        </Routes>
+        {/* <BlankSection className="cursor-none" /> */}
+        <Footer className="cursor-none" />
+        {showAuthModal && (
+          <AuthPage 
+            onAuthSuccess={handleAuthSuccess}
+            onClose={closeAuthModal}
+            className="cursor-none"
+          />
+        )}
+      </div>
+    </MantineProvider>
   );
 }
 

@@ -4,6 +4,7 @@
   padding: calc(var(--spacing-unit) * 8) 0 0 0;
   position: relative;
   z-index: 10;
+  top: 102px;
   backdrop-filter: blur(15px);
 }
 
