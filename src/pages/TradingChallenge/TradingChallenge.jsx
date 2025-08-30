@@ -365,6 +365,11 @@ const TradingChallenge = () => {
                       color: '#FFFFFF !important',
                     },
                   },
+                  input: {
+                   
+                    backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                    color: '#FFFFFF',
+                  },
                   option: {  
                     backgroundColor: 'transparent',
                     color: '#fff',
@@ -530,7 +535,7 @@ const TradingChallenge = () => {
                    fontSize: '1.1rem',
                    padding: '16px 32px',
                    transition: 'all 0.3s ease',
-                   boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
+                  //  boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
                    '&:hover': {
                      backgroundColor: '#15803d',
                      transform: 'translateY(-2px)',
