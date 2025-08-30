@@ -13,6 +13,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import AuthPage from './components/AuthPage/AuthPage';
 import useAuth from './hooks/useAuth';
 import { SmoothCursor } from './components/ui/smooth-cursor';
+import Particles from './components/magicui/particles';
 import './App.css';
 
 function App() {
@@ -67,6 +68,15 @@ function App() {
   return (
     <div className="App cursor-none">
       <SmoothCursor size="small" />
+      {/* Particles background covering the entire body */}
+      <Particles 
+        quantity={400}
+        staticity={70}
+        ease={40}
+        size={0.6}
+        color="#00ff88"
+        className="particles-background"
+      />
       <Header 
         isLoggedIn={userData.isLoggedIn}
         username={userData.username}

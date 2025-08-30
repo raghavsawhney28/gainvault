@@ -3,7 +3,7 @@
   margin-top: 80px; /* Push content below fixed header */
   padding-top: calc(var(--spacing-unit) * 4);
   padding-bottom: calc(var(--spacing-unit) * 4);
-  background-color: var(--primary-bg);
+  background-color: transparent; /* Transparent background for particles visibility */
   min-height: calc(100vh - 80px); /* Adjust for header height */
   width: 100%;
   position: relative;
@@ -43,7 +43,7 @@
 
 /* Step Container */
 .stepContainer {
-  background-color: var(--card-bg);
+  background-color: #000000d6; /* Dark background like objective selection */
   border-radius: calc(var(--spacing-unit) * 2);
   padding: calc(var(--spacing-unit) * 4);
   box-shadow: var(--shadow-lg);
@@ -61,13 +61,13 @@
 }
 
 .toggleButton {
-  background-color: var(--primary-bg);
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
   border: 2px solid var(--border-color);
   border-radius: calc(var(--spacing-unit) * 3);
   padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
   cursor: pointer;
   transition: all 0.3s ease;
-  color: var(--text-secondary);
+  color: white; /* White text for dark mode */
   font-weight: 600;
   font-size: 1rem;
   min-width: 140px;
@@ -77,6 +77,7 @@
 
 .toggleButton:hover {
   border-color: var(--accent-green);
+  background-color: rgba(0, 0, 0, 0.9); /* Slightly darker on hover */
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
@@ -90,7 +91,7 @@
 }
 
 .stepContent h2 {
-  color: var(--text-primary);
+  color: white; /* Changed to white for dark mode */
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
   margin-bottom: calc(var(--spacing-unit) * 4);
@@ -112,7 +113,7 @@
 }
 
 .formGroup label {
-  color: var(--text-primary);
+  color: white; /* Changed to white for dark mode */
   font-weight: 600;
   font-size: 0.875rem;
 }
@@ -122,8 +123,8 @@
   padding: calc(var(--spacing-unit) * 2);
   border: 1px solid var(--border-color);
   border-radius: calc(var(--spacing-unit) * 1);
-  background-color: var(--primary-bg);
-  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.1); /* Changed to semi-transparent white */
+  color: white; /* Changed to white for dark mode */
   font-size: 1rem;
   transition: border-color 0.3s ease;
 }
@@ -132,10 +133,11 @@
 .formGroup select:focus {
   outline: none;
   border-color: var(--accent-green);
+  background-color: rgba(255, 255, 255, 0.15); /* Slightly more opaque on focus */
 }
 
 .formGroup input::placeholder {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6); /* Changed to semi-transparent white */
 }
 
 /* Coupon Section */
@@ -180,24 +182,25 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  background-color: var(--primary-bg);
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background for all cards */
   box-shadow: var(--shadow-sm);
 }
 
 .accountSizeCard:hover {
   border-color: var(--accent-green);
+  background-color: rgba(0, 0, 0, 0.9); /* Slightly darker on hover */
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
 .accountSizeCard.selected {
   border-color: var(--accent-green);
-  background-color: rgba(16, 185, 129, 0.05);
+  background-color: rgba(0, 0, 0, 0.9); /* Dark background for selected card */
   box-shadow: var(--shadow-md);
 }
 
 .accountSizeLabel {
-  color: var(--text-primary);
+  color: white; /* White text for dark mode */
   margin: 0 0 calc(var(--spacing-unit) * 1) 0;
   font-size: 1.25rem;
   font-weight: 700;
@@ -211,7 +214,7 @@
 }
 
 .challengeTypeLabel {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.7); /* Semi-transparent white for dark mode */
   margin: 0;
   font-size: 0.875rem;
   font-weight: 500;
@@ -469,13 +472,15 @@
 }
 
 .btnPrimary {
-  background-color: var(--accent-green);
-  color: var(--primary-bg);
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+  color: white; /* White text for dark mode */
+  border: 2px solid var(--border-color);
   margin-left: auto;
 }
 
 .btnPrimary:hover:not(:disabled) {
-  background-color: var(--accent-green-hover);
+  background-color: rgba(0, 0, 0, 0.9); /* Slightly darker on hover */
+  border-color: var(--accent-green);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
@@ -494,14 +499,15 @@
 }
 
 .btnSecondary {
-  background-color: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+  color: white; /* White text for dark mode */
+  border: 2px solid var(--border-color);
 }
 
 .btnSecondary:hover {
-  background-color: var(--border-color);
-  color: var(--text-primary);
+  background-color: rgba(0, 0, 0, 0.9); /* Slightly darker on hover */
+  border-color: var(--accent-green);
+  color: white; /* Keep white text on hover */
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
@@ -690,6 +696,7 @@
   .challengePage {
     margin-top: 70px; /* Account for mobile header height */
     padding-top: calc(var(--spacing-unit) * 2);
+    background-color: transparent; /* Transparent background for particles visibility */
   }
 
   .container {
@@ -766,6 +773,7 @@
   .challengePage {
     margin-top: 65px; /* Account for small mobile header height */
     padding-top: calc(var(--spacing-unit) * 1);
+    background-color: transparent; /* Transparent background for particles visibility */
   }
 
   .container {

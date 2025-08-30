@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSpring, animated, config } from '@react-spring/web';
 import { Play } from 'lucide-react';
 import styles from './HeroSection.module.css';
-import Particles from '../magicui/particles';
+
 import TextScramble from '../TextScramble/TextScramble';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -146,17 +146,6 @@ const HeroSection = () => {
 
   return (
     <section className={styles.hero}>
-      {/* Particles Background - Full Page */}
-      <div className={styles.particlesContainer}>
-        <Particles 
-          quantity={300}
-          staticity={30}
-          ease={40}
-          size={0.6}
-          color="#4A90E2"
-        />
-      </div>
-      
       <div className={styles.container}>
         <div className={styles.leftContent}>
           <animated.div style={heroAnimation} className={styles.heroContent}>

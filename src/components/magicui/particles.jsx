@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 const Particles = ({ 
   className = '',
-  quantity = 15000, // Increased to 15000 for extremely dense particles
+  quantity = 10, // Increased to 15000 for extremely dense particles
   staticity = 50,
   ease = 50,
   size = 0.0, // Decreased from 2.0 to 0.0 for smaller particles
