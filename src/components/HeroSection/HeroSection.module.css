@@ -35,6 +35,7 @@
   scale: 1 !important; */
 }
 
+
 /* Aggressive zoom prevention for Spline */
 .splineWrapper > div,
 .splineWrapper > div > div,
@@ -512,9 +513,7 @@
     font-size: 21px;
   }
   
-  .contentWrapper {
-    justify-content: center;
-  }
+  
   .rightContent {
     height: 112vh;
   }
