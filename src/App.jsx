@@ -4,7 +4,7 @@ import Header from './components/Header/Header';
 import HeroSection from './components/HeroSection/HeroSection';
 import FeaturesSection from './components/FeaturesSection/FeaturesSection';
 import PricingSection from './components/PricingSection/PricingSection';
-import NewSection from './components/NewSection/NewSection';
+// import NewSection from './components/NewSection/NewSection';
 import Footer from './components/Footer/Footer';
 import TradingChallenge from './pages/TradingChallenge/TradingChallenge';
 import Rules from './pages/Rules/Rules';
@@ -58,7 +58,7 @@ function App() {
       <HeroSection className="cursor-none" />
       <FeaturesSection className="cursor-none" />
       <PricingSection className="cursor-none" />
-      <NewSection className="cursor-none" />
+      {/* <NewSection className="cursor-none" /> */}
     </main>
   ), []);
 
