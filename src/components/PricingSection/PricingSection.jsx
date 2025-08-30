@@ -13,7 +13,7 @@ const PricingSection = () => {
   const challengePlans = [
     {
       name: "BASE",
-      value: "$25,000",
+      value: "$5,000",
       cost: 69,
       singleStageCost: 124,
       details: {
@@ -27,7 +27,7 @@ const PricingSection = () => {
     },
     {
       name: "STARTER",
-      value: "$50,000",
+      value: "$10,000",
       tag: "BEST SELLER",
       cost: 129,
       singleStageCost: 232,
@@ -42,7 +42,7 @@ const PricingSection = () => {
     },
     {
       name: "SKILLED",
-      value: "$100,000",
+      value: "$15,000",
       tag: "NEW",
       cost: 179,
       singleStageCost: 322,
@@ -58,7 +58,7 @@ const PricingSection = () => {
     },
     {
       name: "INTERMEDIATE",
-      value: "$200,000",
+      value: "$25,000",
       cost: 269,
       singleStageCost: 484,
       details: {
@@ -72,7 +72,7 @@ const PricingSection = () => {
     },
     {
       name: "ADVANCED",
-      value: "$500,000",
+      value: "$50,000",
       cost: 549,
       singleStageCost: 988,
       details: {
@@ -86,7 +86,7 @@ const PricingSection = () => {
     },
     {
       name: "EXPERT",
-      value: "$1,000,000",
+      value: "$100,000",
       tag: "POPULAR",
       cost: 1199,
       singleStageCost: 2158,
