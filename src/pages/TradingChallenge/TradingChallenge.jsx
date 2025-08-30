@@ -365,31 +365,30 @@ const TradingChallenge = () => {
                       color: '#FFFFFF !important',
                     },
                   },
-                 item: {
-                   backgroundColor: 'rgba(26, 26, 26, 0.95)',
-                   color: '#FFFFFF',
-                   fontSize: '1rem',
-                   padding: '12px 20px',
-                   '&[data-selected]': {
-                     backgroundColor: '#16a34a',
-                     color: '#000000',
-                     fontWeight: 700,
-                   },
-                   '&[data-selected]:hover': {
-                     backgroundColor: '#15803d',
-                     color: '#000000',
-                     fontWeight: 700,
-                   },
-                   '&:hover': {
-                     backgroundColor: 'rgba(22, 163, 74, 0.1)',
-                     color: '#16a34a',
-                   },
-                 },
+                  option: {  
+                    backgroundColor: 'transparent',
+                    color: '#fff',
+                    fontSize: '1rem',
+                    padding: '12px 20px',
+                    '&[data-hovered]': {
+                      backgroundColor: 'rgba(22,163,74,.1)',
+                      color: '#16a34a',
+                    },
+                    '&[data-checked]': {
+                      backgroundColor: '#16a34a',
+                      color: '#fffafa',
+                      fontWeight: 700,
+                    },
+                  },
+                  
+                  
                  dropdown: {
-                   backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                  color: '#FFFFFF',
+                   backgroundColor: 'rgba(32, 32, 32, 0.95)',
                    borderColor: '#16a34a',
                    borderWidth: '2px',
                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
+                  
                  },
                                    value: {
                     color: '#FFFFFF !important',
