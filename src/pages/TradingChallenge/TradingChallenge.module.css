@@ -2,12 +2,12 @@
 .challengePage {
   margin-top: 80px; /* Push content below fixed header */
   padding-top: calc(var(--spacing-unit) * 4);
-  padding-bottom: calc(var(--spacing-unit) * 4);
+  padding-bottom: calc(var(--spacing-unit) * 8); /* Increased bottom padding to prevent footer overlap */
   background-color: transparent; /* Transparent background for particles visibility */
   min-height: calc(100vh - 80px); /* Adjust for header height */
   width: 100%;
   position: relative;
-  z-index: 1; /* Ensure it's below the header */
+  z-index: 2; /* Increased z-index to be above footer */
 }
 
 .container {
@@ -16,6 +16,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 calc(var(--spacing-unit) * 3);
+  z-index: 2; /* Ensure container is above footer */
 }
 
 .challengeHeader {
@@ -48,7 +49,9 @@
   padding: calc(var(--spacing-unit) * 4);
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-color);
-  margin-bottom: calc(var(--spacing-unit) * 4);
+  margin-bottom: calc(var(--spacing-unit) * 6); /* Increased bottom margin */
+  position: relative;
+  z-index: 2; /* Ensure step container is above footer */
 }
 
 /* Challenge Type Toggle */
@@ -448,6 +451,7 @@
   gap: calc(var(--spacing-unit) * 2);
   margin-top: calc(var(--spacing-unit) * 4);
   flex-wrap: wrap;
+  margin-bottom: calc(var(--spacing-unit) * 2); /* Added bottom margin to prevent footer overlap */
 }
 
 /* Button Base Styles */
