@@ -1,5 +1,5 @@
 /* Trading Challenge Page Styles */
-.challengePage {
+.tradingChallenge {
   margin-top: 80px; /* Push content below fixed header */
   padding-top: calc(var(--spacing-unit) * 4);
   padding-bottom: calc(var(--spacing-unit) * 8); /* Increased bottom padding to prevent footer overlap */
@@ -683,117 +683,484 @@
   }
 }
 
-/* Mobile Styles */
+/* Comprehensive Mobile Responsive Styles */
 @media (max-width: 768px) {
-  .challengePage {
-    margin-top: 70px; /* Account for mobile header height */
+  .tradingChallenge {
+    margin-top: 60px;
     padding-top: calc(var(--spacing-unit) * 2);
-    background-color: transparent; /* Transparent background for particles visibility */
+    padding-bottom: calc(var(--spacing-unit) * 4);
   }
 
   .container {
-    padding: 0 calc(var(--spacing-unit) * 2);
+    top: 3rem;
+    padding: 0 calc(var(--spacing-unit) * 1.5);
   }
 
+  .stepContainer {
+    border-radius: 20px;
+    padding: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 3);
+  }
+
+  .stepContent h2 {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  /* Challenge Type Toggle - Mobile */
+  .challengeTypeToggle {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  .toggleButton {
+    min-width: 100%;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+    font-size: 1rem;
+  }
+
+  /* Form Grid - Mobile */
+  .formGrid {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  /* Account Size Grid - Mobile */
+  .accountSizeGrid {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .accountSizeCard {
+    min-height: 120px;
+    padding: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .accountSizeLabel {
+    font-size: 1rem;
+  }
+
+  .accountSizePrice {
+    font-size: 1.1rem;
+  }
+
+  .challengeTypeLabel {
+    font-size: 0.7rem;
+  }
+
+  /* Summary Section - Mobile */
+  .summarySection,
+  .summaryCard {
+    padding: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  /* Navigation Buttons - Mobile */
+  .stepNavigation {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    margin-top: calc(var(--spacing-unit) * 2);
+  }
+
+  .stepNavigation button {
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+    font-size: 1rem;
+  }
+
+  /* Payment Status - Mobile */
+  .paymentStatus {
+    padding: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  .statusContent h4 {
+    font-size: 1.1rem;
+  }
+
+  .statusContent p {
+    font-size: 0.9rem;
+  }
+
+  /* Transaction Info - Mobile */
+  .transactionInfo {
+    margin-top: calc(var(--spacing-unit) * 1);
+  }
+
+  .transactionId {
+    font-size: 0.8rem;
+  }
+
+  .solscanLink {
+    font-size: 0.8rem;
+    padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
+  }
+
+  /* Terms and Conditions - Mobile */
+  .termsCheckbox {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    text-align: center;
+  }
+
+  .termsCheckbox input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+  }
+
+  .termsCheckbox label {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  /* Wallet Connection - Mobile */
+  .walletConnection {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1.5);
+    text-align: center;
+  }
+
+  .walletConnection button {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  /* Summary Details - Mobile */
+  .summaryDetails {
+    gap: calc(var(--spacing-unit) * 1);
+  }
+
+  .summaryRow {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 0.5);
+    text-align: center;
+  }
+
+  .summaryTotal {
+    margin-top: calc(var(--spacing-unit) * 2);
+  }
+
+  .totalRow {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    text-align: center;
+  }
+
+  .solConversion {
+    margin-top: calc(var(--spacing-unit) * 1.5);
+    text-align: center;
+  }
+
+  /* Challenge Type Section - Mobile */
+  .challengeTypeSection {
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  .challengeTypeGrid {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .challengeTypeOption {
+    padding: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .challengeTypeOption h4 {
+    font-size: 1.1rem;
+  }
+
+  .challengeTypeOption p {
+    font-size: 0.8rem;
+  }
+
+  /* Platform Selection - Mobile */
+  .platformSelection {
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  .platformSelect {
+    width: 100%;
+  }
+
+  /* Account Size Section - Mobile */
+  .accountSizeSection {
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  .accountSizeSection label {
+    font-size: 0.9rem;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+  }
+
+  /* Header - Mobile */
   .challengeHeader {
-    margin-bottom: calc(var(--spacing-unit) * 4);
+    margin-bottom: calc(var(--spacing-unit) * 3);
   }
 
   .challengeHeader h1 {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
+  }
+
+  .challengeHeader p {
+    font-size: clamp(0.9rem, 4vw, 1.1rem);
+    margin: calc(var(--spacing-unit) * 2) auto 0;
+  }
+
+  /* Spacing adjustments for mobile */
+  .stepContent > * {
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .stepContent > *:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Button groups - Mobile */
+  .buttonGroup {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+
+  .buttonGroup button {
+    width: 100%;
+  }
+
+  /* Paper components - Mobile */
+  .mantine-Paper-root {
+    padding: calc(var(--spacing-unit) * 1.5) !important;
+    margin-bottom: calc(var(--spacing-unit) * 1.5) !important;
+  }
+
+  /* Stack and Group components - Mobile */
+  .mantine-Stack-root {
+    gap: calc(var(--spacing-unit) * 1) !important;
+  }
+
+  .mantine-Group-root {
+    gap: calc(var(--spacing-unit) * 1) !important;
+  }
+
+  /* Text components - Mobile */
+  .mantine-Text-root {
+    font-size: clamp(0.9rem, 4vw, 1rem) !important;
+  }
+
+  .mantine-Title-root {
+    font-size: clamp(1.2rem, 6vw, 1.5rem) !important;
+  }
+
+  /* Badge components - Mobile */
+  .mantine-Badge-root {
+    font-size: 0.7rem !important;
+    padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 0.75) !important;
+  }
+
+  /* Select components - Mobile */
+  .mantine-Select-input {
+    font-size: 1rem !important;
+    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 1.5) !important;
+  }
+
+  .mantine-Select-dropdown {
+    max-height: 200px !important;
+  }
+
+  /* Card components - Mobile */
+  .mantine-Card-root {
+    padding: calc(var(--spacing-unit) * 1.5) !important;
+  }
+
+  /* Button components - Mobile */
+  .mantine-Button-root {
+    font-size: 1rem !important;
+    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 2) !important;
+    height: auto !important;
+    min-height: 48px !important;
+  }
+
+  /* Container - Mobile */
+  .mantine-Container-root {
+    padding: 0 calc(var(--spacing-unit) * 1) !important;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .tradingChallenge {
+    margin-top: 50px;
+    padding-top: calc(var(--spacing-unit) * 1.5);
+    padding-bottom: calc(var(--spacing-unit) * 3);
+  }
+
+  .container {
+    top: 2.5rem;
+    padding: 0 calc(var(--spacing-unit) * 1);
+  }
+
+  .stepContainer {
+    border-radius: 15px;
+    padding: calc(var(--spacing-unit) * 1.5);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  .stepContent h2 {
+    font-size: clamp(1.3rem, 7vw, 1.8rem);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .accountSizeCard {
+    min-height: 100px;
+    padding: calc(var(--spacing-unit) * 1);
+  }
+
+  .accountSizeLabel {
+    font-size: 0.9rem;
+  }
+
+  .accountSizePrice {
+    font-size: 1rem;
+  }
+
+  .challengeTypeLabel {
+    font-size: 0.6rem;
+  }
+
+  .mantine-Paper-root {
+    padding: calc(var(--spacing-unit) * 1) !important;
+    margin-bottom: calc(var(--spacing-unit) * 1) !important;
+  }
+
+  .mantine-Button-root {
+    font-size: 0.9rem !important;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5) !important;
+    min-height: 44px !important;
+  }
+
+  .mantine-Text-root {
+    font-size: clamp(0.8rem, 4.5vw, 0.9rem) !important;
+  }
+
+  .mantine-Title-root {
+    font-size: clamp(1rem, 7vw, 1.3rem) !important;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .tradingChallenge {
+    margin-top: 50px;
+    padding-top: calc(var(--spacing-unit) * 1);
+    padding-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  .stepContainer {
+    padding: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .accountSizeGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: calc(var(--spacing-unit) * 1);
+  }
+
+  .accountSizeCard {
+    min-height: 100px;
+    padding: calc(var(--spacing-unit) * 1);
+  }
+
+  .challengeTypeToggle {
+    flex-direction: row;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+
+  .toggleButton {
+    min-width: auto;
+    flex: 1;
+  }
+}
+
+/* Tablet Devices */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 2);
   }
 
   .stepContainer {
     padding: calc(var(--spacing-unit) * 3);
   }
 
-  .formGrid {
-    grid-template-columns: 1fr;
+  .accountSizeGrid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: calc(var(--spacing-unit) * 1.5);
   }
 
-  .accountSizeGrid,
-  .challengeTypeGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .stepNavigation {
-    flex-direction: column;
-  }
-
-  .btnPrimary,
-  .btnSecondary,
-  .btnSuccess {
-    width: 100%;
-  }
-
-
-
-  .toggleButton {
-    min-width: 120px;
-    font-size: 0.875rem;
-  }
-
-  .summaryRow,
-  .totalRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: calc(var(--spacing-unit) * 0.5);
-  }
-
-  .walletPrompt {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .walletPrompt button {
-    margin-left: 0;
-    margin-top: calc(var(--spacing-unit) * 2);
-  }
-
-  .paymentStatus {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .statusContent {
-    min-width: auto;
-  }
-}
-
-/* Small Mobile Styles */
-@media (max-width: 480px) {
-  .challengePage {
-    margin-top: 65px; /* Account for small mobile header height */
-    padding-top: calc(var(--spacing-unit) * 1);
-    background-color: transparent; /* Transparent background for particles visibility */
-  }
-
-  .container {
-    padding: 0 calc(var(--spacing-unit) * 1);
-  }
-
-  .stepContainer {
+  .accountSizeCard {
+    min-height: 130px;
     padding: calc(var(--spacing-unit) * 2);
   }
 
-  .challengeHeader h1 {
-    font-size: 1.75rem;
+  .stepContent h2 {
+    font-size: clamp(1.8rem, 5vw, 2.2rem);
   }
 
-  .challengeHeader p {
-    font-size: 1rem;
+  .mantine-Button-root {
+    font-size: 1.05rem !important;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2.5) !important;
+  }
+}
+
+/* Large Screens */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 1400px;
+    padding: 0 calc(var(--spacing-unit) * 4);
+  }
+
+  .stepContainer {
+    padding: calc(var(--spacing-unit) * 5);
+  }
+
+  .accountSizeGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: calc(var(--spacing-unit) * 3);
+  }
+
+  .accountSizeCard {
+    min-height: 180px;
+    padding: calc(var(--spacing-unit) * 3);
+  }
+
+  .stepContent h2 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+  }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .accountSizeCard {
+    border-width: 0.5px;
   }
 
   .toggleButton {
-    min-width: 100px;
-    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
-    font-size: 0.8rem;
+    border-width: 0.5px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .tradingChallenge {
+    margin-top: 0;
+    padding: 0;
   }
 
-  .btnPrimary,
-  .btnSecondary,
-  .btnSuccess {
-    min-width: 120px;
-    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
+  .stepContainer {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .accountSizeCard {
+    break-inside: avoid;
+    border: 1px solid #000;
   }
 }
