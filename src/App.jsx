@@ -46,6 +46,22 @@ function App() {
     checkAuthStatus();
   }, [checkAuthStatus]);
 
+  // Handle query parameter routing for deployed environments
+  useEffect(() => {
+    const handleQueryRouting = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const path = urlParams.get('');
+      
+      if (path && path !== '/') {
+        // Remove the query parameter and update the URL
+        const newUrl = window.location.origin + path;
+        window.history.replaceState(null, null, newUrl);
+      }
+    };
+
+    handleQueryRouting();
+  }, []);
+
   const handleAuthSuccess = useCallback(() => {
     console.log('🎉 Auth success callback triggered');
     setShowAuthModal(false);

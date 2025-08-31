@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: gainvault-backend
+    env: node
+    buildCommand: cd .. && npm install && npm run build && cd backend && npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -12,5 +12,23 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Handle client-side routing for deployed environments
+      (function() {
+        var redirect = function() {
+          var path = window.location.pathname;
+          if (path !== '/' && !path.includes('.')) {
+            var newPath = '/?' + path;
+            window.history.replaceState(null, null, newPath);
+          }
+        };
+        
+        // Handle initial load
+        redirect();
+        
+        // Handle browser back/forward
+        window.addEventListener('popstate', redirect);
+      })();
+    </script>
   </body>
 </html>
