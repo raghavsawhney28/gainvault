@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import connectDB from './config/database.js';
 import authRoutes from './routes/auth.js';
 import referralRoutes from './routes/referral.js';
@@ -87,15 +88,23 @@ app.use((err, req, res, next) => {
 // Serve static files from the dist directory (React build)
 app.use(express.static(path.join(process.cwd(), '../dist')));
 
-// Catch-all handler: send back React's index.html file for any non-API route
+// Handle all non-API routes by serving the React app
 app.get('*', (req, res) => {
   // Don't handle API routes
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'API route not found' });
   }
   
-  // Serve the React app for all other routes
-  res.sendFile(path.join(process.cwd(), '../dist/index.html'));
+  // For Render deployment, ensure we're serving the correct file
+  const indexPath = path.join(process.cwd(), '../dist/index.html');
+  
+  // Check if the file exists
+  if (require('fs').existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    // Fallback for development or if dist doesn't exist
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+  }
 });
 
 // Start server
