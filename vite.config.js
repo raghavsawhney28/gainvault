@@ -12,6 +12,11 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    historyApiFallback: true,
+  },
+  preview: {
+    port: 3000,
+    historyApiFallback: true,
   },
   define: {
     global: 'globalThis',

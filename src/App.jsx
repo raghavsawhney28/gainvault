@@ -112,6 +112,7 @@ function App() {
           <Route path="/rules" element={<Rules className="cursor-none" />} />
           <Route path="/referral" element={<Referral />} />
           <Route path="/dashboard/:username" element={<Dashboard className="cursor-none" />} />
+          <Route path="*" element={mainContent} />
         </Routes>
         {/* <BlankSection className="cursor-none" /> */}
         <Footer className="cursor-none" />

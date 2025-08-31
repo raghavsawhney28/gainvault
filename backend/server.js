@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 import connectDB from './config/database.js';
 import authRoutes from './routes/auth.js';
 import referralRoutes from './routes/referral.js';
@@ -83,9 +84,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+// Serve static files from the dist directory (React build)
+app.use(express.static(path.join(process.cwd(), '../dist')));
+
+// Catch-all handler: send back React's index.html file for any non-API route
+app.get('*', (req, res) => {
+  // Don't handle API routes
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'API route not found' });
+  }
+  
+  // Serve the React app for all other routes
+  res.sendFile(path.join(process.cwd(), '../dist/index.html'));
 });
 
 // Start server
