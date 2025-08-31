@@ -458,7 +458,7 @@
   }
   
   .container {
-    padding: 0 calc(var(--spacing-unit) * 1);
+    padding: 0 calc(var(--spacing-unit) * 0.5);
   }
   
   .heroContent {
@@ -466,8 +466,8 @@
   }
   
   .heroTitle {
-    font-size: clamp(1.8rem, 14vw, 2.5rem);
-    margin-bottom: calc(var(--spacing-unit) * 1);
+    font-size: clamp(1.6rem, 14vw, 2.5rem);
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
     padding: 8px 12px;
     line-height: 1.1;
   }
@@ -518,4 +518,85 @@
     height: 112vh;
   }
   
+}
+
+/* Ultra small mobile devices */
+@media (max-width: 375px) {
+  .hero {
+    padding: calc(var(--spacing-unit) * 6) 0 calc(var(--spacing-unit) * 2) 0;
+  }
+  
+  .container {
+    padding: 0 calc(var(--spacing-unit) * 0.5);
+  }
+  
+  .heroContent {
+    padding: 0;
+  }
+  
+  .heroTitle {
+    font-size: clamp(1.6rem, 14vw, 2.2rem);
+    margin-bottom: calc(var(--spacing-unit) * 1);
+    padding: 6px 8px;
+    line-height: 1.05;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .enrollTitle {
+    font-size: clamp(1.4rem, 12vw, 2rem);
+    margin-top: 4px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  .heroSubtitle {
+    font-size: clamp(0.8rem, 5vw, 1rem);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    padding: 4px 8px;
+    line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  .heroActions {
+    padding: 0;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+  
+  .heroActions .btnLarge {
+    max-width: 220px;
+    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 1.75);
+    font-size: 0.85rem;
+  }
+}
+
+/* Landscape mobile devices */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero {
+    padding: calc(var(--spacing-unit) * 6) 0 calc(var(--spacing-unit) * 3) 0;
+    min-height: auto;
+  }
+  
+  .heroTitle {
+    font-size: clamp(2.2rem, 6vw, 3rem);
+    margin-bottom: calc(var(--spacing-unit) * 1);
+  }
+  
+  .enrollTitle {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    margin-top: 6px;
+  }
+  
+  .heroSubtitle {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+  
+  .heroActions {
+    margin-top: calc(var(--spacing-unit) * 2);
+  }
 }

@@ -151,11 +151,19 @@ const HeroSection = () => {
           <animated.div style={heroAnimation} className={styles.heroContent}>
             <h1 className={styles.heroTitle}>
               <animated.span style={titleReveal} data-aos="fade-up" data-aos-duration="1000">
-                <TextScramble text="UNLOCK&nbsp;YOUR&nbsp;POTENTIAL" />
+                {isMobile ? (
+                  "UNLOCK YOUR POTENTIAL"
+                ) : (
+                  <TextScramble text="UNLOCK&nbsp;YOUR&nbsp;POTENTIAL" />
+                )}
               </animated.span>
               <span className={styles.enrollTitle}>
                 <animated.span style={enrollReveal} data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-                  <TextScramble text="ENROLL&nbsp;NOW&nbsp;!" />
+                  {isMobile ? (
+                    "ENROLL NOW !"
+                  ) : (
+                    <TextScramble text="ENROLL&nbsp;NOW&nbsp;!" />
+                  )}
                 </animated.span>
               </span>
             </h1>

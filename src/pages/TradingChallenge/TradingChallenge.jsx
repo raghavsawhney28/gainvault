@@ -186,7 +186,7 @@ const TradingChallenge = () => {
     const theme = useMantineTheme();
     
     return (
-      <div className={styles.stepContent}>
+    <div className={styles.stepContent}>
         <Text 
           fw={700} 
           size="2.5rem" 
@@ -200,8 +200,8 @@ const TradingChallenge = () => {
         >
           Account Setup
         </Text>
-        
-        {/* Challenge Type Toggle */}
+      
+      {/* Challenge Type Toggle */}
         <Paper 
           p="xl" 
           radius="lg" 
@@ -239,7 +239,7 @@ const TradingChallenge = () => {
                 color="green"
                 size="xl"
                 radius="lg"
-                onClick={() => handleChallengeTypeChange('twoStage')}
+          onClick={() => handleChallengeTypeChange('twoStage')}
                 leftSection={challengeType === 'twoStage' && <ChevronRight size={20} />}
                 styles={{
                   root: {
@@ -264,15 +264,15 @@ const TradingChallenge = () => {
                      },
                   },
                 }}
-              >
-                Two Stages
+        >
+          Two Stages
               </Button>
               <Button
                 variant={challengeType === 'singleStage' ? 'filled' : 'outline'}
                 color="green"
                 size="xl"
                 radius="lg"
-                onClick={() => handleChallengeTypeChange('singleStage')}
+          onClick={() => handleChallengeTypeChange('singleStage')}
                 leftSection={challengeType === 'singleStage' && <ChevronRight size={20} />}
                 styles={{
                   root: {
@@ -297,8 +297,8 @@ const TradingChallenge = () => {
                      },
                   },
                 }}
-              >
-                Single Stage
+        >
+          Single Stage
               </Button>
             </Group>
           </Stack>
@@ -442,17 +442,17 @@ const TradingChallenge = () => {
              >
                ACCOUNT SIZE
              </Text>
-            <div className={styles.accountSizeGrid}>
-              {accountSizes.map(size => (
+        <div className={styles.accountSizeGrid}>
+          {accountSizes.map(size => (
                 <Card
-                  key={size.value}
+              key={size.value}
                                     padding="sm"
                   radius="md"
                   withBorder
-                  className={`${styles.accountSizeCard} ${
-                    formData.accountSize === size.value ? styles.selected : ''
-                  }`}
-                  onClick={() => handleInputChange('accountSize', size.value)}
+              className={`${styles.accountSizeCard} ${
+                formData.accountSize === size.value ? styles.selected : ''
+              }`}
+              onClick={() => handleInputChange('accountSize', size.value)}
                   style={{
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -479,7 +479,7 @@ const TradingChallenge = () => {
                       textShadow: '0 0 15px rgba(22, 163, 74, 0.5)',
                       fontSize: '1.5rem'
                     }}>
-                      ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
+                ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
                     </Title>
                     <Badge 
                       variant="light" 
@@ -504,8 +504,8 @@ const TradingChallenge = () => {
                     </Badge>
                   </Stack>
                 </Card>
-              ))}
-            </div>
+          ))}
+        </div>
           </Stack>
         </Paper>
 
@@ -525,7 +525,7 @@ const TradingChallenge = () => {
             <Button
               size="xl"
               radius="lg"
-              onClick={handleNext}
+          onClick={handleNext}
               disabled={!formData.accountSize || !formData.platform}
               rightSection={<ChevronRight size={20} />}
               styles={{
@@ -558,12 +558,12 @@ const TradingChallenge = () => {
             </Button>
           </Group>
         </Paper>
-      </div>
-    );
+    </div>
+  );
   };
 
-     const renderOrderSummary = () => (
-     <div className={styles.stepContent}>
+  const renderOrderSummary = () => (
+    <div className={styles.stepContent}>
        <Text 
          fw={700} 
          size="2.5rem" 
@@ -611,44 +611,44 @@ const TradingChallenge = () => {
            >
              CHALLENGE DETAILS
            </Text>
-           
-           <div className={styles.summaryDetails}>
-             <div className={styles.summaryRow}>
+        
+        <div className={styles.summaryDetails}>
+          <div className={styles.summaryRow}>
                <Text fw={600} c="#CCCCCC">Challenge Type:</Text>
                <Text fw={700} c="#FFFFFF">{challengeType === 'twoStage' ? 'Two Stages' : 'Single Stage'}</Text>
-             </div>
-             <div className={styles.summaryRow}>
+          </div>
+          <div className={styles.summaryRow}>
                <Text fw={600} c="#CCCCCC">Platform:</Text>
                <Text fw={700} c="#FFFFFF">{formData.platform}</Text>
-             </div>
-             <div className={styles.summaryRow}>
+          </div>
+          <div className={styles.summaryRow}>
                <Text fw={600} c="#CCCCCC">Account Size:</Text>
                <Text fw={700} c="#FFFFFF">{accountSizes.find(size => size.value === formData.accountSize)?.label}</Text>
-             </div>
-           </div>
+          </div>
+        </div>
 
-           <div className={styles.summaryTotal}>
-             <div className={styles.totalRow}>
+        <div className={styles.summaryTotal}>
+          <div className={styles.totalRow}>
                <Text fw={700} size="lg" c="#16a34a">Total Cost:</Text>
                <Text fw={900} size="2rem" c="#FFFFFF" style={{ textShadow: '0 0 20px rgba(22, 163, 74, 0.5)' }}>
                  ${getSelectedAccountPrice()}
                </Text>
-             </div>
-             {connected && formData.accountSize && (
-               <div className={styles.solConversion}>
+          </div>
+          {connected && formData.accountSize && (
+            <div className={styles.solConversion}>
                  <Text fw={600} c="#CCCCCC">SOL Amount:</Text>
                  <Text fw={700} c="#FFFFFF">
-                   ◎{calculateSOLAmount(formData.accountSize).toFixed(4)} SOL
+                ◎{calculateSOLAmount(formData.accountSize).toFixed(4)} SOL
                  </Text>
                  <Text fw={500} size="sm" c="#888888">@ ${SOL_RATE}/SOL</Text>
-               </div>
-             )}
-           </div>
+            </div>
+          )}
+        </div>
          </Stack>
        </Paper>
 
        {/* Wallet Connection Prompt */}
-       {!connected && (
+      {!connected && (
          <Paper 
            p="xl" 
            radius="lg" 
@@ -689,14 +689,14 @@ const TradingChallenge = () => {
                  },
                }}
              >
-               Connect Wallet
+            Connect Wallet
              </Button>
            </Group>
          </Paper>
-       )}
+      )}
 
        {/* Payment Status */}
-       {renderPaymentStatus()}
+      {renderPaymentStatus()}
 
        {/* Terms and Conditions */}
        <Paper 
@@ -712,10 +712,10 @@ const TradingChallenge = () => {
          }}
        >
          <Group gap="md" align="center">
-           <input
-             type="checkbox"
-             checked={formData.agreeToTerms}
-             onChange={(e) => handleInputChange('agreeToTerms', e.target.checked)}
+          <input
+            type="checkbox"
+            checked={formData.agreeToTerms}
+            onChange={(e) => handleInputChange('agreeToTerms', e.target.checked)}
              style={{
                width: '20px',
                height: '20px',
@@ -724,7 +724,7 @@ const TradingChallenge = () => {
              }}
            />
            <Text fw={600} c="#FFFFFF" size="lg">
-             I have read and agree to the Rules and Conditions
+          I have read and agree to the Rules and Conditions
            </Text>
          </Group>
        </Paper>
@@ -771,8 +771,8 @@ const TradingChallenge = () => {
            <Button
              size="xl"
              radius="lg"
-             onClick={handleConfirmOrder}
-             disabled={!formData.agreeToTerms || !connected || isProcessing}
+          onClick={handleConfirmOrder}
+          disabled={!formData.agreeToTerms || !connected || isProcessing}
              rightSection={isProcessing ? <Loader2 size={20} className={styles.spinning} /> : <Check size={20} />}
              styles={{
                root: {
@@ -805,8 +805,8 @@ const TradingChallenge = () => {
            </Button>
          </Group>
        </Paper>
-     </div>
-   );
+    </div>
+  );
 
   return (
     <div className={styles.tradingChallenge}>

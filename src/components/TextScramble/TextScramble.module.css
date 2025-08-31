@@ -51,3 +51,29 @@
   letter-spacing: inherit;
   text-shadow: inherit;
 }
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .char {
+    transition: all 0.2s ease;
+  }
+  
+  .char:hover {
+    transform: none;
+    color: #ffffff !important;
+  }
+  
+  .textBlock {
+    cursor: default;
+  }
+}
+
+@media (max-width: 480px) {
+  .char {
+    transition: none;
+  }
+  
+  .textBlock {
+    cursor: default;
+  }
+}
