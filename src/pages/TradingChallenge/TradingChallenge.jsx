@@ -70,7 +70,7 @@ const TradingChallenge = () => {
   };
 
   const handleNext = () => {
-    if (currentStep < 4) {
+    if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -110,7 +110,7 @@ const TradingChallenge = () => {
       return;
     }
     // Show processing confirmation
-    alert('Transaction submitted! You will receive an email with trading platform credentials after payment confirmation.');
+    setCurrentStep(5);
   };
 
   const copyToClipboard = async () => {
@@ -734,6 +734,101 @@ const TradingChallenge = () => {
     </div>
   );
 
+  const renderProcessingConfirmation = () => (
+    <div className={styles.stepContent}>
+      <Text 
+        fw={700} 
+        size="2.5rem" 
+        c="#FFFFFF" 
+        ta="center" 
+        mb="xl"
+        style={{ 
+          textShadow: '0 0 20px rgba(34, 197, 94, 0.3)',
+          letterSpacing: '1px'
+        }}
+      >
+        Transaction Submitted
+      </Text>
+      
+      {/* Processing Confirmation */}
+      <Paper 
+        p="xl" 
+        radius="lg" 
+        withBorder 
+        style={{ 
+          backgroundColor: 'rgba(26, 26, 26, 0.6)',
+          borderColor: '#16a34a',
+          backdropFilter: 'blur(15px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
+          marginBottom: '2rem'
+        }}
+      >
+        <div className={styles.processingContainer}>
+          <CheckCircle size={48} className={styles.processingIcon} />
+          <Text 
+            fw={700} 
+            size="xl" 
+            c="#16a34a" 
+            ta="center"
+            className={styles.processingTitle}
+          >
+            UNDER PROCESSING
+          </Text>
+          <Text 
+            fw={500} 
+            size="lg" 
+            c="#FFFFFF" 
+            ta="center"
+            className={styles.processingMessage}
+          >
+            Transaction submitted! You will receive an email with trading platform credentials after payment confirmation.
+          </Text>
+        </div>
+      </Paper>
+
+      {/* Navigation Buttons */}
+      <Paper 
+        p="xl" 
+        radius="lg" 
+        withBorder 
+        style={{ 
+          backgroundColor: 'rgba(26, 26, 26, 0.6)',
+          borderColor: '#22c55e',
+          backdropFilter: 'blur(15px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 197, 94, 0.1)'
+        }}
+      >
+        <Group justify="center">
+          <Button
+            size="xl"
+            radius="lg"
+            onClick={handleBack}
+            leftSection={<ChevronLeft size={20} />}
+            styles={{
+              root: {
+                backgroundColor: 'transparent',
+                color: '#16a34a',
+                border: '2px solid #16a34a',
+                fontWeight: 700,
+                fontSize: '1.1rem',
+                padding: '16px 32px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 15px rgba(22, 163, 74, 0.2)',
+                '&:hover': {
+                  backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
+                },
+              },
+            }}
+          >
+            Back
+          </Button>
+        </Group>
+      </Paper>
+    </div>
+  );
+
   const renderPaymentForm = () => (
     <div className={styles.stepContent}>
       <Text 
@@ -1061,6 +1156,7 @@ const TradingChallenge = () => {
           {currentStep === 2 && renderOrderSummary()}
           {currentStep === 3 && renderQr()}
           {currentStep === 4 && renderPaymentForm()}
+          {currentStep === 5 && renderProcessingConfirmation()}
         </div>
       </div>
     </div>
