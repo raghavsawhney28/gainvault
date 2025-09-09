@@ -787,7 +787,7 @@ const TradingChallenge = () => {
       </Paper>
 
       {/* Navigation Buttons */}
-      <Paper 
+      {/* <Paper 
         p="xl" 
         radius="lg" 
         withBorder 
@@ -825,7 +825,7 @@ const TradingChallenge = () => {
             Back
           </Button>
         </Group>
-      </Paper>
+      </Paper> */}
     </div>
   );
 
