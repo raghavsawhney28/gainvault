@@ -111,7 +111,7 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
     { path: '/trading-challenge', label: 'Trading Challenge' },
     { path: '/rules', label: 'Rules' },
     { path: '/referral', label: 'Referral' },
-    ...(isLoggedIn ? [{ path: `/dashboard/${username}`, label: 'Dashboard' }] : [])
+    // ...(isLoggedIn ? [{ path: `/dashboard/${username}`, label: 'Dashboard' }] : [])
   ];
 
   return (
@@ -169,16 +169,16 @@ const Header = ({ isLoggedIn, username, onAuthClick, onLogout }) => {
                       className={styles.dropdownItem}
                       onClick={() => handleNavClick(`/dashboard/${username}`)}
                     >
-                      <PersonOutlineIcon />
-                      <span>Dashboard</span>
+                      {/* <PersonOutlineIcon />
+                      <span>Dashboard</span> */}
                     </button>
                     
                     <button 
                       className={styles.dropdownItem}
                       onClick={() => handleProfileAction('profile')}
                     >
-                      <PersonOutlineIcon />
-                      <span>Profile</span>
+                      {/* <PersonOutlineIcon />
+                      <span>Profile</span> */}
                     </button>
                     
                     <button 
