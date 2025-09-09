@@ -5,6 +5,7 @@ import usePhantomPayment from '../../hooks/usePhantomPayment';
 import styles from './TradingChallenge.module.css';
 import { useMantineTheme } from '@mantine/core';
 import { Paper, Stack, Text, Group, Button, Select, Card, Badge, Title } from '@mantine/core';
+import qrCodeImage from '../../assets/Qr.jpg';
 
 const TradingChallenge = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -32,8 +33,11 @@ const TradingChallenge = () => {
     accountSize: '',
     
     // Order Summary
-    agreeToTerms: false
+    agreeToTerms: false,
+    transactionId: ''
   });
+
+  const [paymentStep, setPaymentStep] = useState('qr'); // 'qr', 'form', 'processing'
 
   const accountSizes = [
     { value: '5k', label: '$5,000', price: 69, singleStagePrice: 124 },
@@ -93,19 +97,29 @@ const TradingChallenge = () => {
       return;
     }
     
-    if (!connected || !publicKey) {
-      alert('Please connect your Phantom wallet first');
-      return;
-    }
-
-    handlePayment();
+    // For manual payment, just proceed to QR code step
+    setPaymentStep('qr');
   };
 
-  const handlePayment = async () => {
+  const handleIHavePaid = () => {
+    setPaymentStep('form');
+  };
+
+  const handleTransactionSubmit = () => {
+    if (!formData.transactionId.trim()) {
+      alert('Please enter your transaction ID');
+      return;
+    }
+    setPaymentStep('processing');
+  };
+
+  const copyToClipboard = async () => {
+    const walletAddress = '3uNDrLyL73jifLvS3i7FrSB1foWYVr6qxo7qJt6XvZor';
     try {
-      await sendSOLPayment(formData.accountSize, publicKey);
-    } catch (error) {
-      console.error('Payment failed:', error);
+      await navigator.clipboard.writeText(walletAddress);
+      alert('Wallet address copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy: ', err);
     }
   };
 
@@ -634,21 +648,12 @@ const TradingChallenge = () => {
                  ${getSelectedAccountPrice()}
                </Text>
           </div>
-          {connected && formData.accountSize && (
-            <div className={styles.solConversion}>
-                 <Text fw={600} c="#CCCCCC">SOL Amount:</Text>
-                 <Text fw={700} c="#FFFFFF">
-                ◎{calculateSOLAmount(formData.accountSize).toFixed(4)} SOL
-                 </Text>
-                 <Text fw={500} size="sm" c="#888888">@ ${SOL_RATE}/SOL</Text>
-            </div>
-          )}
         </div>
          </Stack>
        </Paper>
 
-       {/* Wallet Connection Prompt */}
-      {!connected && (
+       {/* QR Code Payment Section */}
+       {paymentStep === 'qr' && (
          <Paper 
            p="xl" 
            radius="lg" 
@@ -661,42 +666,205 @@ const TradingChallenge = () => {
              marginBottom: '2rem'
            }}
          >
-           <Group gap="md" align="center" justify="center">
-             <AlertCircle size={24} color="#16a34a" />
-             <Text fw={600} c="#FFFFFF" size="lg">
-               Connect your Phantom wallet to proceed with payment
+           <Stack gap="lg" align="center">
+             <Text 
+               fw={700} 
+               size="lg" 
+               tt="uppercase" 
+               c="#16a34a" 
+               ta="center" 
+               style={{ 
+                 backgroundColor: '#1A3A1A', 
+                 padding: '12px 24px', 
+                 borderRadius: '8px',
+                 border: '1px solid #16a34a',
+                 boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)',
+                 letterSpacing: '2px'
+               }}
+             >
+               PAYMENT VIA QR CODE
              </Text>
+             
+             {/* QR Code Image */}
+             <div className={styles.qrCodeContainer}>
+               <img 
+                 src={qrCodeImage} 
+                 alt="Payment QR Code" 
+                 className={styles.qrCodeImage}
+               />
+             </div>
+
+             {/* Wallet Address */}
+             <div className={styles.walletAddressContainer}>
+               <Text fw={600} c="#CCCCCC" size="md" ta="center" mb="sm">
+                 Send payment to this wallet address:
+               </Text>
+               <Paper
+                 p="md"
+                 radius="md"
+                 className={styles.walletAddressBox}
+               >
+                 <Group justify="space-between" align="center">
+                   <Text 
+                     fw={700} 
+                     c="#FFFFFF" 
+                     size="sm"
+                     className={styles.walletAddressText}
+                   >
+                     3uNDrLyL73jifLvS3i7FrSB1foWYVr6qxo7qJt6XvZor
+                   </Text>
+                   <button
+                     className={styles.copyButton}
+                     onClick={copyToClipboard}
+                   >
+                     Copy
+                   </button>
+                 </Group>
+               </Paper>
+             </div>
+
+             {/* I Have Paid Button */}
              <Button
-               size="lg"
+               size="xl"
                radius="lg"
-               onClick={connectWallet}
+               onClick={handleIHavePaid}
                styles={{
                  root: {
                    backgroundColor: '#16a34a',
                    color: '#000000',
                    border: '2px solid #16a34a',
                    fontWeight: 700,
-                   fontSize: '1rem',
-                   padding: '12px 24px',
+                   fontSize: '1.1rem',
+                   padding: '16px 32px',
                    transition: 'all 0.3s ease',
-                   boxShadow: '0 4px 15px rgba(22, 163, 74, 0.3)',
+                   boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
                    '&:hover': {
                      backgroundColor: '#15803d',
                      borderColor: '#15803d',
                      transform: 'translateY(-2px)',
-                     boxShadow: '0 8px 25px rgba(22, 163, 74, 0.4)',
+                     boxShadow: '0 12px 35px rgba(22, 163, 74, 0.4)',
                    },
                  },
                }}
              >
-            Connect Wallet
+               I Have Paid
              </Button>
-           </Group>
+           </Stack>
          </Paper>
-      )}
+       )}
 
-       {/* Payment Status */}
-      {renderPaymentStatus()}
+       {/* Transaction ID Form */}
+       {paymentStep === 'form' && (
+         <Paper 
+           p="xl" 
+           radius="lg" 
+           withBorder 
+           style={{ 
+             backgroundColor: 'rgba(26, 26, 26, 0.6)',
+             borderColor: '#16a34a',
+             backdropFilter: 'blur(15px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
+             marginBottom: '2rem'
+           }}
+         >
+           <Stack gap="lg">
+             <Text 
+               fw={700} 
+               size="lg" 
+               tt="uppercase" 
+               c="#16a34a" 
+               ta="center" 
+               style={{ 
+                 backgroundColor: '#1A3A1A', 
+                 padding: '12px 24px', 
+                 borderRadius: '8px',
+                 border: '1px solid #16a34a',
+                 boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)',
+                 letterSpacing: '2px'
+               }}
+             >
+               SUBMIT TRANSACTION DETAILS
+             </Text>
+             
+             <div>
+               <Text fw={600} c="#FFFFFF" size="md" mb="sm">
+                 Transaction ID:
+               </Text>
+               <input
+                 type="text"
+                 value={formData.transactionId}
+                 onChange={(e) => handleInputChange('transactionId', e.target.value)}
+                 placeholder="Enter your transaction ID here"
+                 className={styles.transactionInput}
+               />
+             </div>
+
+             <Button
+               size="xl"
+               radius="lg"
+               onClick={handleTransactionSubmit}
+               styles={{
+                 root: {
+                   backgroundColor: '#16a34a',
+                   color: '#000000',
+                   border: '2px solid #16a34a',
+                   fontWeight: 700,
+                   fontSize: '1.1rem',
+                   padding: '16px 32px',
+                   transition: 'all 0.3s ease',
+                   boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
+                   '&:hover': {
+                     backgroundColor: '#15803d',
+                     borderColor: '#15803d',
+                     transform: 'translateY(-2px)',
+                     boxShadow: '0 12px 35px rgba(22, 163, 74, 0.4)',
+                   },
+                 },
+               }}
+             >
+               Submit
+             </Button>
+           </Stack>
+         </Paper>
+       )}
+
+       {/* Processing Confirmation */}
+       {paymentStep === 'processing' && (
+         <Paper 
+           p="xl" 
+           radius="lg" 
+           withBorder 
+           style={{ 
+             backgroundColor: 'rgba(26, 26, 26, 0.6)',
+             borderColor: '#16a34a',
+             backdropFilter: 'blur(15px)',
+             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
+             marginBottom: '2rem'
+           }}
+         >
+           <div className={styles.processingContainer}>
+             <CheckCircle size={48} className={styles.processingIcon} />
+             <Text 
+               fw={700} 
+               size="xl" 
+               c="#16a34a" 
+               ta="center"
+               className={styles.processingTitle}
+             >
+               UNDER PROCESSING
+             </Text>
+             <Text 
+               fw={500} 
+               size="lg" 
+               c="#FFFFFF" 
+               ta="center"
+               className={styles.processingMessage}
+             >
+               After confirming the payment you will get an email with the credentials of trading platform.
+             </Text>
+           </div>
+         </Paper>
+       )}
 
        {/* Terms and Conditions */}
        <Paper 
@@ -768,14 +936,15 @@ const TradingChallenge = () => {
              Back
            </Button>
            
-           <Button
-             size="xl"
-             radius="lg"
-          onClick={handleConfirmOrder}
-          disabled={!formData.agreeToTerms || !connected || isProcessing}
-             rightSection={isProcessing ? <Loader2 size={20} className={styles.spinning} /> : <Check size={20} />}
-             styles={{
-               root: {
+           {paymentStep === 'qr' && (
+             <Button
+               size="xl"
+               radius="lg"
+               onClick={handleConfirmOrder}
+               disabled={!formData.agreeToTerms}
+               rightSection={<Check size={20} />}
+               styles={{
+                 root: {
                                     backgroundColor: '#16a34a',
                    color: '#000000',
                    border: '2px solid #16a34a',
@@ -801,8 +970,9 @@ const TradingChallenge = () => {
                },
              }}
            >
-             {isProcessing ? 'Processing...' : (connected ? 'Pay with SOL' : 'Connect Wallet First')}
+             {!formData.agreeToTerms ? 'Agree to Terms First' : 'Proceed to Payment'}
            </Button>
+           )}
          </Group>
        </Paper>
     </div>

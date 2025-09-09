@@ -984,6 +984,39 @@
   .mantine-Container-root {
     padding: 0 calc(var(--spacing-unit) * 1) !important;
   }
+
+  /* QR Code - Mobile */
+  .qrCodeImage {
+    max-width: 250px !important;
+  }
+
+  .walletAddressContainer {
+    max-width: 100% !important;
+    padding: 0 calc(var(--spacing-unit) * 1);
+  }
+
+  .walletAddressText {
+    font-size: 0.75rem !important;
+    margin-right: 8px !important;
+  }
+
+  .copyButton {
+    font-size: 0.7rem !important;
+    padding: 6px 12px !important;
+  }
+
+  .transactionInput {
+    font-size: 0.9rem !important;
+    padding: 12px 16px !important;
+  }
+
+  .processingTitle {
+    font-size: 1.25rem !important;
+  }
+
+  .processingMessage {
+    font-size: 1rem !important;
+  }
 }
 
 /* Small Mobile Devices */
@@ -1044,6 +1077,33 @@
 
   .mantine-Title-root {
     font-size: clamp(1rem, 7vw, 1.3rem) !important;
+  }
+
+  /* QR Code - Small Mobile */
+  .qrCodeImage {
+    max-width: 200px !important;
+  }
+
+  .walletAddressText {
+    font-size: 0.7rem !important;
+  }
+
+  .copyButton {
+    font-size: 0.65rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .transactionInput {
+    font-size: 0.85rem !important;
+    padding: 10px 14px !important;
+  }
+
+  .processingTitle {
+    font-size: 1.1rem !important;
+  }
+
+  .processingMessage {
+    font-size: 0.9rem !important;
   }
 }
 
@@ -1145,6 +1205,131 @@
   .toggleButton {
     border-width: 0.5px;
   }
+}
+
+/* Transaction ID Input Styles */
+.transactionInput {
+  width: 100%;
+  padding: 16px 20px;
+  background-color: rgba(26, 26, 26, 0.8);
+  border: 2px solid #16a34a;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(22, 163, 74, 0.2);
+  font-family: inherit;
+}
+
+.transactionInput:focus {
+  outline: none;
+  border-color: #15803d;
+  background-color: rgba(26, 26, 26, 0.9);
+  box-shadow: 0 8px 25px rgba(22, 163, 74, 0.3);
+  transform: translateY(-1px);
+}
+
+.transactionInput::placeholder {
+  color: #CCCCCC;
+  opacity: 0.8;
+}
+
+.transactionInput:hover {
+  border-color: #15803d;
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.25);
+}
+
+/* QR Code Container */
+.qrCodeContainer {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.qrCodeImage {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(22, 163, 74, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.qrCodeImage:hover {
+  transform: scale(1.02);
+}
+
+/* Wallet Address Container */
+.walletAddressContainer {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.walletAddressBox {
+  background-color: rgba(22, 163, 74, 0.1);
+  border: 2px solid #16a34a;
+  border-radius: 8px;
+  padding: 16px;
+  position: relative;
+}
+
+.walletAddressText {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  word-break: break-all;
+  flex: 1;
+  margin-right: 12px;
+  font-weight: 700;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+}
+
+.copyButton {
+  background-color: #16a34a;
+  color: #000000;
+  border: 1px solid #16a34a;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.copyButton:hover {
+  background-color: #15803d;
+  border-color: #15803d;
+  transform: translateY(-1px);
+}
+
+/* Processing Status */
+.processingContainer {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.processingIcon {
+  color: #16a34a;
+  margin-bottom: 20px;
+}
+
+.processingTitle {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #16a34a;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(22, 163, 74, 0.5);
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.processingMessage {
+  font-weight: 500;
+  font-size: 1.125rem;
+  color: #FFFFFF;
+  text-align: center;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* Print Styles */
