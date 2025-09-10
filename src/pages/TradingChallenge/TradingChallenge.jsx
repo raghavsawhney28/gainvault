@@ -513,46 +513,60 @@ const TradingChallenge = () => {
           {accountSizes.map(size => (
                 <Card
               key={size.value}
-                                    padding="sm"
-                  radius="md"
-                  withBorder
+              padding="sm"
+              radius="md"
+              withBorder
               className={`${styles.accountSizeCard} ${
                 formData.accountSize === size.value ? styles.selected : ''
               }`}
               onClick={() => handleInputChange('accountSize', size.value)}
-                  style={{
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    borderColor: formData.accountSize === size.value 
-                      ? '#16a34a' 
-                      : '#16a34a',
-                    borderWidth: formData.accountSize === size.value ? '2px' : '1px',
-                    backgroundColor: formData.accountSize === size.value 
-                      ? 'rgba(22, 163, 74, 0.15)' 
-                      : 'rgba(26, 26, 26, 0.8)',
-                    backdropFilter: 'blur(15px)',
-                    boxShadow: formData.accountSize === size.value 
-                      ? '0 8px 25px rgba(22, 163, 74, 0.3)' 
-                      : '0 4px 15px rgba(0, 0, 0, 0.3)',
-                    maxWidth: '220px',
-                    minHeight: '160px'
-                  }}
+              style={{
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                borderColor: formData.accountSize === size.value 
+                  ? '#16a34a' 
+                  : '#16a34a',
+                borderWidth: formData.accountSize === size.value ? '2px' : '1px',
+                backgroundColor: formData.accountSize === size.value 
+                  ? 'rgba(22, 163, 74, 0.15)' 
+                  : 'rgba(26, 26, 26, 0.8)',
+                backdropFilter: 'blur(15px)',
+                boxShadow: formData.accountSize === size.value 
+                  ? '0 8px 25px rgba(22, 163, 74, 0.3)' 
+                  : '0 4px 15px rgba(0, 0, 0, 0.3)',
+                maxWidth: '220px',
+                minHeight: '160px',
+                width: '100%'
+              }}
                 >
-                                    <Stack gap="xs" ta="center">
-                    <Text fw={600} size="md" c="#FFFFFF" style={{ letterSpacing: '0.3px' }}>
+                  <Stack gap="xs" ta="center" style={{ width: '100%' }}>
+                    <Text 
+                      fw={600} 
+                      size="md" 
+                      c="#FFFFFF" 
+                      className={styles.accountSizeLabel}
+                      style={{ letterSpacing: '0.3px' }}
+                    >
                       {size.label}
                     </Text>
-                    <Title order={4} c="#16a34a" fw={800} style={{ 
-                      textShadow: '0 0 15px rgba(22, 163, 74, 0.5)',
-                      fontSize: '1.5rem'
-                    }}>
-                ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
+                    <Title 
+                      order={4} 
+                      c="#16a34a" 
+                      fw={800} 
+                      className={styles.accountSizePrice}
+                      style={{ 
+                        textShadow: '0 0 15px rgba(22, 163, 74, 0.5)',
+                        fontSize: '1.5rem'
+                      }}
+                    >
+                      ${challengeType === 'twoStage' ? size.price : size.singleStagePrice}
                     </Title>
                     <Badge 
                       variant="light" 
                       color="green" 
                       size="sm"
                       radius="sm"
+                      className={styles.challengeTypeLabel}
                       styles={{
                         root: {
                           backgroundColor: 'transparent',

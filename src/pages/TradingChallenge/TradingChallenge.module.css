@@ -167,12 +167,33 @@
 }
 
 
-/* Account Size Grid - Updated for Exact Image Design */
+/* Account Size Grid - Updated for Mobile Responsiveness */
 .accountSizeGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: calc(var(--spacing-unit) * 2);
   width: 100%;
+  justify-items: center;
+}
+
+/* Mobile-specific grid layout */
+@media (max-width: 768px) {
+  .accountSizeGrid {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 1.5);
+    width: 90%;
+    margin: 0 auto;
+  }
+}
+
+/* Two-column layout for wider mobile screens */
+@media (min-width: 400px) and (max-width: 768px) {
+  .accountSizeGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: calc(var(--spacing-unit) * 1.5);
+    width: 95%;
+    margin: 0 auto;
+  }
 }
 
 .accountSizeCard {
@@ -187,6 +208,17 @@
   justify-content: center;
   align-items: center;
   padding: calc(var(--spacing-unit) * 2.5);
+  width: 100%;
+  max-width: 220px;
+}
+
+/* Mobile-specific card styling */
+@media (max-width: 768px) {
+  .accountSizeCard {
+    padding: calc(var(--spacing-unit) * 1.5);
+    min-height: 120px;
+    max-width: 100%;
+  }
 }
 
 .accountSizeCard:hover {
@@ -200,6 +232,22 @@
   border-color: #00FF88;
   background-color: rgba(0, 255, 136, 0.1);
   box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+/* Mobile-specific hover and glow effects */
+@media (max-width: 768px) {
+  .accountSizeCard:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .accountSizeCard.selected {
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.15);
+  }
+  
+  .accountSizePrice {
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.2);
+  }
 }
 
 /* Dark theme text colors matching exact image design */
@@ -218,12 +266,31 @@
   text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
 }
 
+/* Mobile typography adjustments */
+@media (max-width: 768px) {
+  .accountSizeLabel {
+    font-size: 1rem;
+  }
+  
+  .accountSizePrice {
+    font-size: 1.1rem;
+  }
+}
+
 .challengeTypeLabel {
   color: #00FF88 !important;
   margin: 0;
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+/* Mobile-specific stage badge styling */
+@media (max-width: 768px) {
+  .challengeTypeLabel {
+    font-size: 0.7rem;
+    font-weight: 400;
+  }
 }
 
 /* Challenge Type Section */
