@@ -714,6 +714,23 @@ const TradingChallenge = () => {
               </Group>
             </Paper>
           </div>
+
+          {/* Payment Amount */}
+          <div className={styles.paymentAmountContainer}>
+            <Text 
+              fw={700} 
+              size="1.5rem" 
+              c="#16a34a" 
+              ta="center"
+              style={{ 
+                textShadow: '0 0 20px rgba(22, 163, 74, 0.5)',
+                letterSpacing: '1px',
+                marginTop: '1rem'
+              }}
+            >
+              Total Payment Amount: ${getTotalCost()}
+            </Text>
+          </div>
         </Stack>
       </Paper>
 
