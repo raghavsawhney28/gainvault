@@ -34,7 +34,12 @@ const TradingChallenge = () => {
     
     // Order Summary
     agreeToTerms: false,
-    transactionId: ''
+    transactionId: '',
+    
+    // Coupon
+    couponCode: '',
+    appliedCoupon: null,
+    discountAmount: 0
   });
 
 
@@ -86,6 +91,54 @@ const TradingChallenge = () => {
     if (!selected) return 0;
     
     return challengeType === 'twoStage' ? selected.price : selected.singleStagePrice;
+  };
+
+  const getSubtotal = () => {
+    return getSelectedAccountPrice();
+  };
+
+  const getDiscountAmount = () => {
+    return formData.discountAmount;
+  };
+
+  const getTotalCost = () => {
+    return getSubtotal() - getDiscountAmount();
+  };
+
+  const handleCouponApply = () => {
+    const couponCode = formData.couponCode.trim().toUpperCase();
+    
+    // Check if coupon is already applied
+    if (formData.appliedCoupon === couponCode) {
+      return;
+    }
+    
+    // Validate coupon
+    if (couponCode === 'WELCOME15') {
+      const subtotal = getSubtotal();
+      const discountAmount = Math.round(subtotal * 0.15 * 100) / 100; // 15% discount, rounded to 2 decimal places
+      
+      setFormData(prev => ({
+        ...prev,
+        appliedCoupon: couponCode,
+        discountAmount: discountAmount
+      }));
+    } else {
+      // Invalid coupon - show error temporarily
+      setFormData(prev => ({
+        ...prev,
+        appliedCoupon: 'INVALID',
+        discountAmount: 0
+      }));
+      
+      // Clear error after 3 seconds
+      setTimeout(() => {
+        setFormData(prev => ({
+          ...prev,
+          appliedCoupon: null
+        }));
+      }, 3000);
+    }
   };
 
 
@@ -1028,15 +1081,141 @@ const TradingChallenge = () => {
 
         <div className={styles.summaryTotal}>
           <div className={styles.totalRow}>
+               <Text fw={700} size="lg" c="#16a34a">Subtotal:</Text>
+               <Text fw={700} size="lg" c="#FFFFFF">
+                 ${getSubtotal()}
+               </Text>
+          </div>
+          
+          {formData.discountAmount > 0 && (
+            <div className={styles.totalRow}>
+              <Text fw={700} size="lg" c="#ef4444">Discount:</Text>
+              <Text fw={700} size="lg" c="#ef4444">
+                -${getDiscountAmount()}
+              </Text>
+            </div>
+          )}
+          
+          <div className={styles.totalRow} style={{ borderTop: '2px solid #16a34a', paddingTop: '12px', marginTop: '8px' }}>
                <Text fw={700} size="lg" c="#16a34a">Total Cost:</Text>
                <Text fw={900} size="2rem" c="#FFFFFF" style={{ textShadow: '0 0 20px rgba(22, 163, 74, 0.5)' }}>
-                 ${getSelectedAccountPrice()}
+                 ${getTotalCost()}
                </Text>
           </div>
         </div>
          </Stack>
        </Paper>
 
+       {/* Coupon Code Section */}
+       <Paper 
+         p="xl" 
+         radius="lg" 
+         withBorder 
+         style={{ 
+           backgroundColor: 'rgba(26, 26, 26, 0.6)',
+           borderColor: '#22c55e',
+           backdropFilter: 'blur(15px)',
+           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 197, 94, 0.1)',
+           marginBottom: '2rem'
+         }}
+       >
+         <Stack gap="md">
+           <Text fw={700} size="lg" c="#FFFFFF" ta="center">
+             Coupon Code
+           </Text>
+           
+           <Group gap="md" align="flex-end">
+             <div style={{ flex: 1 }}>
+               <input
+                 type="text"
+                 placeholder="Enter coupon code"
+                 value={formData.couponCode}
+                 onChange={(e) => handleInputChange('couponCode', e.target.value)}
+                 style={{
+                   width: '100%',
+                   padding: '12px 16px',
+                   backgroundColor: 'rgba(26, 26, 26, 0.8)',
+                   border: '2px solid #22c55e',
+                   borderRadius: '8px',
+                   color: '#FFFFFF',
+                   fontSize: '1rem',
+                   outline: 'none',
+                   transition: 'all 0.3s ease',
+                   '&:focus': {
+                     borderColor: '#16a34a',
+                     boxShadow: '0 0 10px rgba(22, 163, 74, 0.3)'
+                   }
+                 }}
+                 onFocus={(e) => {
+                   e.target.style.borderColor = '#16a34a';
+                   e.target.style.boxShadow = '0 0 10px rgba(22, 163, 74, 0.3)';
+                 }}
+                 onBlur={(e) => {
+                   e.target.style.borderColor = '#22c55e';
+                   e.target.style.boxShadow = 'none';
+                 }}
+               />
+             </div>
+             
+             <Button
+               size="lg"
+               radius="lg"
+               onClick={handleCouponApply}
+               disabled={!formData.couponCode.trim()}
+               styles={{
+                 root: {
+                   backgroundColor: '#16a34a',
+                   color: '#000000',
+                   border: '2px solid #16a34a',
+                   fontWeight: 700,
+                   fontSize: '1rem',
+                   padding: '12px 24px',
+                   transition: 'all 0.3s ease',
+                   boxShadow: '0 4px 15px rgba(22, 163, 74, 0.2)',
+                   '&:hover': {
+                     backgroundColor: '#15803d',
+                     borderColor: '#15803d',
+                     transform: 'translateY(-2px)',
+                     boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
+                   },
+                   '&:disabled': {
+                     backgroundColor: '#666666',
+                     color: '#CCCCCC',
+                     cursor: 'not-allowed',
+                     transform: 'none',
+                     borderColor: '#666666',
+                     boxShadow: 'none',
+                   },
+                 },
+               }}
+             >
+               Apply
+             </Button>
+           </Group>
+           
+           {formData.appliedCoupon === 'INVALID' && (
+             <Text fw={600} size="sm" c="#ef4444" ta="center" style={{ 
+               backgroundColor: 'rgba(239, 68, 68, 0.1)',
+               padding: '8px 16px',
+               borderRadius: '6px',
+               border: '1px solid #ef4444'
+             }}>
+               Invalid coupon code
+             </Text>
+           )}
+           
+           {formData.appliedCoupon === 'WELCOME15' && (
+             <Text fw={600} size="sm" c="#16a34a" ta="center" style={{ 
+               backgroundColor: 'rgba(22, 163, 74, 0.1)',
+               padding: '8px 16px',
+               borderRadius: '6px',
+               border: '1px solid #16a34a'
+             }}>
+               ✓ Coupon applied successfully! 15% discount applied.
+             </Text>
+           )}
+         </Stack>
+       </Paper>
 
        {/* Terms and Conditions */}
        <Paper 
