@@ -274,10 +274,10 @@ const TradingChallenge = () => {
           radius="lg" 
           withBorder 
           style={{ 
-                         backgroundColor: 'rgba(26, 26, 26, 0.6)',
-             borderColor: '#16a34a',
-             backdropFilter: 'blur(15px)',
-             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
+            backgroundColor: 'rgba(26, 26, 26, 0.6)',
+            borderColor: 'transparent',
+            backdropFilter: 'blur(15px)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
             marginBottom: '2rem'
           }}
         >
@@ -378,7 +378,7 @@ const TradingChallenge = () => {
            withBorder 
            style={{ 
              backgroundColor: 'rgba(26, 26, 26, 0.6)',
-             borderColor: '#16a34a',
+             borderColor: 'transparent',
              backdropFilter: 'blur(15px)',
              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
              marginBottom: '2rem'
@@ -412,7 +412,7 @@ const TradingChallenge = () => {
                              styles={{
                                    input: {
                     backgroundColor: 'rgba(26, 26, 26, 0.8)',
-                    borderColor: '#16a34a',
+                    borderColor: 'transparent',
                     borderWidth: '2px',
                     color: '#FFFFFF !important',
                     fontSize: '1.1rem',
@@ -420,7 +420,7 @@ const TradingChallenge = () => {
                     transition: 'all 0.3s ease',
                     boxShadow: '0 4px 15px rgba(22, 163, 74, 0.2)',
                     '&:focus': {
-                      borderColor: '#16a34a',
+                      borderColor: 'transparent',
                       backgroundColor: 'rgba(26, 26, 26, 0.9)',
                       boxShadow: '0 8px 25px rgba(22, 163, 74, 0.3)',
                       transform: 'translateY(-1px)',
@@ -457,7 +457,7 @@ const TradingChallenge = () => {
                  dropdown: {
                   color: '#FFFFFF',
                    backgroundColor: 'rgba(32, 32, 32, 0.95)',
-                   borderColor: '#16a34a',
+                   borderColor: 'transparent',
                    borderWidth: '2px',
                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)',
                   
@@ -484,7 +484,7 @@ const TradingChallenge = () => {
            withBorder 
            style={{ 
              backgroundColor: 'rgba(26, 26, 26, 0.6)',
-             borderColor: '#16a34a',
+             borderColor: 'transparent',
              backdropFilter: 'blur(15px)',
              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
              marginBottom: '2rem'
@@ -571,7 +571,7 @@ const TradingChallenge = () => {
                         root: {
                           backgroundColor: 'transparent',
                           color: '#16a34a',
-                          borderColor: '#16a34a',
+                          borderColor: 'transparent',
                           borderWidth: '1px',
                           textTransform: 'uppercase',
                           fontWeight: 500,
@@ -600,7 +600,7 @@ const TradingChallenge = () => {
            withBorder 
            style={{ 
              backgroundColor: 'rgba(26, 26, 26, 0.6)',
-             borderColor: '#16a34a',
+             borderColor: 'transparent',
              backdropFilter: 'blur(15px)',
              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)'
            }}
@@ -669,7 +669,7 @@ const TradingChallenge = () => {
         withBorder 
         style={{ 
           backgroundColor: 'rgba(26, 26, 26, 0.6)',
-          borderColor: '#16a34a',
+          borderColor: 'transparent',
           backdropFilter: 'blur(15px)',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
           marginBottom: '2rem'
@@ -844,7 +844,7 @@ const TradingChallenge = () => {
         withBorder 
         style={{ 
           backgroundColor: 'rgba(26, 26, 26, 0.6)',
-          borderColor: '#16a34a',
+          borderColor: 'transparent',
           backdropFilter: 'blur(15px)',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
           marginBottom: '2rem'
@@ -939,7 +939,7 @@ const TradingChallenge = () => {
         withBorder 
         style={{ 
           backgroundColor: 'rgba(26, 26, 26, 0.6)',
-          borderColor: '#16a34a',
+          borderColor: 'transparent',
           backdropFilter: 'blur(15px)',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(22, 163, 74, 0.1)',
           marginBottom: '2rem'
@@ -1176,7 +1176,7 @@ const TradingChallenge = () => {
                    outline: 'none',
                    transition: 'all 0.3s ease',
                    '&:focus': {
-                     borderColor: '#16a34a',
+                     borderColor: 'transparent',
                      boxShadow: '0 0 10px rgba(22, 163, 74, 0.3)'
                    }
                  }}
