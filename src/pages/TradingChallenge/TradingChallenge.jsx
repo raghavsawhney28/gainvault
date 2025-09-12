@@ -577,7 +577,10 @@ const TradingChallenge = () => {
                           fontWeight: 500,
                           fontSize: '0.7rem',
                           padding: '4px 8px',
-                          letterSpacing: '0.3px'
+                          letterSpacing: '0.3px',
+                          marginTop: '8px',
+                          alignSelf: 'center',
+                          width: 'fit-content'
                         },
                       }}
                     >
