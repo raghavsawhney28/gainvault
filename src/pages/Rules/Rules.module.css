@@ -360,7 +360,7 @@
 }
 
 .prohibitedList h4 {
-  color: var(--text-primary);
+  color: #e5e7eb;
   margin-bottom: calc(var(--spacing-unit) * 2);
   font-size: 1.1rem;
 }
