@@ -376,7 +376,7 @@ const Rules = () => {
               <span className={styles.statLabel}>Max Funding</span>
             </div>
             <div className={styles.statItem}>
-              <span className={styles.statNumber}>1</span>
+              <span className={styles.statNumber}>∞</span>
               <span className={styles.statLabel}>Lifetime Attempt</span>
             </div>
           </div>

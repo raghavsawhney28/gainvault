@@ -1,7 +1,7 @@
 /* Rules Page Styles */
 .rulesPage {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--card-bg) 100%);
+  background: transparent;
   color: var(--text-primary);
   padding: calc(var(--spacing-unit) * 12) 0 calc(var(--spacing-unit) * 8) 0;
   margin-top: 80px;
@@ -80,7 +80,7 @@
   font-weight: 700;
   text-align: center;
   margin-bottom: calc(var(--spacing-unit) * 4);
-  color: var(--text-primary);
+  color: #e5e7eb;
 }
 
 .phaseGrid {
@@ -125,7 +125,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: calc(var(--spacing-unit) * 1);
-  color: var(--text-primary);
+  color: #e5e7eb;
 }
 
 .phaseDetails {
@@ -140,7 +140,7 @@
   padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
   border-radius: calc(var(--spacing-unit) * 0.5);
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: #e5e7eb;
 }
 
 .phaseTarget {
@@ -155,8 +155,8 @@
 }
 
 .ruleSection {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: calc(var(--spacing-unit) * 2);
   margin-bottom: calc(var(--spacing-unit) * 3);
   overflow: hidden;
@@ -178,7 +178,7 @@
 }
 
 .ruleHeader:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .ruleTitle {
@@ -201,7 +201,7 @@
 .ruleTitle h3 {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #e5e7eb;
   margin: 0;
 }
 
@@ -213,7 +213,7 @@
 }
 
 .ruleToggle {
-  color: var(--text-secondary);
+  color: var(--text-primary);
   transition: transform 0.3s ease;
 }
 
@@ -235,7 +235,7 @@
 
 /* Rule Content Styles */
 .ruleContent {
-  color: var(--text-secondary);
+  color: var(--text-primary);
   line-height: 1.6;
 }
 
@@ -264,12 +264,12 @@
 .timelineDuration {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #e5e7eb;
   margin-bottom: calc(var(--spacing-unit) * 0.5);
 }
 
 .timelineDesc {
-  color: var(--text-secondary);
+  color: #cbd5e1;
   font-size: 0.875rem;
 }
 
@@ -306,7 +306,7 @@
 }
 
 .tierLabel {
-  color: var(--text-secondary);
+  color: #e5e7eb;
   font-size: 0.875rem;
 }
 
@@ -335,6 +335,11 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Improve readability inside dark cards */
+.ruleItem p {
+  color: #e5e7eb;
+}
+
 .ruleHeader {
   display: flex;
   justify-content: space-between;
@@ -343,7 +348,7 @@
 }
 
 .ruleLabel {
-  color: var(--text-secondary);
+  color: #e5e7eb;
   font-size: 0.875rem;
   font-weight: 500;
 }
@@ -368,7 +373,7 @@
 
 .prohibitedList li {
   padding: calc(var(--spacing-unit) * 0.5) 0;
-  color: var(--text-secondary);
+  color: #e5e7eb;
   position: relative;
   padding-left: calc(var(--spacing-unit) * 2);
 }
@@ -398,6 +403,10 @@
   text-align: center;
 }
 
+.newsTrading p {
+  color: #e5e7eb;
+}
+
 .newsWindow {
   display: flex;
   justify-content: center;
@@ -413,7 +422,7 @@
 }
 
 .newsLabel {
-  color: var(--text-secondary);
+  color: #e5e7eb;
   font-size: 0.875rem;
 }
 
@@ -463,7 +472,7 @@
 }
 
 .phaseDuration {
-  color: var(--text-secondary);
+  color: #cbd5e1;
   font-size: 0.875rem;
 }
 
@@ -472,7 +481,7 @@
 }
 
 .targetLabel {
-  color: var(--text-secondary);
+  color: #cbd5e1;
   font-size: 0.875rem;
   margin-right: calc(var(--spacing-unit) * 0.5);
 }
@@ -490,7 +499,7 @@
 
 .phaseList li {
   padding: calc(var(--spacing-unit) * 0.5) 0;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-size: 0.875rem;
   position: relative;
   padding-left: calc(var(--spacing-unit) * 1.5);
@@ -546,7 +555,7 @@
   font-weight: 700;
   text-align: center;
   margin-bottom: calc(var(--spacing-unit) * 4);
-  color: var(--text-primary);
+  color: #e5e7eb;
 }
 
 .checklistGrid {
@@ -577,8 +586,13 @@
 }
 
 .checklistItem span {
-  color: var(--text-secondary);
+  color: #e5e7eb;
   font-size: 0.875rem;
+}
+
+/* Ensure checklist heading and section title are bright */
+.complianceChecklist h2 {
+  color: #e5e7eb;
 }
 
 /* Footer Notice */
@@ -603,13 +617,13 @@
 }
 
 .noticeSection h3 {
-  color: var(--text-primary);
+  color: #e5e7eb;
   margin: 0 0 calc(var(--spacing-unit) * 1) 0;
   font-size: 1.25rem;
 }
 
 .noticeSection p {
-  color: var(--text-secondary);
+  color: #e5e7eb;
   line-height: 1.6;
   margin: 0;
   font-size: 0.875rem;
