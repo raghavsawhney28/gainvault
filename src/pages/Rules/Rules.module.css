@@ -466,13 +466,13 @@
 }
 
 .phaseHeader h4 {
-  color: var(--text-primary);
+  color: #e5e7eb;
   margin: 0;
   font-size: 1.1rem;
 }
 
 .phaseDuration {
-  color: #cbd5e1;
+  color: #e5e7eb;
   font-size: 0.875rem;
 }
 
@@ -499,7 +499,7 @@
 
 .phaseList li {
   padding: calc(var(--spacing-unit) * 0.5) 0;
-  color: var(--text-primary);
+  color: #e5e7eb;
   font-size: 0.875rem;
   position: relative;
   padding-left: calc(var(--spacing-unit) * 1.5);
