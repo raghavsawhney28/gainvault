@@ -1,7 +1,15 @@
 import axios from 'axios';
 
+const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+const envBase = import.meta?.env?.VITE_API_BASE?.replace(/\/$/, '');
+const baseURL = envBase
+  ? `${envBase}/api`
+  : isLocalhost
+    ? '/api'
+    : 'https://gainvault.onrender.com/api';
+
 const api = axios.create({
-  baseURL: 'https://gainvault.onrender.com/api',
+  baseURL,
   withCredentials: true,
 });
 

@@ -10,7 +10,7 @@ const router = express.Router();
 // ✅ Get user's referral code and link
 router.get('/code', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).lean();
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -83,9 +83,9 @@ router.get('/stats', auth, async (req, res) => {
 
     // Get referral counts by status
     const [pendingCount, activeCount, rewardedCount] = await Promise.all([
-      Referral.countDocuments({ referrerUserId: userId, status: 'pending' }),
-      Referral.countDocuments({ referrerUserId: userId, status: 'active' }),
-      Referral.countDocuments({ referrerUserId: userId, status: 'rewarded' })
+      Referral.countDocuments({ referrerUserId: userId, status: 'pending' }).lean(),
+      Referral.countDocuments({ referrerUserId: userId, status: 'active' }).lean(),
+      Referral.countDocuments({ referrerUserId: userId, status: 'rewarded' }).lean()
     ]);
 
     // Get total rewards earned
@@ -128,12 +128,13 @@ router.get('/transactions', auth, async (req, res) => {
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
-    .populate('referenceId', 'username email');
+    .populate('referenceId', 'username email')
+    .lean();
 
     const total = await Transaction.countDocuments({ 
       userId, 
       type: { $in: ['referral_reward', 'withdrawal'] } 
-    });
+    }).lean();
 
     res.json({
       success: true,
@@ -163,9 +164,10 @@ router.get('/list', auth, async (req, res) => {
       .populate('referredUserId', 'username email walletAddress createdAt')
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
-    const total = await Referral.countDocuments({ referrerUserId: userId });
+    const total = await Referral.countDocuments({ referrerUserId: userId }).lean();
 
     res.json({
       success: true,

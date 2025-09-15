@@ -14,9 +14,11 @@ import Referral from './pages/Referral/Referral';
 import Dashboard from './pages/Dashboard/Dashboard';
 import AuthPage from './components/AuthPage/AuthPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 import useAuth from './hooks/useAuth';
 import { SmoothCursor } from './components/ui/smooth-cursor';
 import Particles from './components/magicui/particles';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 // Create a dark theme
@@ -123,6 +125,7 @@ function App() {
           onLogout={handleLogout}
           className="cursor-none"
         />
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={mainContent} />
           <Route path="/trading-challenge" element={<TradingChallenge className="cursor-none" />} />
@@ -130,6 +133,7 @@ function App() {
           <Route path="/referral" element={<Referral />} />
           <Route path="/dashboard/:username" element={<Dashboard className="cursor-none" />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="*" element={mainContent} />
         </Routes>
         {/* <BlankSection className="cursor-none" /> */}

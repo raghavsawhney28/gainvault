@@ -13,6 +13,7 @@ import {
   Loader2
 } from 'lucide-react';
 import useAuth from '../../hooks/useAuth';
+import api from '../../utils/api';
 import styles from './Referral.module.css';
 
 const Referral = () => {
@@ -47,18 +48,9 @@ const Referral = () => {
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
       const [codeRes, statsRes, transactionsRes] = await Promise.allSettled([
-        fetch('https://gainvault.onrender.com/api/referral/code', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
-          signal: controller.signal
-        }),
-        fetch('https://gainvault.onrender.com/api/referral/stats', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
-          signal: controller.signal
-        }),
-        fetch('https://gainvault.onrender.com/api/referral/transactions', {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
-          signal: controller.signal
-        })
+        api.get('/referral/code', { signal: controller.signal }),
+        api.get('/referral/stats', { signal: controller.signal }),
+        api.get('/referral/transactions', { signal: controller.signal })
       ]);
 
       clearTimeout(timeoutId);
@@ -75,9 +67,9 @@ const Referral = () => {
 
       // Process successful responses
       const [codeData, statsData, transactionsData] = await Promise.all([
-        codeRes.value.json(),
-        statsRes.value.json(),
-        transactionsRes.value.json()
+        codeRes.value.data,
+        statsRes.value.data,
+        transactionsRes.value.data
       ]);
 
       setReferralData({
@@ -118,21 +110,14 @@ const Referral = () => {
     }
 
     try {
-      const response = await fetch('https://gainvault.onrender.com/api/wallet/withdraw', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-        },
-        body: JSON.stringify({
-          amount: parseFloat(withdrawAmount),
-          withdrawalMethod,
-          accountDetails: 'Bank transfer'
-        })
+      const response = await api.post('/wallet/withdraw', {
+        amount: parseFloat(withdrawAmount),
+        withdrawalMethod,
+        accountDetails: 'Bank transfer'
       });
 
-      if (response.ok) {
-        const result = await response.json();
+      if (response.status === 200) {
+        const result = response.data;
         setShowWithdrawModal(false);
         setShowSuccessCard(true);
         setWithdrawAmount('');
@@ -144,8 +129,7 @@ const Referral = () => {
         
         fetchReferralData(); // Refresh data
       } else {
-        const error = await response.json();
-        alert(error.error || 'Withdrawal failed');
+        alert('Withdrawal failed');
       }
     } catch (error) {
       console.error('Withdrawal error:', error);

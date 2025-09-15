@@ -1,7 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './FeaturesSection.module.css';
 
 const FeaturesSection = () => {
+  const navigate = useNavigate();
   const features = [
     {
       icon: '⚡',
@@ -47,7 +49,7 @@ const FeaturesSection = () => {
       <div className={styles.buttonSection}>
         <button 
           className={styles.getStartedButton}
-          onClick={() => window.location.href = '/trading-challenge'}
+          onClick={() => navigate('/trading-challenge')}
         >
           Get Started
         </button>

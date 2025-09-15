@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Check, ExternalLink, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import usePhantomWallet from '../../hooks/usePhantomWallet';
 import usePhantomPayment from '../../hooks/usePhantomPayment';
@@ -41,6 +41,13 @@ const TradingChallenge = () => {
     appliedCoupon: null,
     discountAmount: 0
   });
+
+  // Scroll to top whenever step changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.scrollTo) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [currentStep]);
 
 
   const accountSizes = [

@@ -12,7 +12,7 @@ const Footer = () => {
     ],
     Legal: [
       { label: "Privacy Policy", to: "/privacy-policy" },
-      { label: "Terms of Service", to: "#" },
+      { label: "Terms of Service", to: "/terms-of-service" },
       { label: "Risk Disclosure", to: "#" },
     ],
   };
