@@ -13,6 +13,7 @@ import Rules from './pages/Rules/Rules';
 import Referral from './pages/Referral/Referral';
 import Dashboard from './pages/Dashboard/Dashboard';
 import AuthPage from './components/AuthPage/AuthPage';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import useAuth from './hooks/useAuth';
 import { SmoothCursor } from './components/ui/smooth-cursor';
 import Particles from './components/magicui/particles';
@@ -128,6 +129,7 @@ function App() {
           <Route path="/rules" element={<Rules className="cursor-none" />} />
           <Route path="/referral" element={<Referral />} />
           <Route path="/dashboard/:username" element={<Dashboard className="cursor-none" />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="*" element={mainContent} />
         </Routes>
         {/* <BlankSection className="cursor-none" /> */}

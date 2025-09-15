@@ -1,12 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Mail, MessageCircle } from "lucide-react";
 import styles from "./Footer.module.css";
 import logo from "../../assets/logo.png";
 
 const Footer = () => {
   const footerLinks = {
-    Company: ["About Us", "Contact"],
-    Legal: ["Privacy Policy", "Terms of Service", "Risk Disclosure"],
+    Company: [
+      { label: "About Us", to: "#" },
+      { label: "Contact", to: "#" },
+    ],
+    Legal: [
+      { label: "Privacy Policy", to: "/privacy-policy" },
+      { label: "Terms of Service", to: "#" },
+      { label: "Risk Disclosure", to: "#" },
+    ],
   };
 
   return (
@@ -50,7 +58,11 @@ const Footer = () => {
                 <ul>
                   {links.map((link, index) => (
                     <li key={index}>
-                      <a href="#">{link}</a>
+                      {link.to && link.to !== "#" ? (
+                        <Link to={link.to}>{link.label}</Link>
+                      ) : (
+                        <a href={link.to || "#"}>{link.label}</a>
+                      )}
                     </li>
                   ))}
                 </ul>
