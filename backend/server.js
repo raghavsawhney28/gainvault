@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import connectDB from './config/database.js';
 import authRoutes from './routes/auth.js';
 import referralRoutes from './routes/referral.js';
@@ -10,6 +11,10 @@ import walletRoutes from './routes/wallet.js';
 
 // Load environment variables
 dotenv.config();
+
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Connect to MongoDB
 connectDB();
@@ -23,6 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://0.0.0.0:5173',
   'https://gainvault.fund',
   'https://raghavsawhney28.github.io',
   'https://gainvault-capital.onrender.com',
@@ -32,9 +39,10 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // Allow tools like Postman
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error('Not allowed by CORS'));
+    if (!origin) return callback(null, true); // Allow tools like Postman and same-origin proxy
+    const isLocal = /^(https?:\/\/)?(localhost|127\.0\.0\.1|0\.0\.0\.0)(:\\d+)?$/i.test(origin);
+    if (allowedOrigins.includes(origin) || isLocal) return callback(null, true);
+    return callback(new Error(`Not allowed by CORS: ${origin}`));
   },
   credentials: true
 }));
@@ -99,7 +107,7 @@ app.get('*', (req, res) => {
   const indexPath = path.join(process.cwd(), '../dist/index.html');
   
   // Check if the file exists
-  if (require('fs').existsSync(indexPath)) {
+  if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
     // Fallback for development or if dist doesn't exist

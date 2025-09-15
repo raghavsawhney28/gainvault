@@ -15,7 +15,9 @@ router.get('/code', auth, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const referralLink = `${process.env.FRONTEND_URL || 'https://gainvault.com'}?ref=${user.referralCode}`;
+    const origin = req.get('origin');
+    const baseUrl = origin && origin.startsWith('http') ? origin : (process.env.FRONTEND_URL || 'https://gainvault.com');
+    const referralLink = `${baseUrl}?ref=${user.referralCode}`;
     
     res.json({
       success: true,
@@ -83,9 +85,9 @@ router.get('/stats', auth, async (req, res) => {
 
     // Get referral counts by status
     const [pendingCount, activeCount, rewardedCount] = await Promise.all([
-      Referral.countDocuments({ referrerUserId: userId, status: 'pending' }).lean(),
-      Referral.countDocuments({ referrerUserId: userId, status: 'active' }).lean(),
-      Referral.countDocuments({ referrerUserId: userId, status: 'rewarded' }).lean()
+      Referral.countDocuments({ referrerUserId: userId, status: 'pending' }),
+      Referral.countDocuments({ referrerUserId: userId, status: 'active' }),
+      Referral.countDocuments({ referrerUserId: userId, status: 'rewarded' })
     ]);
 
     // Get total rewards earned
@@ -134,7 +136,7 @@ router.get('/transactions', auth, async (req, res) => {
     const total = await Transaction.countDocuments({ 
       userId, 
       type: { $in: ['referral_reward', 'withdrawal'] } 
-    }).lean();
+    });
 
     res.json({
       success: true,
@@ -167,7 +169,7 @@ router.get('/list', auth, async (req, res) => {
       .limit(limit)
       .lean();
 
-    const total = await Referral.countDocuments({ referrerUserId: userId }).lean();
+    const total = await Referral.countDocuments({ referrerUserId: userId });
 
     res.json({
       success: true,

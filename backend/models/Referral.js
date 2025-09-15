@@ -9,8 +9,7 @@ const referralSchema = new mongoose.Schema({
   referredUserId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
-    unique: true // Each user can only be referred once
+    required: true
   },
   status: {
     type: String,
@@ -39,7 +38,7 @@ const referralSchema = new mongoose.Schema({
 
 // Indexes for better query performance
 referralSchema.index({ referrerUserId: 1, status: 1 });
-referralSchema.index({ referredUserId: 1 });
+referralSchema.index({ referredUserId: 1 }, { unique: true }); // Each user can only be referred once
 referralSchema.index({ referralCode: 1 });
 
 // Prevent self-referrals

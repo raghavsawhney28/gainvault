@@ -56,21 +56,27 @@ const Referral = () => {
       clearTimeout(timeoutId);
       clearInterval(progressInterval);
 
-      // Check if any requests failed
-      const failedRequests = [codeRes, statsRes, transactionsRes].filter(
-        result => result.status === 'rejected' || !result.value.ok
-      );
+      // Check if any requests failed (Axios responses don't have `ok`)
+      const failedRequests = [codeRes, statsRes, transactionsRes].filter((result) => {
+        if (result.status === 'rejected') return true;
+        const statusCode = result.value?.status;
+        return typeof statusCode === 'number' && statusCode >= 400;
+      });
 
       if (failedRequests.length > 0) {
         throw new Error('Some data failed to load');
       }
 
       // Process successful responses
-      const [codeData, statsData, transactionsData] = await Promise.all([
-        codeRes.value.data,
-        statsRes.value.data,
-        transactionsRes.value.data
-      ]);
+      const [codeData, statsData, transactionsData] = [
+        codeRes.status === 'fulfilled' ? codeRes.value.data : null,
+        statsRes.status === 'fulfilled' ? statsRes.value.data : null,
+        transactionsRes.status === 'fulfilled' ? transactionsRes.value.data : null
+      ];
+      
+      if (!codeData || !statsData || !transactionsData) {
+        throw new Error('Some data failed to load');
+      }
 
       setReferralData({
         ...codeData,
