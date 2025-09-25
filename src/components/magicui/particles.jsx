@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 
 const Particles = ({ 
   className = '',
-  quantity = 10, // Increased to 15000 for extremely dense particles
-  staticity = 50,
-  ease = 50,
-  size = 2.0, // Decreased from 2.0 to 0.0 for smaller particles
+  quantity = 80,
+  staticity = 60,
+  ease = 40,
+  size = 2.0,
   refresh = false,
-  color = '#00ff00', // Changed to green
+  color = '#00ff00',
   vx = 0,
   vy = 0
 }) => {
@@ -29,17 +29,10 @@ const Particles = ({
     // Mobile detection and optimization
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
     
-    // Debug logging
-    console.log('🎯 Particles Debug:', {
-      isMobile,
-      screenWidth: window.innerWidth,
-      userAgent: navigator.userAgent
-    });
-    
     // Adjust parameters for mobile
-    const mobileQuantity = isMobile ? Math.max(8, Math.floor(quantity * 0.7)) : quantity;
-    const mobileSize = isMobile ? Math.max(1.0, size * 1.8) : size;
-    const mobileStaticity = isMobile ? Math.min(70, staticity + 10) : staticity;
+    const mobileQuantity = isMobile ? Math.max(20, Math.floor(quantity * 0.5)) : quantity;
+    const mobileSize = isMobile ? Math.max(1.0, size * 1.5) : size;
+    const mobileStaticity = isMobile ? Math.min(80, staticity + 10) : staticity;
 
     // Particle class
     class Particle {
@@ -49,7 +42,7 @@ const Particles = ({
         this.vx = (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3) + vx;
         this.vy = (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3) + vy;
         this.size = Math.random() * mobileSize + (isMobile ? 0.1 : 0.05);
-        this.opacity = Math.random() * 0.8 + 0.6;
+        this.opacity = Math.random() * 0.5 + 0.4;
         this.baseColor = color;
         this.color = color;
         this.staticity = mobileStaticity / 100;
@@ -77,7 +70,7 @@ const Particles = ({
       draw() {
         ctx.save();
         ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = '#00ff00'; // Force green color
+        ctx.fillStyle = color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -92,14 +85,10 @@ const Particles = ({
       particles.push(new Particle());
     }
 
-    console.log('🚀 Created particles:', particles.length, 'Mobile:', isMobile, 'Size:', mobileSize);
-
-    // Test canvas rendering
-    ctx.fillStyle = '#ff0000';
-    ctx.fillRect(10, 10, 20, 20);
-    console.log('🎨 Canvas test - red square should be visible');
+    // Reduce overdraw by drawing on dark bg only
 
     // Animation loop
+    let rafId;
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
@@ -109,9 +98,7 @@ const Particles = ({
         particle.draw();
       });
 
-      // Connection lines removed - only particles are shown
-
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     };
 
     animate();
@@ -119,6 +106,7 @@ const Particles = ({
     // Cleanup
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [quantity, staticity, ease, size, refresh, color, vx, vy]);
 

@@ -77,6 +77,7 @@ export function SmoothCursor() {
       ringDiv.style.height = `${ringProperties[i].width}px`;
       ringDiv.style.opacity = '0';
       ringDiv.style.visibility = 'hidden';
+      ringDiv.style.willChange = 'transform, opacity';
       container.appendChild(ringDiv);
       
       cursors.push({
@@ -88,25 +89,11 @@ export function SmoothCursor() {
 
     cursorsRef.current = cursors;
 
-    // Enhanced cursor hiding for macOS compatibility
+    // Lightweight cursor hiding (avoid global DOM scans)
     const hideCursor = () => {
-      // Multiple fallback methods for better cross-platform compatibility
       try {
-        // Method 1: Set cursor on body
         document.body.style.cursor = 'none';
-        
-        // Method 2: Set cursor on html element
         document.documentElement.style.cursor = 'none';
-        
-        // Method 3: Set cursor on all major containers
-        const containers = [document.body, document.documentElement, container];
-        containers.forEach(cont => {
-          if (cont && cont.style) {
-            cont.style.cursor = 'none';
-          }
-        });
-        
-        // Method 4: Force cursor hiding with CSS classes
         document.body.classList.add('cursor-hidden');
         document.documentElement.classList.add('cursor-hidden');
         
@@ -339,24 +326,7 @@ export function SmoothCursor() {
         document.documentElement.style.cursor = 'auto';
         document.body.classList.remove('cursor-hidden');
         document.documentElement.classList.remove('cursor-hidden');
-        
-        // Remove global cursor hiding CSS
-        const hideStyle = document.getElementById('cursor-hide-style');
-        if (hideStyle) {
-          hideStyle.remove();
-        }
-        
-        // Clean up macOS-specific cursor hiding
-        if (isMacOS && container._cursorStyle) {
-          if (container._cursorStyle.parentNode) {
-            container._cursorStyle.parentNode.removeChild(container._cursorStyle);
-          }
-          delete container._cursorStyle;
-        }
-        
-      } catch (error) {
-        console.warn('Cursor restoration failed:', error);
-      }
+      } catch {}
       
       if (animationId) {
         cancelAnimationFrame(animationId);
@@ -396,7 +366,7 @@ export function SmoothCursor() {
           height: 4px;
           background-color: #ffffff;
           border-radius: 50%;
-          transform: translate(-50%, -50%);
+          transform: translate3d(-50%, -50%, 0);
           z-index: 9998;
           pointer-events: none;
         }
@@ -405,7 +375,7 @@ export function SmoothCursor() {
           position: absolute;
           background-color: transparent;
           border-radius: 50%;
-          transform: translate(-50%, -50%);
+          transform: translate3d(-50%, -50%, 0);
           pointer-events: none;
           transition: opacity 0.2s ease-out;
         }

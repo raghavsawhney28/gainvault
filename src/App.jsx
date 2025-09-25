@@ -108,13 +108,13 @@ function App() {
   return (
     <MantineProvider theme={darkTheme} defaultColorScheme="dark">
       <div className="App cursor-none">
-        <SmoothCursor size="small" />
+        <SmoothCursor />
         {/* Particles background covering the entire body */}
         <Particles 
-          quantity={150}
-          staticity={60}
-          ease={50}
-          size={1.2}
+          quantity={90}
+          staticity={70}
+          ease={35}
+          size={1.0}
           color="#00ff88"
           className="particles-background"
         />

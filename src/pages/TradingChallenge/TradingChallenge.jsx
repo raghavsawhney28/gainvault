@@ -121,7 +121,7 @@ const TradingChallenge = () => {
     }
     
     // Validate coupon
-    if (couponCode === 'WELCOME15') {
+    if (['WELCOME15', 'BULLRUN0474', 'RAJU07'].includes(couponCode)) {
       const subtotal = getSubtotal();
       const discountAmount = Math.round(subtotal * 0.15 * 100) / 100; // 15% discount, rounded to 2 decimal places
       
@@ -1245,7 +1245,7 @@ const TradingChallenge = () => {
              </Text>
            )}
            
-           {formData.appliedCoupon === 'WELCOME15' && (
+          {['WELCOME15', 'BULLRUN0474', 'RAJU07'].includes(formData.appliedCoupon) && (
              <Text fw={600} size="sm" c="#16a34a" ta="center" style={{ 
                backgroundColor: 'rgba(22, 163, 74, 0.1)',
                padding: '8px 16px',
