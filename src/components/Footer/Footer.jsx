@@ -8,7 +8,7 @@ const Footer = () => {
   const footerLinks = {
     Company: [
       { label: "About Us", to: "#" },
-      { label: "Contact", to: "#" },
+      { label: "Contact", to: "/contact" },
     ],
     Legal: [
       { label: "Privacy Policy", to: "/privacy-policy" },

@@ -15,6 +15,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import AuthPage from './components/AuthPage/AuthPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import ContactUs from './pages/ContactUs';
 import useAuth from './hooks/useAuth';
 import { SmoothCursor } from './components/ui/smooth-cursor';
 import Particles from './components/magicui/particles';
@@ -134,6 +135,7 @@ function App() {
           <Route path="/dashboard/:username" element={<Dashboard className="cursor-none" />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/contact" element={<ContactUs />} />
           <Route path="*" element={mainContent} />
         </Routes>
         {/* <BlankSection className="cursor-none" /> */}
