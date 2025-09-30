@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import User from '../models/User.js';
 import Referral from '../models/Referral.js';
 import Transaction from '../models/Transaction.js';
@@ -180,21 +181,26 @@ router.get('/list', auth, async (req, res) => {
       Referral.countDocuments(query)
     ]);
 
-    // For active or all we may need commission aggregation per referred user
-    let commissionsByReferredUser = {};
+    // For active or all we may need commission aggregation per referral (referenceId points to Referral._id)
+    let commissionsByReferralId = {};
     if (statusFilter === 'active' || statusFilter === 'all') {
-      const referredUserIds = referrals
-        .filter(r => r && r.referredUserId)
-        .map(r => r.referredUserId._id);
+      const referralIds = referrals
+        .map(r => {
+          try {
+            return new mongoose.Types.ObjectId(r._id);
+          } catch (_) {
+            return null;
+          }
+        })
+        .filter(Boolean);
 
-      if (referredUserIds.length > 0) {
+      if (referralIds.length > 0) {
         const commissionAgg = await Transaction.aggregate([
           {
             $match: {
-              userId: Referral.db.castObjectId(userId),
               type: 'referral_reward',
               status: 'completed',
-              referenceId: { $in: referredUserIds }
+              referenceId: { $in: referralIds }
             }
           },
           {
@@ -205,7 +211,7 @@ router.get('/list', auth, async (req, res) => {
           }
         ]);
 
-        commissionsByReferredUser = commissionAgg.reduce((acc, row) => {
+        commissionsByReferralId = commissionAgg.reduce((acc, row) => {
           acc[row._id.toString()] = row.total;
           return acc;
         }, {});
@@ -214,8 +220,8 @@ router.get('/list', auth, async (req, res) => {
 
     const shaped = referrals.map(r => {
       const referred = r.referredUserId || {};
-      const commission = (statusFilter === 'active' || statusFilter === 'all') && referred._id
-        ? (commissionsByReferredUser[referred._id.toString()] || 0)
+      const commission = (statusFilter === 'active' || statusFilter === 'all')
+        ? (commissionsByReferralId[r._id.toString()] || 0)
         : 0;
       return {
         _id: r._id,

@@ -362,7 +362,7 @@ const Referral = () => {
                 <table className={styles.table}>
                   <thead>
                     <tr>
-                      <th>Wallet Address</th>
+                      <th>Referred User</th>
                       <th>Referral Time</th>
                       {selectedTab !== 'pending' && <th>{selectedTab === 'all' ? 'Status' : 'Total Commission'}</th>}
                       {selectedTab === 'all' && <th>Commission</th>}
