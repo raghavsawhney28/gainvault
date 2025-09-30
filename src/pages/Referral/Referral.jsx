@@ -48,9 +48,9 @@ const Referral = () => {
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
       const [codeRes, statsRes, transactionsRes] = await Promise.allSettled([
-        api.get('/api/referral/code', { signal: controller.signal }),
-        api.get('/api/referral/stats', { signal: controller.signal }),
-        api.get('/api/referral/transactions', { signal: controller.signal })
+        api.get('/referral/code', { signal: controller.signal }),
+        api.get('/referral/stats', { signal: controller.signal }),
+        api.get('/referral/transactions', { signal: controller.signal })
       ]);
 
       clearTimeout(timeoutId);
@@ -116,7 +116,7 @@ const Referral = () => {
     }
 
     try {
-      const response = await api.post('/api/wallet/withdraw', {
+      const response = await api.post('/wallet/withdraw', {
         amount: parseFloat(withdrawAmount),
         withdrawalMethod,
         accountDetails: 'Bank transfer'

@@ -38,7 +38,7 @@ const useAuth = () => {
 
       // fallback: verify with backend
       console.log('🔄 Verifying with backend...');
-      const response = await api.get('/api/auth/me');
+      const response = await api.get('/auth/me');
       if (response.data.success) {
         console.log('✅ Backend verification successful:', response.data.user);
         setIsLoggedIn(true);
@@ -99,7 +99,7 @@ const useAuth = () => {
 
         // fallback: fetch from backend
         try {
-          const response = await api.get('/api/auth/me');
+          const response = await api.get('/auth/me');
           if (response.data.success) {
             setUser(response.data.user);
             localStorage.setItem('auth_user', JSON.stringify(response.data.user));
@@ -121,7 +121,7 @@ const useAuth = () => {
       }
 
       // Normal email/password login
-      const response = await api.post('/api/auth/signin', credentials);
+      const response = await api.post('/auth/signin', credentials);
       if (response.data.success) {
         const { token, user } = response.data;
         if (token) localStorage.setItem('auth_token', token);
@@ -146,13 +146,13 @@ const useAuth = () => {
   const logout = useCallback(async () => {
     try {
       // Try the main logout endpoint first
-      await api.post('/api/auth/logout');
+      await api.post('/auth/logout');
     } catch (error) {
       console.error('Logout API call failed:', error);
       
       // If main logout fails (e.g., expired token), try optional logout
       try {
-        await api.post('/api/auth/logout-optional');
+        await api.post('/auth/logout-optional');
       } catch (optionalError) {
         console.error('Optional logout also failed:', optionalError);
         // Continue with logout anyway - this is just for logging
