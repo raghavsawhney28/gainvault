@@ -119,7 +119,7 @@ const usePhantomPayment = () => {
 
       // Send activation request to backend
       try {
-        await api.post('/activate-challenge', {
+        await api.post('/api/activate-challenge', {
           walletAddress: senderPublicKey.toString(),
           selectedAccountSize: getAccountLabel(accountSize),
           usdPrice: usdPrice,

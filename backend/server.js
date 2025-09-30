@@ -98,12 +98,12 @@ app.use(express.static(path.join(process.cwd(), '../dist')));
 
 // Handle all non-API routes by serving the React app
 app.get('*', (req, res) => {
-  // Don't handle API routes
+  // Don't handle API routes - they should be handled by the routes above
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'API route not found' });
   }
   
-  // For Render deployment, ensure we're serving the correct file
+  // For all other routes, serve the React app's index.html
   const indexPath = path.join(process.cwd(), '../dist/index.html');
   
   // Check if the file exists
@@ -111,7 +111,12 @@ app.get('*', (req, res) => {
     res.sendFile(indexPath);
   } else {
     // Fallback for development or if dist doesn't exist
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
+    const fallbackPath = path.join(__dirname, '../dist/index.html');
+    if (fs.existsSync(fallbackPath)) {
+      res.sendFile(fallbackPath);
+    } else {
+      res.status(404).json({ error: 'React build not found. Please run npm run build first.' });
+    }
   }
 });
 

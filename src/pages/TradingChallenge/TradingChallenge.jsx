@@ -439,11 +439,6 @@ const TradingChallenge = () => {
                       color: '#FFFFFF !important',
                     },
                   },
-                  input: {
-                   
-                    backgroundColor: 'rgba(26, 26, 26, 0.95)',
-                    color: '#FFFFFF',
-                  },
                   option: {  
                     backgroundColor: 'transparent',
                     color: '#fff',
