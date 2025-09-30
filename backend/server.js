@@ -126,3 +126,13 @@ app.listen(PORT, () => {
   console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL}`);
   console.log(`🔐 JWT Secret configured: ${!!process.env.JWT_SECRET}`);
 });
+
+
+
+
+
+
+
+
+
+

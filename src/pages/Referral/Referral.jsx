@@ -28,6 +28,9 @@ const Referral = () => {
   const [showSuccessCard, setShowSuccessCard] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedTab, setSelectedTab] = useState(null); // 'pending' | 'active' | 'all' | null
+  const [tableData, setTableData] = useState([]);
+  const [tableLoading, setTableLoading] = useState(false);
 
   // Memoized fetch function for better performance
   const fetchReferralData = useCallback(async () => {
@@ -98,6 +101,28 @@ const Referral = () => {
   useEffect(() => {
     fetchReferralData();
   }, [fetchReferralData]);
+
+  const fetchReferralsByStatus = useCallback(async (status) => {
+    if (!isLoggedIn) return;
+    try {
+      setTableLoading(true);
+      const response = await api.get('/referral/list', {
+        params: { status }
+      });
+      setTableData(response.data?.referrals || []);
+    } catch (err) {
+      console.error('Failed to load referrals list:', err);
+      setTableData([]);
+    } finally {
+      setTableLoading(false);
+    }
+  }, [isLoggedIn]);
+
+  const handleSelectTab = (tab) => {
+    if (selectedTab === tab) return; // no-op
+    setSelectedTab(tab);
+    fetchReferralsByStatus(tab);
+  };
 
   const copyReferralLink = async () => {
     try {
@@ -256,7 +281,12 @@ const Referral = () => {
 
       {/* Stats Grid */}
       <div className={styles.statsGrid}>
-        <div className={styles.statCard}>
+        <div 
+          className={`${styles.statCard} ${selectedTab === 'all' ? styles.activeStatCard : ''}`}
+          onClick={() => handleSelectTab('all')}
+          role="button"
+          tabIndex={0}
+        >
           <div className={styles.statIcon}>
             <Users size={24} />
           </div>
@@ -266,7 +296,12 @@ const Referral = () => {
           </div>
         </div>
 
-        <div className={styles.statCard}>
+        <div 
+          className={`${styles.statCard} ${selectedTab === 'pending' ? styles.activeStatCard : ''}`}
+          onClick={() => handleSelectTab('pending')}
+          role="button"
+          tabIndex={0}
+        >
           <div className={styles.statIcon}>
             <Clock size={24} />
           </div>
@@ -276,7 +311,12 @@ const Referral = () => {
           </div>
         </div>
 
-        <div className={styles.statCard}>
+        <div 
+          className={`${styles.statCard} ${selectedTab === 'active' ? styles.activeStatCard : ''}`}
+          onClick={() => handleSelectTab('active')}
+          role="button"
+          tabIndex={0}
+        >
           <div className={styles.statIcon}>
             <CheckCircle size={24} />
           </div>
@@ -295,6 +335,67 @@ const Referral = () => {
             <p>Total Earned</p>
           </div>
         </div>
+      </div>
+
+      {/* Referrals Table Section */}
+      <div className={`${styles.tableSection} ${selectedTab ? styles.tableVisible : ''}`}>
+        {selectedTab === null && (
+          <div className={styles.tablePlaceholder}>Select a category to view referrals</div>
+        )}
+
+        {selectedTab !== null && (
+          <div className={styles.tableCard}>
+            <div className={styles.tableHeader}>
+              <h2>
+                {selectedTab === 'pending' && 'Pending Referrals'}
+                {selectedTab === 'active' && 'Active Referrals'}
+                {selectedTab === 'all' && 'Total Referrals'}
+              </h2>
+            </div>
+            {tableLoading ? (
+              <div className={styles.tableLoading}>
+                <Loader2 size={24} className={styles.spinningIcon} />
+                <span>Loading...</span>
+              </div>
+            ) : (
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Wallet Address</th>
+                      <th>Referral Time</th>
+                      {selectedTab !== 'pending' && <th>{selectedTab === 'all' ? 'Status' : 'Total Commission'}</th>}
+                      {selectedTab === 'all' && <th>Commission</th>}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tableData.length === 0 ? (
+                      <tr>
+                        <td colSpan={selectedTab === 'pending' ? 2 : selectedTab === 'active' ? 3 : 4} className={styles.emptyCell}>No referrals found</td>
+                      </tr>
+                    ) : (
+                      tableData.map((row) => (
+                        <tr key={row._id}>
+                          <td className={styles.mono}>{row.walletAddress || '—'}</td>
+                          <td>{row.referralTime ? new Date(row.referralTime).toLocaleString() : '—'}</td>
+                          {selectedTab === 'active' && (
+                            <td>${row.commission?.toFixed ? row.commission.toFixed(2) : Number(row.commission || 0).toFixed(2)}</td>
+                          )}
+                          {selectedTab === 'all' && (
+                            <>
+                              <td className={styles.statusBadge}>{row.status}</td>
+                              <td>${Number(row.commission || 0).toFixed(2)}</td>
+                            </>
+                          )}
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Wallet Section */}
@@ -406,3 +507,26 @@ const Referral = () => {
 };
 
 export default Referral;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

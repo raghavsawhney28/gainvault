@@ -154,26 +154,81 @@ router.get('/transactions', auth, async (req, res) => {
   }
 });
 
-// ✅ Get detailed referral list
+// ✅ Get detailed referral list (supports filtering and commission aggregation)
 router.get('/list', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    const statusFilter = (req.query.status || 'all').toLowerCase(); // 'pending' | 'active' | 'all'
 
-    const referrals = await Referral.find({ referrerUserId: userId })
-      .populate('referredUserId', 'username email walletAddress createdAt')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    const query = { referrerUserId: userId };
+    if (statusFilter === 'pending') {
+      query.status = 'pending';
+    } else if (statusFilter === 'active') {
+      query.status = 'active';
+    } // else 'all' → no extra filter
 
-    const total = await Referral.countDocuments({ referrerUserId: userId });
+    const [referrals, total] = await Promise.all([
+      Referral.find(query)
+        .populate('referredUserId', 'username email walletAddress createdAt')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Referral.countDocuments(query)
+    ]);
+
+    // For active or all we may need commission aggregation per referred user
+    let commissionsByReferredUser = {};
+    if (statusFilter === 'active' || statusFilter === 'all') {
+      const referredUserIds = referrals
+        .filter(r => r && r.referredUserId)
+        .map(r => r.referredUserId._id);
+
+      if (referredUserIds.length > 0) {
+        const commissionAgg = await Transaction.aggregate([
+          {
+            $match: {
+              userId: Referral.db.castObjectId(userId),
+              type: 'referral_reward',
+              status: 'completed',
+              referenceId: { $in: referredUserIds }
+            }
+          },
+          {
+            $group: {
+              _id: '$referenceId',
+              total: { $sum: '$amount' }
+            }
+          }
+        ]);
+
+        commissionsByReferredUser = commissionAgg.reduce((acc, row) => {
+          acc[row._id.toString()] = row.total;
+          return acc;
+        }, {});
+      }
+    }
+
+    const shaped = referrals.map(r => {
+      const referred = r.referredUserId || {};
+      const commission = (statusFilter === 'active' || statusFilter === 'all') && referred._id
+        ? (commissionsByReferredUser[referred._id.toString()] || 0)
+        : 0;
+      return {
+        _id: r._id,
+        walletAddress: referred.walletAddress || null,
+        referralTime: r.createdAt,
+        status: r.status,
+        commission
+      };
+    });
 
     res.json({
       success: true,
-      referrals,
+      referrals: shaped,
       pagination: {
         page,
         limit,

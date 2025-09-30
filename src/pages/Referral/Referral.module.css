@@ -580,6 +580,11 @@
   overflow: hidden;
 }
 
+.activeStatCard {
+  border-color: rgba(0, 255, 136, 0.6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 255, 136, 0.2);
+}
+
 .statCard::before {
   content: '';
   position: absolute;
@@ -799,6 +804,96 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.1);
   position: relative;
   overflow: hidden;
+}
+
+/* Referrals Table */
+.tableSection {
+  margin-bottom: 2rem;
+}
+
+.tablePlaceholder {
+  text-align: center;
+  color: #e5e7eb;
+  font-style: italic;
+  padding: 2rem;
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 16px;
+}
+
+.tableCard {
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.1);
+  animation: fadeInUp 0.4s ease;
+}
+
+.tableHeader h2 {
+  margin: 0 0 1rem 0;
+  color: #FFFFFF;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 640px;
+}
+
+.table thead th {
+  text-align: left;
+  color: #e5e7eb;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table tbody td {
+  padding: 0.75rem 1rem;
+  color: #FFFFFF;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mono {
+  font-family: 'Courier New', monospace;
+}
+
+.emptyCell {
+  text-align: center;
+  color: #e5e7eb;
+  padding: 1.5rem;
+}
+
+.statusBadge {
+  text-transform: capitalize;
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.tableLoading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #e5e7eb;
+  padding: 1rem;
 }
 
 .transactionsSection::before {
