@@ -5,7 +5,7 @@ const envBase = import.meta?.env?.VITE_API_BASE?.replace(/\/$/, '');
 const baseURL = envBase
   ? `${envBase}/api`
   : isLocalhost
-    ? '/api'
+    ? 'http://localhost:3001/api'
     : 'https://gainvault.onrender.com/api';
 
 const api = axios.create({
